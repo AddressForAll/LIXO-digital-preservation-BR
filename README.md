@@ -1,6 +1,17 @@
 # Digital-preservartion-BR
 [Preservação digital](https://en.wikipedia.org/wiki/Digital_preservation) das principais fontes  do **banco de dados AddressForAll-Brasil**, mantido pelo [Instituto AddressForAll](http://addressforall.org/).
 
+# OPERAÇÃO DESTE GIT
+
+Neste repositórios são registrados apenas metadados e relatórios. 
+
+Os metadados relativos a datasets são relativos ao arquivo comprimido contendo um ou mais pacotes de dados preservados, relativos a um doador e uma data específicos. Metadados típicos são o número de bytes (file size), o tipo de arquivo (ex. `.zip` ou  `.gz`), a data de aceitação ou registro, o CNPJ da entidade doadora, o hash SHA256 do arquivo, etc. Vide pasta `/data` deste git.
+
+Os relatórios são como um blog de anúncio de atos de registro, em geral com um resumo para apresentar também os metadados. Vide pasta `/reports` deste git.
+
+# CONCEITOS
+Apresentação dos principais conceitos e diretivas adotadas na AddressForAll e no seu Projeto de Preservação Digital.
+
 ## Fontes primárias 
 As [fontes de dados primárias](https://en.wikipedia.org/wiki/Primary_source) podem ter diversas origens e diferentes metodologias de coleta. De especial interesse para o Instituto AddressForAll, num contexto de preservação de longo prazo (décadas), são as fontes de dados relativos a endereços postais de cada município do Brasil. Cada fonte consiste de um conjunto de dados sistematizados e publicados **por uma instituição** (nacional ou internacional) com idoniedade reconhecida pela comunidade local.
 
