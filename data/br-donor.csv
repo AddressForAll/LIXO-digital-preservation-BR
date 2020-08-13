@@ -31,6 +31,6 @@ id,scope,shortname,vat_id,legalname,url
 31,BR-SP-SCB,SP-SCB,cnpj:46.634.044/0001-74,Prefeitura Municipal de Sorocaba,http://www.sorocaba.sp.gov.br/
 32,BR-SP-SOV,SP-SOV,cnpj:46.177.523/0001-09,Prefeitura Municipal de São Vicente,http://www.saovicente.sp.gov.br/publico/
 33,BR-SP-SPA,SP-SPA,cnpj:46.395.000/0001-39,Prefeitura Municipal de São Paulo,http://www.capital.sp.gov.br/
-34,BR-MS-CPE,MS-CPE,,Prefeitura Municipal de Campo Grande,http://www.campogrande.ms.gov.br/
-35,BR-SC-JVE,SC-JVE,,Prefeitura Municipal de Joinville,https://www.joinville.sc.gov.br/
+34,BR-MS-CPE,MS-CPE,cnpj:03.501.509/0001-06,Prefeitura Municipal de Campo Grande,http://www.campogrande.ms.gov.br/
+35,BR-SC-JVE,SC-JVE,cnpj:83.169.623/0001-10,Prefeitura Municipal de Joinville,https://www.joinville.sc.gov.br/
 14,BR-PR-PIN,PR-PIN,cnpj:95.423.000/0001-00,Prefeitura Municipal de Pinhais,https://pinhais.atende.net/
