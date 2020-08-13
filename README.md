@@ -54,4 +54,10 @@ O Depósito legal dos metadados e da normalização das fontes é realizado em d
 
 A preservação do arquivo em si (muitos Gigabytes) é feita por contratos de longo prazo (décadas), ainda em estudo. Uma vez no repositório definitivo, alguns parceiros se comprometem também com réplicas. PS: sistemas como  Filecoin ou LOCKSS, também em estudo, geram as réplicas de segurança automaticamente.
 
+## Acoplamento com o projeto AddressForAll
+
+A *Plataforma de Projetos* do *Instituto AdddressForAll* foi concebida para a gestão de projetos integrados e uso de um ecosistema de padrões e metodologias interoperáveis.
+O presente projeto de preservação digital é um deles, e um subconjunto das suas entregas é utilizado no *Projeto AddressForAll*. Abaixo um diagrama que resume o passo-a-passo da preservação e como ele se relaciona com atividades de outros projetos.
+
+![](https://github.com/AddressForAll/specifications/raw/master/docs/assets-spec02/image5.png)
  
