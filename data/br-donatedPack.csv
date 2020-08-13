@@ -1,0 +1,28 @@
+pack_id,donor_id,accepted_date,about
+22,5,2020-05-14,"Bairros, eixos, lotes"
+23,6,2020-05-14,"Bairros, eixos, lotes"
+24,7,2020-05-14,"Bairros, eixos, lotes"
+12,8,2020-03-19,Pontos com rua e número
+33,9,2020-07-22,"Bairros, eixos, endereços, lotes, quadras"
+21,10,2020-05-14,"Bairros, eixos, lotes"
+16,11,2020-04-14,"Lotes, eixos, divisa de bairro"
+30,13,2020-07-10,Arquivo DWG-CAD incompleto
+29,14,2020-06-26,"Bairros, eixos, lotes"
+19,15,2020-04-22,"Bairros, eixos, lotes, pontos de numeração de casa"
+18,16,2020-04-20,"Bairros, eixos, empresas, lotes"
+14,17,2020-04-02,Eixos e bairros
+27,18,2020-07-27,"Bairros, eixos, lotes"
+31,19,2020-07-15,Bairros
+34,20,2020-07-23,"Eixos, edificação, quadras"
+36,21,2020-07-29,Eixos
+10,24,2020-05-07,"Loteamento, edificação, eixo, lote e quadra"
+28,25,2020-06-22,"Bairros, eixos, lotes, edificação"
+15,26,2020-04-08,Arquivo DWG-CAD sem endereços
+32,27,2020-07-17,"Eixos, edificação, lotes"
+26,28,2020-06-22,"Bairros, eixos"
+20,29,2020-04-24,Pontos com inscrição do lote
+25,30,2020-06-18,"Bairros, eixos, lotes, pontos de endereços"
+17,31,2020-04-20,Eixos
+13,32,2020-04-02,CSV dos pontos de numeração de casa
+35,33,2020-07-26,"Distritos, subprefeituras, eixos, lotes, edificação"
+37,35,2020-08-11,"Lotes, eixos, edificações e quadras"
