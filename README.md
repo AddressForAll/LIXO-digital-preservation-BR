@@ -3,9 +3,9 @@
 
 # OPERAÇÃO DESTE GIT
 
-Neste repositórios são registrados apenas metadados e relatórios. 
+Neste repositório são registrados apenas dados de gestão, metadados dos arquivos doados (*input* de geometrias) e relatórios. 
 
-Os metadados relativos a datasets são relativos ao arquivo comprimido contendo um ou mais pacotes de dados preservados, relativos a um doador e uma data específicos. Metadados típicos são o número de bytes (file size), o tipo de arquivo (ex. `.zip` ou  `.gz`), a data de aceitação ou registro, o CNPJ da entidade doadora, o hash SHA256 do arquivo, etc. Vide pasta `/data` deste git.
+Os metadados relativos a datasets são relativos ao arquivo comprimido contendo um ou mais pacotes de dados preservados (doação), relativos a um doador e uma data específicos. Metadados típicos são o número de bytes (file size), o tipo de arquivo (ex. `.zip` ou  `.gz`), a data de aceitação ou registro, o CNPJ da entidade doadora, o hash SHA256 do arquivo, etc. Vide pasta `/data` deste git.
 
 Os relatórios são como um blog de anúncio de atos de registro, em geral com um resumo para apresentar também os metadados. Vide pasta `/reports` deste git.
 
