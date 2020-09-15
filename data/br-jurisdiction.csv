@@ -1,4 +1,31 @@
 osm_id,jurisd_base_id,jurisd_local_id,name,parent_abbrev,abbrev,wikidata_id,lexlabel,isolabel_ext,ddd,info
+325866,76,11,Rondônia,BR,RO,43235,rondonia,BR-RO,,
+326266,76,12,Acre,BR,AC,40780,acre,BR-AC,,
+332476,76,13,Amazonas,BR,AM,40040,amazonas,BR-AM,,
+326287,76,14,Roraima,BR,RR,42508,roraima,BR-RR,,
+185579,76,15,Pará,BR,PA,39517,para,BR-PA,,
+331463,76,16,Amapá,BR,AP,40130,amapa,BR-AP,,
+336819,76,17,Tocantins,BR,TO,43695,tocantins,BR-TO,,
+332924,76,21,Maranhão,BR,MA,42362,maranhao,BR-MA,,
+302819,76,22,Piauí,BR,PI,42722,piaui,BR-PI,,
+302635,76,23,Ceará,BR,CE,40123,ceara,BR-CE,,
+301079,76,24,Rio Grande do Norte,BR,RN,43255,rio.grande.norte,BR-RN,,
+301464,76,25,Paraíba,BR,PB,38088,paraiba,BR-PB,,
+303702,76,26,Pernambuco,BR,PE,40942,pernambuco,BR-PE,,
+303781,76,27,Alagoas,BR,AL,40885,alagoas,BR-AL,,
+303940,76,28,Sergipe,BR,SE,43783,sergipe,BR-SE,,
+362413,76,29,Bahia,BR,BA,40430,bahia,BR-BA,,
+315173,76,31,Minas Gerais,BR,MG,39109,minas.gerais,BR-MG,,
+54882,76,32,Espírito Santo,BR,ES,43233,espirito.santo,BR-ES,,
+57963,76,33,Rio de Janeiro,BR,RJ,8678,rio.janeiro,BR-RJ,,
+298204,76,35,São Paulo,BR,SP,175,sao.paulo,BR-SP,,
+297640,76,41,Paraná,BR,PR,15499,parana,BR-PR,,
+296584,76,42,Santa Catarina,BR,SC,41115,santa.catarina,BR-SC,,
+242620,76,43,Rio Grande do Sul,BR,RS,40030,rio.grande.sul,BR-RS,,
+334051,76,50,Mato Grosso do Sul,BR,MS,43319,mato.grosso.sul,BR-MS,,
+333597,76,51,Mato Grosso,BR,MT,42824,mato.grosso,BR-MT,,
+334443,76,52,Goiás,BR,GO,41587,goias,BR-GO,,
+421151,76,53,Distrito Federal,BR,DF,119158,distrito.federal,BR-DF,,
 325842,76,1100015,Alta Floresta D'Oeste,RO,,1761456,alta.floresta.oeste,BR-RO-AltaFlorestaOeste,69,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[76954-000 76955-999]""}"
 325888,76,1100023,Ariquemes,RO,AQS,1646975,ariquemes,BR-RO-Ariquemes,69,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[76870-001 76879-999]""}"
 325882,76,1100031,Cabixi,RO,,940433,cabixi,BR-RO-Cabixi,69,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[76994-000 76994-999]""}"
@@ -253,6 +280,7 @@ osm_id,jurisd_base_id,jurisd_local_id,name,parent_abbrev,abbrev,wikidata_id,lexl
 185557,76,1506138,Redenção,PA,RDO,2381693,redencao,BR-PA-Redencao,94,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[68549-001 68554-999]""}"
 185549,76,1506161,Rio Maria,PA,RMA,2008301,rio.maria,BR-PA-RioMaria,94,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[68530-000 68532-999]""}"
 185603,76,1506187,Rondon do Pará,PA,RNP,2008429,rondon.para,BR-PA-RondonPara,94,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[68638-000 68638-999]""}"
+185670,76,1508159,Uruará,PA,UAA,2009083,uruara,BR-PA-Uruara,93,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[68140-000 68142-999]""}"
 185564,76,1506195,Rurópolis,PA,RRI,2009519,ruropolis,BR-PA-Ruropolis,93,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[68165-000 68169-999]""}"
 185586,76,1506203,Salinópolis,PA,SAS,1008198,salinopolis,BR-PA-Salinopolis,91,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[68721-000 68721-999]""}"
 185583,76,1506302,Salvaterra,PA,SLV,1921992,salvaterra,BR-PA-Salvaterra,91,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[68860-000 68869-999]""}"
@@ -289,7 +317,6 @@ osm_id,jurisd_base_id,jurisd_local_id,name,parent_abbrev,abbrev,wikidata_id,lexl
 -761508084,76,1508084,Tucumã,PA,TCA,2445520,tucuma,BR-PA-Tucuma,94,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[68385-000 68387-999]""}"
 185562,76,1508100,Tucuruí,PA,TUU,374432,tucurui,BR-PA-Tucurui,94,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[68455-001 68464-999]""}"
 185627,76,1508126,Ulianópolis,PA,,2008337,ulianopolis,BR-PA-Ulianopolis,91,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[68632-000 68632-999]""}"
-185670,76,1508159,Uruará,PA,UAA,2009083,uruara,BR-PA-Uruara,93,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[68140-000 68142-999]""}"
 185648,76,1508209,Vigia,PA,VGI,1804913,vigia,BR-PA-Vigia,91,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[68780-000 68784-999]""}"
 90130,76,1508308,Viseu,PA,VSU,772569,viseu,BR-PA-Viseu,91,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[68620-000 68624-999]""}"
 185675,76,1508357,Vitória do Xingu,PA,,2008512,vitoria.xingu,BR-PA-VitoriaXingu,93,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[68383-000 68384-999]""}"
@@ -328,6 +355,7 @@ osm_id,jurisd_base_id,jurisd_local_id,name,parent_abbrev,abbrev,wikidata_id,lexl
 336746,76,1702406,Arraias,TO,AAX,1801696,arraias,BR-TO-Arraias,63,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[77330-000 77349-999]""}"
 336794,76,1702554,Augustinópolis,TO,AIO,1801708,augustinopolis,BR-TO-Augustinopolis,63,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[77960-000 77969-999]""}"
 336849,76,1702703,Aurora do Tocantins,TO,AUT,1801726,aurora.tocantins,BR-TO-AuroraTocantins,63,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[77325-000 77327-999]""}"
+336839,76,1716208,Paranã,TO,PNK,1801570,parana,BR-TO-Parana,63,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[77360-000 77364-999]""}"
 336864,76,1702901,Axixá do Tocantins,TO,AXX,1801670,axixa.tocantins,BR-TO-AxixaTocantins,63,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[77930-000 77939-999]""}"
 336811,76,1703008,Babaçulândia,TO,BBU,1801746,babaculandia,BR-TO-Babaculandia,63,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[77870-000 77879-999]""}"
 336789,76,1703057,Bandeirantes do Tocantins,TO,,2011614,bandeirantes.tocantins,BR-TO-BandeirantesTocantins,63,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[77783-000 77784-999]""}"
@@ -401,7 +429,6 @@ osm_id,jurisd_base_id,jurisd_local_id,name,parent_abbrev,abbrev,wikidata_id,lexl
 336802,76,1715705,Palmeirante,TO,,523587,palmeirante,BR-TO-Palmeirante,63,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[77798-000 77799-999]""}"
 336834,76,1715754,Palmeirópolis,TO,PMP,1801038,palmeiropolis,BR-TO-Palmeiropolis,63,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[77365-000 77367-999]""}"
 336859,76,1716109,Paraíso do Tocantins,TO,PIT,978148,paraiso.tocantins,BR-TO-ParaisoTocantins,63,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[77600-000 77602-999]""}"
-336839,76,1716208,Paranã,TO,PNK,1801570,parana,BR-TO-Parana,63,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[77360-000 77364-999]""}"
 336797,76,1716307,Pau D'Arco,TO,,2085357,pau.arco,BR-TO-PauArco,63,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[77785-000 77789-999]""}"
 336737,76,1716505,Pedro Afonso,TO,PDF,1801535,pedro.afonso,BR-TO-PedroAfonso,63,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[77710-000 77713-999]""}"
 336736,76,1716604,Peixe,TO,PXE,654261,peixe,BR-TO-Peixe,63,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[77460-000 77462-999]""}"
@@ -623,6 +650,7 @@ osm_id,jurisd_base_id,jurisd_local_id,name,parent_abbrev,abbrev,wikidata_id,lexl
 332807,76,2110500,São Bento,MA,SEO,2104116,sao.bento,BR-MA-SaoBento,98,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[65235-000 65237-999]""}"
 332806,76,2110609,São Bernardo,MA,SBW,2065297,sao.bernardo,BR-MA-SaoBernardo,98,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[65550-000 65554-999]""}"
 332800,76,2110658,São Domingos do Azeitão,MA,,1977781,sao.domingos.azeitao,BR-MA-SaoDomingosAzeitao,99,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[65888-000 65889-999]""}"
+302489,76,2304954,Guaiúba,CE,GBA,2028404,guaiuba,BR-CE-Guaiuba,85,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[61890-000 61899-999]""}"
 332850,76,2110708,São Domingos do Maranhão,MA,SDH,2036695,sao.domingos.maranhao,BR-MA-SaoDomingosMaranhao,99,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[65790-000 65794-999]""}"
 332855,76,2110807,São Félix de Balsas,MA,SFB,2065066,sao.felix.balsas,BR-MA-SaoFelixBalsas,99,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[65890-000 65894-999]""}"
 332853,76,2110856,São Francisco do Brejão,MA,,2012495,sao.francisco.brejao,BR-MA-SaoFranciscoBrejao,99,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[65929-000 65929-999]""}"
@@ -956,7 +984,6 @@ osm_id,jurisd_base_id,jurisd_local_id,name,parent_abbrev,abbrev,wikidata_id,lexl
 302481,76,2304707,Granja,CE,GNJ,2028672,granja,BR-CE-Granja,88,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[62430-000 62449-999]""}"
 302630,76,2304806,Granjeiro,CE,GJO,2026909,granjeiro,BR-CE-Granjeiro,88,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[63230-000 63239-999]""}"
 302524,76,2304905,Groaíras,CE,GRO,2028083,groairas,BR-CE-Groairas,88,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[62190-000 62199-999]""}"
-302489,76,2304954,Guaiúba,CE,GBA,2028404,guaiuba,BR-CE-Guaiuba,85,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[61890-000 61899-999]""}"
 302603,76,2305001,Guaraciaba do Norte,CE,GRN,2027331,guaraciaba.norte,BR-CE-GuaraciabaNorte,88,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[62380-000 62389-999]""}"
 302474,76,2305100,Guaramiranga,CE,GAG,1761441,guaramiranga,BR-CE-Guaramiranga,85,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[62766-000 62769-999]""}"
 302475,76,2305209,Hidrolândia,CE,HDA,2347636,hidrolandia,BR-CE-Hidrolandia,88,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[62270-000 62279-999]""}"
@@ -1263,6 +1290,7 @@ osm_id,jurisd_base_id,jurisd_local_id,name,parent_abbrev,abbrev,wikidata_id,lexl
 301291,76,2501401,Baía da Traição,PB,BAI,978537,baia.traicao,BR-PB-BaiaTraicao,83,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[58295-000 58296-999]""}"
 301418,76,2501500,Bananeiras,PB,BNN,525672,bananeiras,BR-PB-Bananeiras,83,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[58220-000 58224-999]""}"
 301346,76,2501534,Baraúna,PB,,2662559,barauna,BR-PB-Barauna,83,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[58188-000 58194-999]""}"
+301279,76,2504504,Condado,PB,CDX,635267,condado,BR-PB-Condado,83,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[58714-000 58714-999]""}"
 301475,76,2501575,Barra de Santana,PB,,1808715,barra.santana,BR-PB-BarraSantana,83,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[58458-000 58459-999]""}"
 301341,76,2501609,Barra de Santa Rosa,PB,BEN,1800788,barra.santa.rosa,BR-PB-BarraSantaRosa,83,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[58170-000 58172-999]""}"
 301391,76,2501708,Barra de São Miguel,PB,BRG,2309706,barra.sao.miguel,BR-PB-BarraSaoMiguel,83,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[58483-000 58484-999]""}"
@@ -1301,7 +1329,6 @@ osm_id,jurisd_base_id,jurisd_local_id,name,parent_abbrev,abbrev,wikidata_id,lexl
 301411,76,2504306,Catolé do Rocha,PB,CRH,1808697,catole.rocha,BR-PB-CatoleRocha,83,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[58884-000 58886-999]""}"
 301465,76,2504355,Caturité,PB,,1815927,caturite,BR-PB-Caturite,83,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[58455-000 58457-999]""}"
 301299,76,2504405,Conceição,PB,CCI,2010944,conceicao,BR-PB-Conceicao,83,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[58970-000 58977-999]""}"
-301279,76,2504504,Condado,PB,CDX,635267,condado,BR-PB-Condado,83,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[58714-000 58714-999]""}"
 301285,76,2504603,Conde,PB,CWX,1999780,conde,BR-PB-Conde,83,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[58322-000 58323-999]""}"
 301276,76,2504702,Congo,PB,CXG,2009615,congo,BR-PB-Congo,83,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[58535-000 58539-999]""}"
 301366,76,2504801,Coremas,PB,CES,1843416,coremas,BR-PB-Coremas,83,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[58770-000 58774-999]""}"
@@ -1380,6 +1407,7 @@ osm_id,jurisd_base_id,jurisd_local_id,name,parent_abbrev,abbrev,wikidata_id,lexl
 301354,76,2510907,Paulista,PB,PUX,2081885,paulista,BR-PB-Paulista,83,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[58860-000 58864-999]""}"
 301394,76,2511004,Pedra Branca,PB,PKB,2342000,pedra.branca,BR-PB-PedraBranca,83,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[58790-000 58794-999]""}"
 301257,76,2511103,Pedra Lavrada,PB,PVD,2009239,pedra.lavrada,BR-PB-PedraLavrada,83,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[58180-000 58183-999]""}"
+301479,76,2516607,Tavares,PB,TVS,2099625,tavares,BR-PB-Tavares,83,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[58753-000 58754-999]""}"
 301396,76,2511202,Pedras de Fogo,PB,PFO,2009248,pedras.fogo,BR-PB-PedrasFogo,83,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[58328-000 58329-999]""}"
 301347,76,2511301,Piancó,PB,PIC,2009920,pianco,BR-PB-Pianco,83,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[58765-000 58769-999]""}"
 301296,76,2511400,Picuí,PB,PCI,2008685,picui,BR-PB-Picui,83,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[58187-000 58187-999]""}"
@@ -1455,7 +1483,6 @@ osm_id,jurisd_base_id,jurisd_local_id,name,parent_abbrev,abbrev,wikidata_id,lexl
 301264,76,2516300,Sumé,PB,SUE,2008324,sume,BR-PB-Sume,83,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[58540-000 58547-999]""}"
 301310,76,2516409,Tacima,PB,TAM,1816133,tacima,BR-PB-Tacima,83,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[58240-000 58249-999]""}"
 301408,76,2516508,Taperoá,PB,TER,2329707,taperoa,BR-PB-Taperoa,83,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[58680-000 58684-999]""}"
-301479,76,2516607,Tavares,PB,TVS,2099625,tavares,BR-PB-Tavares,83,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[58753-000 58754-999]""}"
 301423,76,2516706,Teixeira,PB,TXE,1004229,teixeira,BR-PB-Teixeira,83,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[58735-000 58736-999]""}"
 301466,76,2516755,Tenório,PB,,1875004,tenorio,BR-PB-Tenorio,83,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[58665-000 58669-999]""}"
 301449,76,2516805,Triunfo,PB,TRU,2097715,triunfo,BR-PB-Triunfo,83,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[58920-000 58921-999]""}"
@@ -3282,6 +3309,7 @@ osm_id,jurisd_base_id,jurisd_local_id,name,parent_abbrev,abbrev,wikidata_id,lexl
 298114,76,3501152,Alumínio,SP,ALM,642894,aluminio,BR-SP-Aluminio,11,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[18125-000 18129-999]""}"
 298519,76,3501202,Álvares Florence,SP,AVF,1754608,alvares.florence,BR-SP-AlvaresFlorence,17,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[15540-000 15549-999]""}"
 298508,76,3501301,Álvares Machado,SP,AVM,1750446,alvares.machado,BR-SP-AlvaresMachado,18,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[19160-000 19179-999]""}"
+298081,76,3504909,Bananal,SP,BNN,268774,bananal,BR-SP-Bananal,12,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[12850-000 12869-999]""}"
 298212,76,3501400,Álvaro de Carvalho,SP,AVC,1749940,alvaro.carvalho,BR-SP-AlvaroCarvalho,14,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[17410-000 17419-999]""}"
 297906,76,3501509,Alvinlândia,SP,AVL,1750195,alvinlandia,BR-SP-Alvinlandia,14,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[17430-000 17439-999]""}"
 297977,76,3501608,Americana,SP,AMR,467421,americana,BR-SP-Americana,19,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[13465-001 13479-999]""}"
@@ -3321,7 +3349,6 @@ osm_id,jurisd_base_id,jurisd_local_id,name,parent_abbrev,abbrev,wikidata_id,lexl
 298279,76,3504602,Bady Bassitt,SP,BBS,268782,bady.bassitt,BR-SP-BadyBassitt,17,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[15115-000 15119-999]""}"
 298465,76,3504701,Balbinos,SP,BBN,268906,balbinos,BR-SP-Balbinos,14,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[16640-000 16649-999]""}"
 298297,76,3504800,Bálsamo,SP,BSM,1750436,balsamo,BR-SP-Balsamo,17,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[15140-000 15144-999]""}"
-298081,76,3504909,Bananal,SP,BNN,268774,bananal,BR-SP-Bananal,12,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[12850-000 12869-999]""}"
 298094,76,3505005,Barão de Antonina,SP,BAT,430127,barao.antonina,BR-SP-BaraoAntonina,15,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[18490-000 18499-999]""}"
 298209,76,3505104,Barbosa,SP,BOS,1795422,barbosa,BR-SP-Barbosa,18,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[16350-000 16359-999]""}"
 298502,76,3505203,Bariri,SP,BRI,1759107,bariri,BR-SP-Bariri,14,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[17250-000 17259-999]""}"
@@ -3557,6 +3584,7 @@ osm_id,jurisd_base_id,jurisd_local_id,name,parent_abbrev,abbrev,wikidata_id,lexl
 298177,76,3525508,Joanópolis,SP,JNP,1760327,joanopolis,BR-SP-Joanopolis,11,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[12980-000 12989-999]""}"
 298118,76,3525607,João Ramalho,SP,JRH,1760921,joao.ramalho,BR-SP-JoaoRamalho,18,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[19680-000 19699-999]""}"
 298095,76,3525706,José Bonifácio,SP,JBF,595976,jose.bonifacio,BR-SP-JoseBonifacio,17,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[15200-000 15209-999]""}"
+298322,76,3536257,Parisi,SP,PAS,523550,parisi,BR-SP-Parisi,17,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[15525-000 15529-999]""}"
 297982,76,3525805,Júlio Mesquita,SP,JLM,1759758,julio.mesquita,BR-SP-JulioMesquita,14,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[17550-000 17559-999]""}"
 297957,76,3525854,Jumirim,SP,JMR,1649822,jumirim,BR-SP-Jumirim,15,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[18535-000 18539-999]""}"
 297991,76,3525904,Jundiaí,SP,JUN,275109,jundiai,BR-SP-Jundiai,11,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[13200-001 13219-999]""}"
@@ -3673,7 +3701,6 @@ osm_id,jurisd_base_id,jurisd_local_id,name,parent_abbrev,abbrev,wikidata_id,lexl
 298144,76,3536000,Parapuã,SP,PRP,1761717,parapua,BR-SP-Parapua,18,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[17730-000 17739-999]""}"
 298347,76,3536109,Pardinho,SP,PRD,933191,pardinho,BR-SP-Pardinho,14,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[18640-000 18649-999]""}"
 297990,76,3536208,Pariquera-Açu,SP,PQA,1760286,pariquera.acu,BR-SP-PariqueraAcu,13,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[11930-000 11939-999]""}"
-298322,76,3536257,Parisi,SP,PAS,523550,parisi,BR-SP-Parisi,17,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[15525-000 15529-999]""}"
 298066,76,3536307,Patrocínio Paulista,SP,PTP,1759984,patrocinio.paulista,BR-SP-PatrocinioPaulista,16,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[14415-000 14419-999]""}"
 298418,76,3536406,Paulicéia,SP,PLC,1649677,pauliceia,BR-SP-Pauliceia,18,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[17990-000 17999-999]""}"
 297938,76,3536505,Paulínia,SP,PLN,40706,paulinia,BR-SP-Paulinia,19,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[13140-001 13149-999]""}"
@@ -4585,6 +4612,7 @@ osm_id,jurisd_base_id,jurisd_local_id,name,parent_abbrev,abbrev,wikidata_id,lexl
 -764218350,76,4218350,Treviso,SC,,1799332,treviso,BR-SC-Treviso,48,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[88862-000 88864-999]""}"
 296633,76,4218400,Treze de Maio,SC,TZE,1764936,treze.maio,BR-SC-TrezeMaio,48,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[88710-000 88714-999]""}"
 296778,76,4218509,Treze Tílias,SC,TZS,339414,treze.tilias,BR-SC-TrezeTilias,49,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[89650-000 89651-999]""}"
+242480,76,4300901,Aratiba,RS,ARB,33961,aratiba,BR-RS-Aratiba,54,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[99770-000 99789-999]""}"
 296631,76,4218608,Trombudo Central,SC,TBC,1784066,trombudo.central,BR-SC-TrombudoCentral,47,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[89176-000 89177-999]""}"
 296517,76,4218707,Tubarão,SC,TRO,1815730,tubarao,BR-SC-Tubarao,48,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[88700-001 88709-999]""}"
 296674,76,4218756,Tunápolis,SC,TNA,1758036,tunapolis,BR-SC-Tunapolis,49,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[89898-000 89898-999]""}"
@@ -4624,7 +4652,6 @@ osm_id,jurisd_base_id,jurisd_local_id,name,parent_abbrev,abbrev,wikidata_id,lexl
 242642,76,4300802,Antônio Prado,RS,AOD,33949,antonio.prado,BR-RS-AntonioPrado,54,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[95250-000 95254-999]""}"
 242645,76,4300851,Arambaré,RS,,33953,arambare,BR-RS-Arambare,51,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[96178-000 96179-999]""}"
 242538,76,4300877,Araricá,RS,,626331,ararica,BR-RS-Ararica,51,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[93880-000 93889-999]""}"
-242480,76,4300901,Aratiba,RS,ARB,33961,aratiba,BR-RS-Aratiba,54,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[99770-000 99789-999]""}"
 242537,76,4301008,Arroio do Meio,RS,AOI,1758806,arroio.meio,BR-RS-ArroioMeio,51,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[95940-000 95944-999]""}"
 242423,76,4301057,Arroio do Sal,RS,AKS,1648525,arroio.sal,BR-RS-ArroioSal,51,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[95585-000 95587-999]""}"
 242336,76,4301073,Arroio do Padre,RS,,510698,arroio.padre,BR-RS-ArroioPadre,53,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[96155-000 96159-999]""}"
@@ -4700,6 +4727,7 @@ osm_id,jurisd_base_id,jurisd_local_id,name,parent_abbrev,abbrev,wikidata_id,lexl
 242353,76,4304903,Casca,RS,CSX,1786658,casca,BR-RS-Casca,54,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[99260-000 99264-999]""}"
 242677,76,4304952,Caseiros,RS,CFR,950522,caseiros,BR-RS-Caseiros,54,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[95315-000 95319-999]""}"
 242459,76,4305009,Catuípe,RS,CTU,592766,catuipe,BR-RS-Catuipe,55,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[98770-000 98779-999]""}"
+242327,76,4310504,Iraí,RS,IAY,1757726,irai,BR-RS-Irai,55,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[98460-000 98464-999]""}"
 242450,76,4305108,Caxias do Sul,RS,CSL,110017,caxias.sul,BR-RS-CaxiasSul,54,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[95000-001 95149-999]""}"
 242568,76,4305116,Centenário,RS,,387167,centenario,BR-RS-Centenario,54,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[99838-000 99839-999]""}"
 242477,76,4305124,Cerrito,RS,,1785871,cerrito,BR-RS-Cerrito,53,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[96395-000 96399-999]""}"
@@ -4814,7 +4842,6 @@ osm_id,jurisd_base_id,jurisd_local_id,name,parent_abbrev,abbrev,wikidata_id,lexl
 242371,76,4310413,Inhacorá,RS,,348258,inhacora,BR-RS-Inhacora,55,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[98765-000 98769-999]""}"
 242506,76,4310439,Ipê,RS,IPF,741764,ipe,BR-RS-Ipe,54,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[95240-000 95249-999]""}"
 242312,76,4310462,Ipiranga do Sul,RS,IZG,1786472,ipiranga.sul,BR-RS-IpirangaSul,54,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[99925-000 99929-999]""}"
-242327,76,4310504,Iraí,RS,IAY,1757726,irai,BR-RS-Irai,55,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[98460-000 98464-999]""}"
 242662,76,4310538,Itaara,RS,,1757446,itaara,BR-RS-Itaara,55,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[97185-000 97189-999]""}"
 242653,76,4310553,Itacurubi,RS,ICQ,1757590,itacurubi,BR-RS-Itacurubi,55,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[97685-000 97689-999]""}"
 242331,76,4310579,Itapuca,RS,,1757396,itapuca,BR-RS-Itapuca,51,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[95997-000 95999-999]""}"
@@ -5267,6 +5294,7 @@ osm_id,jurisd_base_id,jurisd_local_id,name,parent_abbrev,abbrev,wikidata_id,lexl
 333709,76,5106281,Novo São Joaquim,MT,NSJ,2011959,novo.sao.joaquim,BR-MT-NovoSaoJoaquim,66,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[78625-000 78627-999]""}"
 333596,76,5106299,Paranaíta,MT,PNZ,1805645,paranaita,BR-MT-Paranaita,66,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[78590-000 78592-999]""}"
 333611,76,5106307,Paranatinga,MT,PWT,1805618,paranatinga,BR-MT-Paranatinga,66,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[78870-000 78874-999]""}"
+334547,76,5208707,Goiânia,GO,GNA,83189,goiania,BR-GO-Goiania,62,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[74000-001 74899-999]""}"
 333626,76,5106315,Novo Santo Antônio,MT,NSA,2107875,novo.santo.antonio,BR-MT-NovoSantoAntonio,66,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[78674-000 78674-999]""}"
 333604,76,5106372,Pedra Preta,MT,,1857809,pedra.preta,BR-MT-PedraPreta,66,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[78795-000 78799-999]""}"
 333689,76,5106422,Peixoto de Azevedo,MT,PXZ,933251,peixoto.azevedo,BR-MT-PeixotoAzevedo,66,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[78530-000 78534-999]""}"
@@ -5340,6 +5368,7 @@ osm_id,jurisd_base_id,jurisd_local_id,name,parent_abbrev,abbrev,wikidata_id,lexl
 334463,76,5201108,Anápolis,GO,ANS,223422,anapolis,BR-GO-Anapolis,62,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[75000-001 75159-999]""}"
 334458,76,5201207,Anhanguera,GO,AHG,545263,anhanguera,BR-GO-Anhanguera,64,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[75770-000 75779-999]""}"
 334389,76,5201306,Anicuns,GO,ANU,22067260,anicuns,BR-GO-Anicuns,64,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[76170-000 76179-999]""}"
+334492,76,5204953,Campos Verdes,GO,COV,928117,campos.verdes,BR-GO-CamposVerdes,62,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[76515-000 76519-999]""}"
 334413,76,5201405,Aparecida de Goiânia,GO,ACG,459711,aparecida.goiania,BR-GO-AparecidaGoiania,62,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[74900-001 74999-999]""}"
 334601,76,5201454,Aparecida do Rio Doce,GO,,1795248,aparecida.rio.doce,BR-GO-AparecidaRioDoce,64,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[75827-000 75827-999]""}"
 334549,76,5201504,Aporé,GO,APY,22067258,apore,BR-GO-Apore,64,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[75825-000 75826-999]""}"
@@ -5377,7 +5406,6 @@ osm_id,jurisd_base_id,jurisd_local_id,name,parent_abbrev,abbrev,wikidata_id,lexl
 334623,76,5204805,Campo Alegre de Goiás,GO,CGG,988803,campo.alegre.goias,BR-GO-CampoAlegreGoias,64,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[75795-000 75799-999]""}"
 334615,76,5204854,Campo Limpo de Goiás,GO,,989794,campo.limpo.goias,BR-GO-CampoLimpoGoias,62,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[75160-000 75164-999]""}"
 334441,76,5204904,Campos Belos,GO,CSB,991108,campos.belos,BR-GO-CamposBelos,62,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[73840-000 73849-999]""}"
-334492,76,5204953,Campos Verdes,GO,COV,928117,campos.verdes,BR-GO-CamposVerdes,62,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[76515-000 76519-999]""}"
 334417,76,5205000,Carmo do Rio Verde,GO,COD,1805778,carmo.rio.verde,BR-GO-CarmoRioVerde,62,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[76340-000 76342-999]""}"
 334608,76,5205059,Castelândia,GO,,656748,castelandia,BR-GO-Castelandia,64,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[75925-000 75929-999]""}"
 334518,76,5205109,Catalão,GO,CTL,35135,catalao,BR-GO-Catalao,64,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[75700-001 75714-999]""}"
@@ -5416,7 +5444,6 @@ osm_id,jurisd_base_id,jurisd_local_id,name,parent_abbrev,abbrev,wikidata_id,lexl
 334387,76,5208400,Goianápolis,GO,GPS,985611,goianapolis,BR-GO-Goianapolis,62,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[75170-000 75174-999]""}"
 334415,76,5208509,Goiandira,GO,GON,1003443,goiandira,BR-GO-Goiandira,64,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[75740-000 75749-999]""}"
 334613,76,5208608,Goianésia,GO,GNE,988771,goianesia,BR-GO-Goianesia,62,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[76380-001 76389-999]""}"
-334547,76,5208707,Goiânia,GO,GNA,83189,goiania,BR-GO-Goiania,62,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[74000-001 74899-999]""}"
 334566,76,5208806,Goianira,GO,GIN,281011,goianira,BR-GO-Goianira,62,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[75370-000 75374-999]""}"
 334378,76,5208905,Goiás,GO,GOA,427697,goias,BR-GO-Goias,62,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[76600-000 76629-999]""}"
 334619,76,5209101,Goiatuba,GO,GTB,1797061,goiatuba,BR-GO-Goiatuba,64,"{""notes"": null, ""creation"": null, ""extinction"": null, ""postalCode_ranges"": ""[75600-000 75602-999]""}"
