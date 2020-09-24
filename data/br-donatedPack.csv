@@ -1,28 +1,44 @@
-pack_id,donor_id,accepted_date,about
-22,5,2020-05-14,"Bairros, eixos, lotes"
-23,6,2020-05-14,"Bairros, eixos, lotes"
-24,7,2020-05-14,"Bairros, eixos, lotes"
-12,8,2020-03-19,Pontos com rua e número
-33,9,2020-07-22,"Bairros, eixos, endereços, lotes, quadras"
-21,10,2020-05-14,"Bairros, eixos, lotes"
-16,11,2020-04-14,"Lotes, eixos, divisa de bairro"
-30,13,2020-07-10,Arquivo DWG-CAD incompleto
-29,14,2020-06-26,"Bairros, eixos, lotes"
-19,15,2020-04-22,"Bairros, eixos, lotes, pontos de numeração de casa"
-18,16,2020-04-20,"Bairros, eixos, empresas, lotes"
-14,17,2020-04-02,Eixos e bairros
-27,18,2020-07-27,"Bairros, eixos, lotes"
-31,19,2020-07-15,Bairros
-34,20,2020-07-23,"Eixos, edificação, quadras"
-36,21,2020-07-29,Eixos
-10,24,2020-05-07,"Loteamento, edificação, eixo, lote e quadra"
-28,25,2020-06-22,"Bairros, eixos, lotes, edificação"
-15,26,2020-04-08,Arquivo DWG-CAD sem endereços
-32,27,2020-07-17,"Eixos, edificação, lotes"
-26,28,2020-06-22,"Bairros, eixos"
-20,29,2020-04-24,Pontos com inscrição do lote
-25,30,2020-06-18,"Bairros, eixos, lotes, pontos de endereços"
-17,31,2020-04-20,Eixos
-13,32,2020-04-02,CSV dos pontos de numeração de casa
-35,33,2020-07-26,"Distritos, subprefeituras, eixos, lotes, edificação"
-37,35,2020-08-11,"Lotes, eixos, edificações e quadras"
+pack_id,donor_id,donor_label,user_resp,accepted_date,escopo,about,author,contentReferenceTime,license_is_explicit,license,uri_objType,uri,isAt_UrbiGIS
+1,1,IBGE,peter,1900-01-01,BR,original-addressPoint; Censo Agro 2017 do IBGE,IBGE,2017,yes,CC0,site,https://censos.ibge.gov.br/agro/2017/,no
+2,2,IPPUC,enio,1900-01-01,BR-PR-Curitiba,original-addressPoint-local; Dados Geográficos de Curitiba,IPPUC,2018,,(non-standard),site,http://ippuc.org.br/geodownloads/geo.htm,no
+4,3,OK-BR,peter,1900-01-01,BR,controlledVoc; city-codes and state-codes,OK-BR,2020,yes,CC0,site,http://datasets.ok.org.br/city-codes,no
+7,4,OSM,peter,1900-01-01,BR,original-addressPoint; OSMstable-BR de 2/10/2018,OSM,2020,yes,ODbL,site,osm.org,-
+9,44,Wikimedia,peter,1900-01-01,BR,Entidades com dados de endereço,Wikidata,2020,yes,CC0,site,http://wikidata.org,-
+10,24,SP-ITU,igor,2020-05-07,BR-SP-Itu,"Loteamento, edificação, eixo, lote e quadra",(self),2019,no,CC0,email,https://wetransfer.com/downloads/37b259b2c63995271075e5291c82c88d20200506185853/d960e3fd87dab92b15e2e37a022035a920200506185911/e1ea36 (link expirado),yes
+12,8,MG-BHE,igor,2020-03-19,BR-MG-BeloHorizonte,Pontos com rua e número,(self),2019,no,CC0,email,(anexo de email),yes
+13,32,SP-SOV,igor,2020-04-02,BR-SP-SaoVicente,CSV dos pontos de numeração de casa,(self),2019,no,CC0,email,(anexo de email),yes
+14,17,RS-GTI,igor,2020-04-02,BR-RS-Gravatai,Eixos e bairros,(self),2019,no,CC0,email,(anexo de email),yes
+15,26,SP-LIM,igor,2020-04-08,BR-SP-Limeira,Arquivo DWG-CAD sem endereços,(self),2019,no,CC0,site,https://www.limeira.sp.gov.br/sitenovo/simple_hotsite.php?id=29&simple=118,no
+16,11,PR-CSC,igor,2020-04-14,BR-PR-Cascavel,"Lotes, eixos, divisa de bairro",(self),2019,no,CC0,email,(anexo de email),yes
+17,31,SP-SCB,igor,2020-04-20,BR-SP-Sorocaba,Eixos,(self),2019,no,CC0,email,(anexo de email),yes
+18,16,RJ-NRI,igor,2020-04-20,BR-RJ-Niteroi,"Bairros, eixos, empresas, lotes",(self),2019,no,CC0,site,http://transparencia.niteroi.rj.gov.br/Dados-Abertos/dados-abertos.html,yes
+19,15,PR-SJP,igor,2020-04-22,BR-PR-SaoJosePinhais,"Bairros, eixos, lotes, pontos de numeração de casa",(self),2019,no,CC0,email,(anexo de email),yes
+20,29,SP-SAN,igor,2020-04-24,BR-SP-Santos,Pontos com inscrição do lote,(self),2019,no,CC0,email,(anexo de email),yes
+21,10,PE-RCE,igor,2020-05-14,BR-PE-Recife,"Bairros, eixos, lotes",(self),2019,no,CC0,site,http://www.recife.pe.gov.br/ESIG/documentos/Informacao/InformacaoManualArquivos.htm,yes
+22,5,ES-SEA,igor,2020-05-14,BR-ES-Serra,"Bairros, eixos, lotes",(self),2019,no,CC0,email,http://drive.google.com/open?id=0ByzRD7X96jzScHJiNF9xaHpEcGM,yes
+23,6,ES-VTA,igor,2020-05-14,BR-ES-Vitoria,"Bairros, eixos, lotes",(self),2019,no,CC0,site,http://geoweb.vitoria.es.gov.br/#/shp,yes
+24,7,ES-VVA,igor,2020-05-14,BR-ES-VilaVelha,"Bairros, eixos, lotes",(self),2019,no,CC0,site,https://www.vilavelha.es.gov.br/paginas/desenvolvimento-urbano-e-mobilidade-arquivos-de-georreferenciamento,yes
+25,30,SP-SBC,igor,2020-06-18,BR-SP-SaoBernardoCampo,"Bairros, eixos, lotes, pontos de endereços",(self),2019,no,CC0,"site, email",https://geo.saobernardo.sp.gov.br/,yes
+26,28,SP-OSC,igor,2020-06-22,BR-SP-Osasco,"Bairros, eixos",(self),2019,no,CC0,email,(anexo de email),yes
+27,18,RS-PAE,igor,2020-07-27,BR-RS-PortoAlegre,"Bairros, eixos, lotes",(self),2019,no,CC0,email,(anexo de email),no
+28,25,SP-JUN,igor,2020-06-22,BR-SP-Jundiai,"Bairros, eixos, lotes, edificação",CIJUN,2019,no,CC0,site,https://geo.jundiai.sp.gov.br/geojundiai/,yes
+29,14,PR-PIN,igor,2020-06-26,BR-PR-Pinhais,"Bairros, eixos, lotes",(self),2019,no,CC0,site,http://www.pinhais.pr.gov.br/geo/mapa/pinhais/,yes
+30,13,PR-MRH,igor,2020-07-10,BR-PR-MarechalCandidoRondon,Arquivo DWG-CAD incompleto,(self),2019,no,CC0,email,(anexo de email),no
+31,19,RS-SMA,igor,2020-07-15,BR-RS-SantaMaria,Bairros,(self),2019,no,CC0,email,(anexo de email),no
+32,27,SP-LRP,igor,2020-07-17,BR-SP-LaranjalPaulista,"Eixos, edificação, lotes",(self),2019,no,CC0,email,(anexo de email),yes
+33,9,MG-CEM,igor,2020-07-22,BR-MG-Contagem,"Bairros, eixos, endereços, lotes, quadras",(self),2019,no,CC0,email,(anexo de email),yes
+34,20,SC-JGS,igor,2020-07-23,BR-SC-JaraguaSul,"Eixos, edificação, quadras",(self),2019,no,CC0,"osm,email",(anexo de email),yes
+35,33,SP-SPA,igor,2020-07-26,BR-SP-SaoPaulo,"Distritos, subprefeituras, eixos, lotes, edificação",(self),2019,no,CC0,site,http://geosampa.prefeitura.sp.gov.br/PaginasPublicas/_SBC.aspx,yes
+36,21,SP-ATB,igor,2020-07-29,BR-SP-Atibaia,Eixos,(self),2019,no,CC0,email,(anexo de email),no
+37,34,MS-CPE,igor,2020-09-07,BR-MS-CampoGrande,"Lotes, loteamentos",(self),2019,no,CC0,email,(anexo de email),no
+38,35,SC-JVE,igor,2020-08-11,BR-SC-Joinville,"Lotes, eixos, edificações e quadras",(self),2019,no,CC0,site,https://geoprocessamento.joinville.sc.gov.br/download,no
+39,22,SP-CAM,igor,2020-08-14,BR-SP-Campinas,"Eixos, Loteamentos, pontos de lotes",(self),2019,no,CC0,site,https://informacao-didc.campinas.sp.gov.br/metadados.php,no
+40,36,SP-SLT,igor,1900-01-01,BR-SP-Salto,(sem material),(self),2019,no,CC0,(vazio),http://www.geosalto.geonet.net.br/,no
+41,37,PR-PBC,igor,2020-08-12,BR-PR-PatoBranco,"(material em tratamento: lote, eixo, meio fio)",(self),2019,no,CC0,email,(anexo de email),no
+42,38,RJ-DQX,igor,2020-08-18,BR-RJ-DuqueCaxias,"Bairros, Distritos, Município, Eixos-Estradas rurais",(self),2019,no,CC0,email,(anexo de email),no
+43,39,MG-GVS,igor,2020-08-24,BR-MG-GovernadorValadares,"Bairros, Eixos, Lotes (inscrição), Quadras, Meio-fio, Posteação, Arborização",(self),2019,no,CC0,email,(anexo de email),no
+44,40,SP-CBV,igor,2020-08-27,BR-SP-Cabreuva,Mapa em DWG,(self),2019,no,CC0,email,(anexo de email),no
+45,41,SP-PIR,igor,2020-09-03,BR-SP-Piracicaba,"Lotes (endereços), Bairros, Quadras",(self),2019,no,CC0,site,http://geo.piracicaba.sp.gov.br/app/glue-piracicaba/login.html,no
+46,42,AC-RBO,igor,2020-09-10,BR-AC-RioBranco,Eixos,(self),2019,no,CC0,email,(anexo de email),no
+47,43,SP-SJC,igor,2020-09-15,BR-SP-SaoJoseCampos,"Eixos, Bairros",(self),2019,no,CC0,site,https://www.sjc.sp.gov.br/servicos/urbanismo-e-sustentabilidade/uso-do-solo/geoprocessamento/,no
+48,45,PI-TSA,igor,2020-09-23,BR-PI-Teresina,"Eixos, bairros, quadras, equipamentos",(self),2019,no,CC0,site,https://semplan.teresina.pi.gov.br/mapas-interativos/,no
