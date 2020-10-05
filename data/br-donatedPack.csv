@@ -44,3 +44,4 @@ pack_id,donor_id,donor_label,user_resp,accepted_date,escopo,about,author,content
 48,45,PI-TSA,igor,2020-09-23,BR-PI-Teresina,"Eixos, bairros, quadras, equipamentos",(self),2019,no,CC0,site,https://semplan.teresina.pi.gov.br/mapas-interativos/,no
 49,46,ECT,peter,2020-10-04,BR,CEP e ruas,(self),2019-07,yes,comercial,,,no
 50,47,A4A,peter,2020-10-04,BR,abreviações de prefixo de via,(self),2020,yes,CC0,,,no
+51,4,OSM,peter,2020-10-04,BR,"Planet OSM, todos os dados ",(self),2020-09-25,yes,ODbL,site,http://download.geofabrik.de/south-america/brazil-latest.osm.pbf,no
