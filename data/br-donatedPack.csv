@@ -20,12 +20,12 @@ pack_id,donor_id,donor_label,user_resp,accepted_date,escopo,about,author,content
 24,7,ES-VVA,igor,2020-05-14,BR-ES-VilaVelha,"Bairros, eixos, lotes",(self),2019,no,CC0,site,https://www.vilavelha.es.gov.br/paginas/desenvolvimento-urbano-e-mobilidade-arquivos-de-georreferenciamento,yes
 25,30,SP-SBC,igor,2020-06-18,BR-SP-SaoBernardoCampo,"Bairros, eixos, lotes, pontos de endereços",(self),2019,no,CC0,"site, email",https://geo.saobernardo.sp.gov.br/,yes
 26,28,SP-OSC,igor,2020-06-22,BR-SP-Osasco,"Bairros, eixos",(self),2019,no,CC0,email,(anexo de email),yes
-27,18,RS-PAE,igor,2020-07-27,BR-RS-PortoAlegre,"Bairros, eixos, lotes",(self),2019,no,CC0,email,(anexo de email),no
+27,18,RS-PAE,igor,2020-07-27,BR-RS-PortoAlegre,"Bairros, eixos, pontos de numeração de casa",(self),2019,no,CC0,email,(anexo de email),no
 28,25,SP-JUN,igor,2020-06-22,BR-SP-Jundiai,"Bairros, eixos, lotes, edificação",CIJUN,2019,no,CC0,site,https://geo.jundiai.sp.gov.br/geojundiai/,yes
 29,14,PR-PIN,igor,2020-06-26,BR-PR-Pinhais,"Bairros, eixos, lotes",(self),2019,no,CC0,site,http://www.pinhais.pr.gov.br/geo/mapa/pinhais/,yes
 30,13,PR-MRH,igor,2020-07-10,BR-PR-MarechalCandidoRondon,Arquivo DWG-CAD incompleto,(self),2019,no,CC0,email,(anexo de email),no
 31,19,RS-SMA,igor,2020-07-15,BR-RS-SantaMaria,Bairros,(self),2019,no,CC0,email,(anexo de email),no
-32,27,SP-LRP,igor,2020-07-17,BR-SP-LaranjalPaulista,"Eixos, edificação, lotes",(self),2019,no,CC0,email,(anexo de email),yes
+32,27,SP-LRP,igor,2020-07-17,BR-SP-LaranjalPaulista,"Eixos, edificação, lotes",(self),2019,yes,CC0,email,(anexo de email),yes
 33,9,MG-CEM,igor,2020-07-22,BR-MG-Contagem,"Bairros, eixos, endereços, lotes, quadras",(self),2019,no,CC0,email,(anexo de email),yes
 34,20,SC-JGS,igor,2020-07-23,BR-SC-JaraguaSul,"Eixos, edificação, quadras",(self),2019,no,CC0,"osm,email",(anexo de email),yes
 35,33,SP-SPA,igor,2020-07-26,BR-SP-SaoPaulo,"Distritos, subprefeituras, eixos, lotes, edificação",(self),2019,no,CC0,site,http://geosampa.prefeitura.sp.gov.br/PaginasPublicas/_SBC.aspx,yes
@@ -42,3 +42,5 @@ pack_id,donor_id,donor_label,user_resp,accepted_date,escopo,about,author,content
 46,42,AC-RBO,igor,2020-09-10,BR-AC-RioBranco,Eixos,(self),2019,no,CC0,email,(anexo de email),no
 47,43,SP-SJC,igor,2020-09-15,BR-SP-SaoJoseCampos,"Eixos, Bairros",(self),2019,no,CC0,site,https://www.sjc.sp.gov.br/servicos/urbanismo-e-sustentabilidade/uso-do-solo/geoprocessamento/,no
 48,45,PI-TSA,igor,2020-09-23,BR-PI-Teresina,"Eixos, bairros, quadras, equipamentos",(self),2019,no,CC0,site,https://semplan.teresina.pi.gov.br/mapas-interativos/,no
+49,46,ECT,peter,2020-10-04,BR,CEP e ruas,(self),2019-07,yes,comercial,,,no
+50,47,A4A,peter,2020-10-04,BR,abreviações de prefixo de via,(self),2020,yes,CC0,,,no
