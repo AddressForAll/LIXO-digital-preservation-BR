@@ -45,4 +45,6 @@ id,escopo,shortName,vat_id,legalName,wikidata_id,url
 44,INT,Wikimedia,wd:P2657:596597913132-95,Wikimedia Foundation,180,https://wikimediafoundation.org/
 45,BR-PI-TSA,PI-TSA,cnpj:06.554.869/0001-64,Prefeitura Municipal de Teresina,56449993,https://pmt.pi.gov.br/
 46,BR,ECT,cnpj:34.028.316/0001-03,Empresa Brasileira de Correios e Telégrafos,3375004,http://www.correios.com.br/
-47,BR,A4A,cnpj:37.997.382/0001-80,Instituto AddressForAll,,http://addressforall.org/
+47,BR,A4A,cnpj:37.997.382/0001-80,Instituto AddressForAll,100155380,http://addressforall.org/
+48,BR-MS-DOS,MS-DOS,cnpj:03.155.926/0001-44,Prefeitura de Dourados,60029408,http://www.dourados.ms.gov.br/
+49,BR-SP-CQH,SP-CQH,cnpj:46.634.614/0001-26,Prefeitura Municipal de Cerquilho,100154106,https://cerquilho.sp.gov.br/
