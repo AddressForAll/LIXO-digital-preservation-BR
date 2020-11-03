@@ -1,14 +1,14 @@
 id,escopo,shortName,vat_id,legalName,wikidata_id,url
 1,BR,IBGE,cnpj:33.787.094/0001-40,Instituto Brasileiro de Geografia e Estatística,268072,https://ibge.gov.br/
-2,BR-PR-CTA,IPPUC,cnpj:76.582.337/0001-16,Inst. de Pesquisa e Plan Urbano de Curitiba-IPPUC,,http://ippuc.org.br
-3,BR,OK-BR,cnpj:19.131.243/0001-97,Open Knowledge Foundation Brasil,,http://ok.org.br
+2,BR-PR-CTA,IPPUC,cnpj:76.582.337/0001-16,Inst. de Pesquisa e Plan Urbano de Curitiba,100641436,http://ippuc.org.br
+3,BR,OK-BR,cnpj:19.131.243/0001-97,Open Knowledge Foundation Brasil,73828324,http://ok.org.br
 4,INT,OSM,wd:P2657:365969219933-54,OpenStreetMap Foundation,6542248,https://www.osmfoundation.org/
 5,BR-ES-SEA,ES-SEA,cnpj:27.174.093/0001-27,Prefeitura Municipal de Serra,56450024,http://www.serra.es.gov.br/
 6,BR-ES-VTA,ES-VTA,cnpj:27.142.058/0001-26,Prefeitura Municipal de Vitória,30263900,https://www.vitoria.es.gov.br/
 7,BR-ES-VVA,ES-VVA,cnpj:27.165.554/0001-03,Prefeitura Municipal de Vila Velha,56450026,https://www.vilavelha.es.gov.br/
 8,BR-MG-BHE,MG-BHE,cnpj:18.715.383/0001-40,Prefeitura de Belo Horizonte,30263897,https://prefeitura.pbh.gov.br/
-9,BR-MG-CEM,MG-CEM,cnpj:18.715.508/0001-31,Prefeitura Municipal de Contagem,56450007,http://www.contagem.mg.gov.br/novoportal/
-10,BR-PE-RCE,PE-RCE,cnpj:10.565.000/0001-92,Prefeitura Municipal de Recife,53930910,http://www2.recife.pe.gov.br/index.php
+9,BR-MG-CEM,MG-CEM,cnpj:18.715.508/0001-31,Prefeitura Municipal de Contagem,56450007,http://www.contagem.mg.gov.br
+10,BR-PE-RCE,PE-RCE,cnpj:10.565.000/0001-92,Prefeitura Municipal de Recife,53930910,http://www2.recife.pe.gov.br
 11,BR-PR-CSC,PR-CSC,cnpj:76.208.867/0001-07,Prefeitura Municipal de Cascavel,56450074,http://www.cascavel.pr.gov.br/
 12,BR-PR-CTA,PR-CTA,cnpj:76.417.005/0001-86,Prefeitura Municipal de Curitiba,53930907,https://www.curitiba.pr.gov.br/
 13,BR-PR-MRH,PR-MRH,cnpj:76.205.814/0001-24,Prefeitura Municipal de Marechal Cândido Rondon,97936438,https://marechalcandidorondon.atende.net/
@@ -48,3 +48,4 @@ id,escopo,shortName,vat_id,legalName,wikidata_id,url
 47,BR,A4A,cnpj:37.997.382/0001-80,Instituto AddressForAll,100155380,http://addressforall.org/
 48,BR-MS-DOS,MS-DOS,cnpj:03.155.926/0001-44,Prefeitura de Dourados,60029408,http://www.dourados.ms.gov.br/
 49,BR-SP-CQH,SP-CQH,cnpj:46.634.614/0001-26,Prefeitura Municipal de Cerquilho,100154106,https://cerquilho.sp.gov.br/
+50,BR-BA-SDR,BA-SDR,cnpj:13.927.801/0001-49,Municipio de Salvador,53930901,http://www.salvador.ba.gov.br/
