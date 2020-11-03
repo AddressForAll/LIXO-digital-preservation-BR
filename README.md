@@ -1,4 +1,4 @@
-# Digital-preservartion-BR
+# Digital-preservation-BR
 [Preservação digital](https://en.wikipedia.org/wiki/Digital_preservation) das principais fontes  do **banco de dados AddressForAll-Brasil**, mantido pelo [Instituto AddressForAll](http://addressforall.org/).
 
 # OPERAÇÃO DESTE GIT
@@ -31,10 +31,10 @@ Os metadados dos arquivos preservados estão descritos no *git* do projeto, [git
 ### Fontes IBGE
 Fonte dos dados estatísticos oficiais do Brasil, bem como elementos de cartografia e localização de endereços. O IBGE - Instituto Brasileiro de Geografia e Estatística (*CNPJ  33.787.094/0001-40*)
 
-Por ser uma fonte muito extensa, requer  [curadoria e decisões de projeto](https://github.com/AddressForAll/digital-preservartion-BR/issues/1).
+Por ser uma fonte muito extensa, requer  [curadoria e decisões de projeto](https://github.com/AddressForAll/digital-preservation-BR/issues/1).
 
 ### Fontes nas prefeituras
-Por ser uma fonte muito extensa e diversificada, requer  [curadoria e decisões de projeto](https://github.com/AddressForAll/digital-preservartion-BR/issues/1).
+Por ser uma fonte muito extensa e diversificada, requer  [curadoria e decisões de projeto](https://github.com/AddressForAll/digital-preservation-BR/issues/1).
 
 
 ## Normalização das fontes
