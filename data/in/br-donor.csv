@@ -49,3 +49,7 @@ id,escopo,shortName,vat_id,legalName,wikidata_id,url
 48,BR-MS-DOS,MS-DOS,cnpj:03.155.926/0001-44,Prefeitura de Dourados,60029408,http://www.dourados.ms.gov.br/
 49,BR-SP-CQH,SP-CQH,cnpj:46.634.614/0001-26,Prefeitura Municipal de Cerquilho,100154106,https://cerquilho.sp.gov.br/
 50,BR-BA-SDR,BA-SDR,cnpj:13.927.801/0001-49,Municipio de Salvador,53930901,http://www.salvador.ba.gov.br/
+51,BR,ClickSys-BR,cpf:115.658.347-04,ClickSistema,,clicksistema.com.br
+52,BR-SP-RPR,SP-RPR,cnpj:56.024.581/0001-56,Prefeitura Municipal de Ribeirão Preto,56450005,https://www.ribeiraopreto.sp.gov.br/portal/
+53,BR-SC-FNS,IPUF,cnpj:83.469.965/0001-55 ,Instituto de Pesquisa e Planejamento Urbano de Florianópolis,101575535,http://www.pmf.sc.gov.br/entidades/ipuf/
+54,BR-GO-GNA,GO-GNA,cnpj:14.185.071/0001-10,Prefeitura de Goiânia,53930914,https://www.goiania.go.gov.br/
