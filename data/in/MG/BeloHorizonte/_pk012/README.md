@@ -1,3 +1,7 @@
+# Sobre
+
+![](preview.png)
+
 # Extração
 Abaixo os passos para extração por tipo de dado relevante.
 
