@@ -16,7 +16,7 @@ etl_toPgis_endereco:
 	@echo Extraindo ....
 	@tput sgr0
 	cd $(pg_io) ; 7z e -y  $(ENDERECO_ZIP) $(ENDERECO).* > /dev/null
-	@echo TODO Converter csv para postgres
-	@echo "Conferindo se SRID esta configurado:"
-
-
+	# @echo "Conferindo se SRID esta configurado:"
+	@echo "== Convertendo ENDERECOS.CSV para PostgreSQL =="
+	psql $(pg_uri) < ENDERECO_make.sql
+	@echo "== FIM =="

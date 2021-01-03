@@ -25,3 +25,7 @@ Expressão para construir a string do nome do logradouro:
 Expressão para construir a string de número predial:
 
 `NUMERO_IMOVEL + if(LETRA_IMOVEL,LETRA_IMOVEL,'')`
+
+# Evidências de teste
+Teste no QGIS:
+![](qgis.png)
