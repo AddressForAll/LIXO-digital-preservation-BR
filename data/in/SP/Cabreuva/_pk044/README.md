@@ -37,3 +37,6 @@ O doador não forneceu mapa de numeração de quadras, então use a coluna `Quad
 # GitHub
 Issues:
 * https://github.com/AddressForAll/digital-preservation-BR/issues/4
+
+# Evidências de teste
+(vazio)
