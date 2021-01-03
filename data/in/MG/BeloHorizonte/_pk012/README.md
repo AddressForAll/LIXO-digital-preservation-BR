@@ -26,6 +26,15 @@ Expressão para construir a string de número predial:
 
 `NUMERO_IMOVEL + if(LETRA_IMOVEL,LETRA_IMOVEL,'')`
 
-# Evidências de teste
+## Evidências de teste
 Teste no QGIS:
 ![](qgis.png)
+
+------
+
+## Reprodutibilidade
+Os dados de https://github.com/AddressForAll/in-BR foram gerados partir dos seguintes comandos definidos pelo `makefile`: 
+
+* Pontos de endereço: `make etl_toPgis_endereco`
+* Eixos de via: pendente
+
