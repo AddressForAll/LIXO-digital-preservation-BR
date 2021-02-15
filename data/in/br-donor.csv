@@ -53,3 +53,14 @@ id,escopo,shortName,vat_id,legalName,wikidata_id,url
 52,BR-SP-RPR,SP-RPR,cnpj:56.024.581/0001-56,Prefeitura Municipal de Ribeirão Preto,56450005,https://www.ribeiraopreto.sp.gov.br/portal/
 53,BR-SC-FNS,IPUF,cnpj:83.469.965/0001-55 ,Instituto de Pesquisa e Planejamento Urbano de Florianópolis,101575535,http://www.pmf.sc.gov.br/entidades/ipuf/
 54,BR-GO-GNA,GO-GNA,cnpj:14.185.071/0001-10,Prefeitura de Goiânia,53930914,https://www.goiania.go.gov.br/
+55,BR-MG-URA,MG-URA,cnpj:18.428.839/0001-90,Prefeitura Municipal de Uberaba,56450073,http://www.uberaba.mg.gov.br/portal/principal
+56,BR-PE-CRU,PE-CRU,cnpj:10.091.536/0001-13,Prefeitura de Caruaru,56450060,https://caruaru.pe.gov.br/
+57,BR-MG-ULA,MG-ULA,cnpj:18.431.312/0001-15,Prefeitura Municipal de Uberlândia,56450006,https://www.uberlandia.mg.gov.br/
+58,BR-SP-ITH,SP-ITH,cnpj:46.578.498/0001-75,Prefeitura de Itanhaém,104847769,http://www2.itanhaem.sp.gov.br/
+59,BR-PR,Paranacidade,cnpj:01.450.804/0001-55,Serviço Social Autônomo Paranacidade,104848282,http://www.paranacidade.org.br/
+60,BR-PE-PTA,PE-PTA,cnpj:10.358.190/0001-77,Prefeitura de Petrolina,56450068,https://petrolina.pe.gov.br/
+61,BR-PR-AUC,PR-AUC,cnpj:76.105.535/0001-99,Prefeitura do Município de Araucária,104848034,https://araucaria.atende.net/
+62,BR-RO-JIP,RO-JIP,cnpj: 04.092.672/0001-25,Prefeitura Municipal de Ji-Paraná,105008525,http://www.site.ji-parana.ro.gov.br/
+63,BR-RS-NHO,RS-NHO,cnpj: 07.044.304/0001-08,Prefeitura Municipal de Novo Hamburgo,105008951,https://www.novohamburgo.rs.gov.br/
+64,BR-RS-SCR,RS-SCR,cnpj: 95.440.517/0001-08,Prefeitura Municipal de Santa Cruz do Sul,105328349,https://www.santacruz.rs.gov.br
+65,BR-SP-CUB,SP-CUB,cnpj: 47.492.806/0001-08,Prefeitura Municipal de Cubatão,105453143,http://www.cubatao.sp.gov.br/
