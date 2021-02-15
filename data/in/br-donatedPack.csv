@@ -56,7 +56,7 @@ pack_id,donor_id,donor_label,user_resp,accepted_date,escopo,about,author,content
 60,54,GO-GNA,igor,2020-12-01,BR-GO-Goiania,"Lotes, quadras, bairros, limites de município, eixos, meios-fios, hidrografia, pontos de interesse, pontos de praças, grandes equipamentos e pontos de escolas",(self),2018,yes,CC-BY,site,http://dadosabertos.goiania.go.gov.br/,no
 61,55,MG-URA,igor,2020-10-15,BR-MG-Uberaba,"Mapa urbano básico, hidrografias e estradas rurais",(self),2020,no,CC0,email,(anexo de email),no
 62,56,PE-CRU,igor,2020-11-16,BR-PE-Caruaru,Mapa urbano básico,(self),2020,no,CC0,email,(link de download),no
-63,87,MG-ULA,igor,2020-12-03,BR-MG-Uberlandia,"Mapa urbano básico, sistema viário e loteamentos",(self),2020,no,CC0,site,https://www.uberlandia.mg.gov.br/prefeitura/secretarias/planejamento-urbano/mapas-e-bairros/,no
+63,57,MG-ULA,igor,2020-12-03,BR-MG-Uberlandia,"Mapa urbano básico, sistema viário e loteamentos",(self),2020,no,CC0,site,https://www.uberlandia.mg.gov.br/prefeitura/secretarias/planejamento-urbano/mapas-e-bairros/,no
 64,58,SP-ITH,igor,2020-12-07,BR-SP-Itanhaem,"Bairros, eixos, limite de município, loteamentos, lotes e pontos de lotes",(self),2020,no,CC0,email,(anexo de email),no
 65,59,Paranacidade,igor,2020-12-08,BR-PR,Lotes urbanos do Estado de Paraná,(self),2020,no,CC0,email,(anexo de email),no
 66,60,PE-PTA,igor,2020-09-16,BR-PE-Petrolina,Mapa básico em DWG e PDF,(self),2020,no,CC0,email,(anexo de email),no
