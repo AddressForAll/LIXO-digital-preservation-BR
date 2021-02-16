@@ -26,15 +26,24 @@ Expressão para construir a string de número predial:
 
 `NUMERO_IMOVEL + if(LETRA_IMOVEL,LETRA_IMOVEL,'')`
 
-## Evidências de teste
+## Eixos
+SRID: 31983
+1. Abrir `LOGRADOURO.zip`.
+2. Selecionar arquivo `LOGRADOUROLine.*`.
+3. Copiar arquivo selecionado para diretório alvo.
+
+O arquivo `wfsrequest.txt` possui o caminho para gerar o shapefile do servidor da prefeitura.
+
+### Dados relevantes
+Colunas da camada `LOGRADOUROLine`:
+* `TIPO_LOGRA` (string): tipo de logradouro em caixa alta, por extenso (RUA AVENIDA etc).
+* `NOME_LOGRA` (string): nome do logradouro em caixa alta.
+
+### Expressões
+Expressão para construir a string do nome do logradouro:
+
+`TIPO_LOGRA + ' ' + NOME_LOGRA`
+
+# Evidências de teste
 Teste no QGIS:
 ![](qgis.png)
-
-------
-
-## Reprodutibilidade
-Os dados de https://github.com/AddressForAll/in-BR foram gerados partir dos seguintes comandos definidos pelo `makefile`: 
-
-* Pontos de endereço: `make etl_toPgis_endereco`
-* Eixos de via: pendente
-

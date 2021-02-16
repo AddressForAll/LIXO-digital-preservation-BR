@@ -1,4 +1,5 @@
 # Tarefas
+
 ## 1. Converter boxes com numeração predial em pontos
 
 **NB:** Confirmar se é necessária, conforme este comentário e ilustração: https://github.com/AddressForAll/digital-preservation-BR/issues/3#issuecomment-726850941
@@ -50,7 +51,8 @@ Colunas:
 * `NRPARINI` (int): numeração inicial - lado par.
 * `NRPARFIN` (int): numeração final - lado par.
 
-Para construir a string do nome de logradouro, recomenda-se usar: 
+### Expressões
+Expressão para construir a string do nome do logradouro:
 
 `"CDIDECAT" + if("NMIDEPRE",' ' + "NMIDEPRE",'') + ' ' + "NMIDELOG"`
 
@@ -63,6 +65,13 @@ SRID: Custom (TM-POA)
 ### Dados relevantes
 Colunas:
 * `NOME` (string): nome do bairro.
+
+## Outros
+O arquivo `decreto_18.315.pdf` Institui o Sistema Cartográfico de Referência de Porto Alegre.
+
+# Evidências de teste
+Teste no QGIS:
+![](qgis.png)
 
 ------------------
 

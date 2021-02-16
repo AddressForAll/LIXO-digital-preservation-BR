@@ -26,5 +26,5 @@ etl_toPg_relacao:
 	@echo "== Convertendo relacao_CSV para PostgreSQL =="
 	# psql $(pg_uri) -c "DROP TABLE ingest.pk044_relacao CASCADE"
 	psql $(pg_uri) -c "SELECT ingest.fdw_generate_getCSV('relacao','br_pk044',null,';')"
-	@echo "== FIM (confira pk044 na tabela tmp_orig.fdw_relacao_br_pk044) =="
+	@echo "== FIM (confira pk044 na tabela ingest.pk044_relacao) =="
 

@@ -30,7 +30,7 @@ Colunas da camada `IMOVEL_2020_Logradouro`:
 * `LOTE` (string): número de lote.
 
 ## Loteamentos
-SRID: 31983
+SRID: 31981
 1. Abrir `Open_Street.rar`.
 2. Selecionar arquivos `Open Street/PARCELAMENTOS.*`.
 3. Copiar arquivos selecionados para diretório alvo.
@@ -49,3 +49,7 @@ Para outros projetos, há também dados sobre:
 * ASSISTENCIA_SOCIAL
 
 (!!! Havendo outros projetos, esta seção será detalhada !!!)
+
+# Evidências de teste
+Teste no QGIS:
+![](qgis.png)
