@@ -1,5 +1,31 @@
 # Digital-preservation-BR
-[Preservação digital](https://en.wikipedia.org/wiki/Digital_preservation) das principais fontes  do **banco de dados AddressForAll-Brasil**, mantido pelo [Instituto AddressForAll](http://addressforall.org/).
+[Preservação digital](https://en.wikipedia.org/wiki/Digital_preservation) das principais fontes  do **banco de dados AddressForAll-Brasil**, mantido pelo [Instituto ITGS](http://addressforall.org/).
+
+Ao Brasil foram atribuídos: no contexto ISO&nbsp;3166&#8209;2 o geocódigo **BR** e número  **76**; na Wikidata o identificador	[Q155](http://wikidata.org/entity/Q155); no OpenStreetMap o identificador de [*relation* 59470](http://osm.org/relation/59470).
+
+## Organização territorial e seus geocódigos
+
+O território nacional e suas subdivisões adminisrativas representam **jurisdições**:
+
+* O país está dividido em 16 Estados federados (e 1 distrito federal - DF), geridos por representantes eleitos democraticamente nos respectivos territórios. <br/>Os geocódigos das Unidades da Federação (Estados e DF) seguem a convenção registrada pela [ISO&nbsp;3166&#8209;2:BR](https://en.wikipedia.org/wiki/ISO_3166-2:BR). O IBGE também fixou geocódigos numéricos. No OpenStreetMap convenciona-se o que a subdivisão por UF corresponde ao *nível administrativo 2*. <!--, abaixo da subdivisão por regiões (*nível 1* composto por Norte, Nordeste, Centro-Oeste, Sudeste e Sul).  Key:admin_level--> 
+
+* Os Estados são subdivididos em um total de 5500 municípios, geridos por representantes eleitos democraticamente nos respectivos territórios.<br/>Apesar de não existirem geocódigos oficiais, existem propostas (incompativeis) de padronização. Neste projeto demos preferência pela proposta do DER-SP que criou códigos de 3 letras para cada município do estado de SP.   O IBGE  fixou geocódigos numéricos para os municípios. No OpenStreetMap convenciona-se o que os municípios correspondem ao *nível administrativo 4*.
+
+A jurisdição que atribui nomes às ruas e define o sistema de numeração predial é o município.
+
+## Organização deste repositório
+Neste git são mantidos apenas metadados, ou seja, descritores das entidades, tais como nomes e geocódigos, mas mapas e outros dados, armazenados externamente por serem muito grandes. Os metadados foram organizados da seguinte forma, na pasta [`/data`](./data):
+
+* [`data/in`](./data/in): dados originais de **entrada**, ou seja, metadados fornecidos para o sistema.
+   * [`br-jurisdiction.csv`](./data/in/br-jurisdiction.csv): jurisdições (de todos os níveis). 
+   * [`br-donor.csv`](./data/in/br-donor.csv): doadores de pacotes de dados. Metadados das instituições que fornecem dados oficiais.
+   * [`br-donatedPack.csv`](./data/in/br-donatedPack.csv): descritores dos arquivos doados.
+   * *packages* (pastas `_packXX`): pacotes hash e demais descritores dos arquivos armazenados externamente, bem como `makefile` e demais descritores de processo para desempacotar esses arquivos e leva-los ao banco de dados (PostregSQL). Por exemplo ... 
+ 
+* [`data/out`](./data/out): resultados gerados pelo sistema (**saída**), ou seja, metadados criados a partir dos algorimos e estatísticas aplicados aos dados.
+
+
+------
 
 # OPERAÇÃO DESTE GIT
 
