@@ -16,13 +16,13 @@ A jurisdição que atribui nomes às ruas e define o sistema de numeração pred
 ## Organização deste repositório
 Neste git são mantidos apenas metadados, ou seja, descritores das entidades, tais como nomes e geocódigos, mas mapas e outros dados, armazenados externamente por serem muito grandes. Os metadados foram organizados da seguinte forma, na pasta [`/data`](./data):
 
-* [`data/in`](./data/in): dados originais de **entrada**, ou seja, metadados fornecidos para o sistema.
+* [`/data/in`](./data/in): dados originais de **entrada**, ou seja, metadados fornecidos para o sistema.
    * [`br-jurisdiction.csv`](./data/in/br-jurisdiction.csv): jurisdições (de todos os níveis). 
    * [`br-donor.csv`](./data/in/br-donor.csv): doadores de pacotes de dados. Metadados das instituições que fornecem dados oficiais.
    * [`br-donatedPack.csv`](./data/in/br-donatedPack.csv): descritores dos arquivos doados.
-   * *packages* (pastas `_packXX`): pacotes hash e demais descritores dos arquivos armazenados externamente, bem como `makefile` e demais descritores de processo para desempacotar esses arquivos e leva-los ao banco de dados (PostregSQL). Por exemplo ... 
+   * *packages* (pastas `_packXX`): pacotes hash e demais descritores dos arquivos armazenados externamente, bem como `makefile` e demais descritores de processo para desempacotar esses arquivos e leva-los ao banco de dados (PostregSQL). Por exemplo [`/data/in/MG/BeloHorizonte/_pk012`](./data/in/MG/BeloHorizonte/_pk012).
  
-* [`data/out`](./data/out): resultados gerados pelo sistema (**saída**), ou seja, metadados criados a partir dos algorimos e estatísticas aplicados aos dados.
+* [`/data/out`](./data/out): resultados gerados pelo sistema (**saída**), ou seja, metadados criados a partir dos algorimos e estatísticas aplicados aos dados.
 
 
 ------
