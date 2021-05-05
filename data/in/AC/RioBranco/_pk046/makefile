@@ -1,4 +1,13 @@
+## MUSTACHE MAKE e seu JSON.
 
+pg_io  =/tmp/pg_io
+ori    =/var/www/preserv.addressforall.org/download
+pg_uri ="postgres://postgres@localhost/ingest1"
+
+
+
+
+=========== ORIGINAL: =============
 # PWD:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 pg_io  =/tmp/pg_io
 ori    =/var/www/preserv.addressforall.org/download
@@ -137,5 +146,3 @@ etl_toPgis_loteamentos:
 	rm -rf $(pg_io)/$(LOTEAMENTOS_PASTA)
 	psql $(pg_uri) -c "drop table loteamentos cascade"
 	@echo FIM.
-
-

@@ -1,0 +1,34 @@
+pkid:   027   # package ID e ".ID versão" se necessário
+schemaId_input: ref027a     # ID do JSON-schema de input, ref no preimeiro template a usar este padrão de input.
+schemaId_template: ref027a  # ID do makefile.mustache, ref no preimeiro package a usar o template.
+need_commands: 7z psql shp2pgsql
+files:
+  -
+    p:    1
+    file: fbc62efdbd0f16a7db03b5b775c50c9425367a8dee8a85d9b53e4475bbdb99d2.zip
+    name: Imóveis
+  -
+    p:    2
+    file: 258772459588f7941ac6eeda7c6839df02d58741cf6bc3e48825aecd60418251.zip
+    name: Bairros
+  -
+    p:    3
+    file: c35e3b2825d3da122a74c6c8dd5f3157a3bd6201208d2a6d13dec433a6ded9fc.zip
+    name: Eixos de via
+
+parts:
+  geoaddress-novia: # config própria desse template, em sao paulo seria array
+        p: 1a   # identifcador do layer, pode ter mais de um por file
+        file: 1
+        orig_filename: NRO_IMOVEL  # incluir numa pasta isolada todos os NRO_IMOVEL
+        tabname:  geoaddress
+  namespace-full:
+        p: 2a
+        file: 2
+        orig_filename: Bairros_LC12112_16
+        tabname:  namespace
+  via-full:
+        p: 3a
+        file: 3
+        orig_filename: EixosLogradouros
+        tabname:  via
