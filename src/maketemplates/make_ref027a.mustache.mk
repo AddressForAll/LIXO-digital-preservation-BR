@@ -28,10 +28,6 @@ pg_uri_db   =$(pg_uri)/$(pg_db)
 part{{p}}_path  =$(orig)/$(part{{p}}_file)
 {{/files}}
 
-
-{{#parts}}
-$(part{{p}}_tabname) =
-
 all:
 	@echo Requer comandos $(need_commands)
 	@echo Principais targets implementados neste makefile:
@@ -46,6 +42,7 @@ makedirs:
 	@mkdir -p $(pg_io)
 
 {{#parts}}
+$(part{{p}}_tabname) = xxx
 {{#geoaddress-novia}}
 
 ## aqui mais definições, para que include não precise conter mustache!
@@ -61,6 +58,8 @@ geoaddress-novia: makedirs
 	# ATENCAO REVER MEU MODOLO DE DADOS!
 	psql $(pg_uri_db) -c "DROP TABLE IF EXISTS $(tabname) CASCADE; DROP TABLE IF EXISTS $(tabname) CASCADE;"
 	psql $(pg_uri_db) -c "SELECT ingest.getmeta_to_file('{{orig_filename}}.shp','geoaddress-novia',$(pkid))"
+
+	psql postgres://postgres@localhost/lixo -c "SELECT ingest.any_load('/tmp/pg_io/NRO_IMOVEL.shp','geoaddress_none','pk027_geoaddress1',27,array['gid','textstring'])"
 
 	@tput bold
 	@echo Extraindo ....
