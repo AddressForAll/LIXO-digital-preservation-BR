@@ -10,11 +10,11 @@ sandbox={{sandbox}}
 
 ## USER CONFIGS
 pg_db  ={{pg_db}}
+thisTplFile_root = {{thisTplFile_root}}
 
 ## ## ## ## ## ## ##
 ## THIS_MAKE, _pk{{pkid}}
 
-pkid ={{pkid}}
 need_commands   ="{{need_commands}}" # and a prepared database {{pg_db}}
 
 {{#files}}
@@ -27,6 +27,7 @@ pg_uri_db   =$(pg_uri)/$(pg_db)
 {{#files}}
 part{{p}}_path  =$(orig)/$(part{{p}}_file)
 {{/files}}
+
 
 all:
 	@echo Requer comandos $(need_commands)
@@ -42,42 +43,26 @@ makedirs:
 	@mkdir -p $(pg_io)
 
 {{#parts}}
-$(part{{p}}_tabname) = xxx
 {{#geoaddress-novia}}
 
-## aqui mais definições, para que include não precise conter mustache!
-
+geoaddress-novia: tabname = pk{{pkid}}_p{{file}}_{{tabname}}
 geoaddress-novia: makedirs
-	# pk{{pkid}}_p{{file}} - ETL extrating to PostgreSQL/PostGIS the "geoaddress-novia" datatype (point with house_number but no via name)
-	@echo "-- Incluindo dados do arquivo-{{file}} do package-{{pkid}} na Tabela de Endereços da base $(pg_db) --"
+	@# pk{{pkid}}_p{{file}} - ETL extrating to PostgreSQL/PostGIS the "geoaddress-novia" datatype (point with house_number but no via name)
+	@echo
+	@echo "-- Incluindo dados tipo geoaddress-novia do arquivo-{{file}} do package-{{pkid}} na base $(pg_db) --"
 	@echo " Tema do arquivo-{{file}}: $(part{{file}}_name)"
 	@echo " Hash do arquivo-{{file}}: $(part{{file}}_file)"
-	@echo "Creating table ingest.pk{{pkid}}_p{{file}} on PostGIS"
-	@whoami
+	@echo " Tabela do layer geoaddress sem nome de rua, só com numero predial: $(tabname)"
+	@echo " Parte do arquivo que representa a tabela: $(part{{file}}_path)"
 	@echo "Run with tmux and sudo! (DANGER: seems not idempotent on psql)"
-	# ATENCAO REVER MEU MODOLO DE DADOS!
-	psql $(pg_uri_db) -c "DROP TABLE IF EXISTS $(tabname) CASCADE; DROP TABLE IF EXISTS $(tabname) CASCADE;"
-	psql $(pg_uri_db) -c "SELECT ingest.getmeta_to_file('{{orig_filename}}.shp','geoaddress-novia',$(pkid))"
-
-	psql postgres://postgres@localhost/lixo -c "SELECT ingest.any_load('/tmp/pg_io/NRO_IMOVEL.shp','geoaddress_none','pk027_geoaddress1',27,array['gid','textstring'])"
-
+	@whoami
+	@echo "Above user is root? If not, you have permissions for all paths? (press ENTER for yes else ^C)"
+	@read _press_enter_
+	psql $(pg_uri_db) -c "DROP TABLE IF EXISTS $(tabname) CASCADE"
 	@tput bold
 	@echo Extraindo ....
 	@tput sgr0
-	cd $(pg_io) ; 7z e -y  $(part{{p}}_path) {{orig_filename}}.* > /dev/null
-	@echo "Conferindo se SRID esta configurado:"
-	@( psql $(pg_uri_db) -c "SELECT srid, proj4text FROM spatial_ref_sys where srid=952013" )
-	@echo Executando shp2pgsql ...
-	@( cd $(pg_io) ; shp2pgsql -s 952013 {{orig_filename}}.shp $(part1a_tabname) | psql -q $(pg_uri_db) 2> /dev/null  )
-	# assert das assinaturas precisa ser baseado em diff, ideal ter um shell ou python para isso, gerando erro se não bater.
-	# falta tabem usar funcao que gera assinatura conforme tipo de dado  postado.
-	@echo "Conferira se bate o perfil:  154067 | 112.28 |  0.81 | 12.24 |    11.65"
-	psql $(pg_uri_db) -c "SELECT count(*) n, round(max(a),2) a_max, round(min(a),2) a_min, round(avg(a),2) a_avg, round(percentile_disc(0.5) WITHIN GROUP ( ORDER BY a),2) a_median FROM ( select  st_area(geom) a from $(part1a_tabname) ) t"
-	psql $(pg_uri_db) -c "CREATE TABLE ingest.pk027_p1 AS select gid, setor, textstring as housenumber, ST_centroid(ST_Transform(geom,4326)) as geom FROM $(part1a_tabname)"
-	@echo Limpando...
-	rm $(pg_io)/{{orig_filename}}.*
-	psql $(pg_uri_db) -c "drop table $(part1a_tabname) cascade"
-	@echo FIM.
+	cd $(sandbox) ; 7z e -y  $(part{{file}}_path) {{orig_filename}}.* > /dev/null
 {{/geoaddress-novia}}
 
 {{#namespace-full}}

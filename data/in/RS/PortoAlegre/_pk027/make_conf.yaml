@@ -1,7 +1,8 @@
-pkid:   027   # package ID e ".ID versão" se necessário
+pkid:   "27_2"  # usar aspas para não remover underscore
 schemaId_input: ref027a     # ID do JSON-schema de input, ref no preimeiro template a usar este padrão de input.
 schemaId_template: ref027a  # ID do makefile.mustache, ref no preimeiro package a usar o template.
 need_commands: 7z psql shp2pgsql
+thisTplFile_root: digital-preservation-BR
 files:
   -
     p:    1
