@@ -74,10 +74,9 @@ geoaddress-novia: makedirs
 	@read _tudo_bem_
 	@echo Executando shp2pgsql ...
 	cd $(sandbox);	shp2pgsql -s {{srid}} {{orig_filename}}.shp $(tabname) | psql -q $(pg_uri_db) 2> /dev/null
-	# assert das assinaturas precisa ser baseado em diff, ideal ter um shell ou python para isso, gerando erro se não bater.
-	# falta tabem usar funcao que gera assinatura conforme tipo de dado  postado.
-	#psql $(pg_uri_db) -c "SELECT ingest.getmeta_to_file('{{orig_filename}}.shp','geoaddress-novia',$(pkid))"
-	psql $(pg_uri_db) -c "SELECT ingest.any_load('$(pg_io)/{{orig_filename}}.shp','geoaddress_none','$(tabname)',$(pkid),array['gid','textstring'])"
+	# falta o assert das assinaturas, na preservação digital precisaria ser baseado em diff.
+	# as assinaturas dependem do tipo de geometria (ponto, linha ou rea), requerem função especializada (comprovando reprodutibilidade).
+	psql $(pg_uri_db) -c "SELECT ingest.any_load('$(sandbox)/{{orig_filename}}.shp','geoaddress_none','$(tabname)',$(pkid),array['gid','textstring'])"
 	@echo FIM.
 
 geoaddress-novia-clean:

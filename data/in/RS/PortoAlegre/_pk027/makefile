@@ -79,7 +79,7 @@ geoaddress-novia: makedirs
 	# assert das assinaturas precisa ser baseado em diff, ideal ter um shell ou python para isso, gerando erro se não bater.
 	# falta tabem usar funcao que gera assinatura conforme tipo de dado  postado.
 	#psql $(pg_uri_db) -c "SELECT ingest.getmeta_to_file('NRO_IMOVEL.shp','geoaddress-novia',$(pkid))"
-	psql $(pg_uri_db) -c "SELECT ingest.any_load('$(pg_io)/NRO_IMOVEL.shp','geoaddress_none','$(tabname)',$(pkid),array['gid','textstring'])"
+	psql $(pg_uri_db) -c "SELECT ingest.any_load('$(sandbox)/NRO_IMOVEL.shp','geoaddress_none','$(tabname)',$(pkid),array['gid','textstring'])"
 	@echo FIM.
 
 geoaddress-novia-clean:
