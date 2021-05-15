@@ -34,9 +34,9 @@ part{{p}}_path  =$(orig)/$(part{{p}}_file)
 
 
 all:
-	@echo Requer comandos $(need_commands)
-	@echo Principais targets implementados neste makefile:
-	@echo {{#parts}}{{#geoaddress-novia}}geoaddress-novia {{/geoaddress-novia}}{{#namespace-full}}namespace-full {{/namespace-full}}{{/parts}}
+	@echo "Requer comandos $(need_commands)."
+	@echo "Principais targets implementados neste makefile:"
+	@echo " geoaddress_none via_full nsvia_full"
 
 ## ## ## ## ## ## ## ## ##
 ## Make targets of the Project AddressForAll
@@ -48,17 +48,17 @@ makedirs: clean_sandbox
 	@mkdir -p $(pg_io)
 
 {{#parts}}
-{{#geoaddress-novia}}
+{{#geoaddress_none}}
 
-geoaddress-novia: tabname = pk$(fullPkID)_p{{file}}_{{tabname}}
-geoaddress-novia: makedirs
-	@# pk{{pkid}}_p{{file}} - ETL extrating to PostgreSQL/PostGIS the "geoaddress-novia" datatype (point with house_number but no via name)
+geoaddress_none: tabname = pk$(fullPkID)_p{{file}}_{{tabname}}
+geoaddress_none: makedirs $(part{{file}}_path)
+	@# pk{{pkid}}_p{{file}} - ETL extrating to PostgreSQL/PostGIS the "geoaddress_none" datatype (point with house_number but no via name)
 	@echo
-	@echo "-- Incluindo dados tipo geoaddress-novia do arquivo-{{file}} do package-$(fullPkID) na base $(pg_db) --"
+	@echo "-- Incluindo dados tipo geoaddress_none do arquivo-{{file}} do package-$(fullPkID) na base $(pg_db) --"
 	@echo " Tema do arquivo-{{file}}: $(part{{file}}_name)"
-	@echo " Hash do arquivo-{{file}}: $(part{{file}}_file)"
+	@echo " Nome-hash do arquivo-{{file}}: $(part{{file}}_file)"
 	@echo " Tabela do layer geoaddress sem nome de rua, só com numero predial: $(tabname)"
-	@echo " Parte do arquivo que representa a tabela: $(part{{file}}_path)"
+	@echo " Sub-arquivos do arquivo-{{file}} com o conteúdo alvo: {{orig_filename}}.*"
 	@echo "Run with tmux and sudo! (DANGER: seems not idempotent on psql)"
 	@whoami
 	@printf "Above user is root? If not, you have permissions for all paths?\n [press ENTER for yes else ^C]"
@@ -79,18 +79,64 @@ geoaddress-novia: makedirs
 	psql $(pg_uri_db) -c "SELECT ingest.any_load('$(sandbox)/{{orig_filename}}.shp','geoaddress_none','$(tabname)',$(pkid),array['gid','textstring'])"
 	@echo FIM.
 
-geoaddress-novia-clean:
+geoaddress_none-clean:
 	rm -f $(sandbox)/{{orig_filename}}.* || true
 	psql $(pg_uri_db) -c "DROP TABLE IF EXISTS $(tabname) CASCADE"
 
-{{/geoaddress-novia}}
+{{/geoaddress_none}}
 
-{{#namespace-full}}
-namespace-full: sandbox
-	@echo ok!
-{{/namespace-full}}
+## ## ## ##
+{{#nsvia_full}}
+
+nsvia_full: tabname = pk$(fullPkID)_p{{file}}_{{tabname}}
+nsvia_full: makedirs $(part{{file}}_path)
+	@# pk{{pkid}}_p{{file}} - ETL extrating to PostgreSQL/PostGIS the "nsvia_full" datatype (zone with name)
+	@echo
+	@echo "-- Incluindo dados tipo nsvia_full do arquivo-{{file}} do package-$(fullPkID) na base $(pg_db) --"
+	@echo " Tema do arquivo-{{file}}: $(part{{file}}_name)"
+	@echo " Nome-hash do arquivo-{{file}}: $(part{{file}}_file)"
+	@echo " Tabela do layer geoaddress sem nome de rua, só com numero predial: $(tabname)"
+	@echo " Sub-arquivos do arquivo-{{file}} com o conteúdo alvo: {{orig_filename}}.*"
+
+nsvia_full-clean:
+	rm -f $(sandbox)/{{orig_filename}}.* || true
+	psql $(pg_uri_db) -c "DROP TABLE IF EXISTS $(tabname) CASCADE"
+
+{{/nsvia_full}}
+
+## ## ## ##
+{{#via_full}}
+
+via_full: tabname = pk$(fullPkID)_p{{file}}_{{tabname}}
+via_full: makedirs $(part{{file}}_path)
+	@# pk{{pkid}}_p{{file}} - ETL extrating to PostgreSQL/PostGIS the "via_full" datatype (street axes)
+	@echo
+	@echo "-- Incluindo dados tipo via_full do arquivo-{{file}} do package-$(fullPkID) na base $(pg_db) --"
+	@echo " Tema do arquivo-{{file}}: $(part{{file}}_name)"
+	@echo " Nome-hash do arquivo-{{file}}: $(part{{file}}_file)"
+	@echo " Tabela do layer geoaddress sem nome de rua, só com numero predial: $(tabname)"
+	@echo " Sub-arquivos do arquivo-{{file}} com o conteúdo alvo: {{orig_filename}}.*"
+
+via_full-clean:
+	rm -f $(sandbox)/{{orig_filename}}.* || true
+	psql $(pg_uri_db) -c "DROP TABLE IF EXISTS $(tabname) CASCADE"
+
+{{/via_full}}
 
 {{/parts}}
 
+## ## ## ##
+wget_files:
+	@echo "Under construction, need to check that orig path is not /var/www! [ENTER if not else ^C]"
+	@echo $(orig)
+	@read _ENTER_OK_
+{{#files}}
+	@cd $(orig); wget http://preserv.addressforall.org/download/{{file}}
+{{/files}}
+
+## ## ## ##
+
 clean_sandbox:
-	@rm -rf $(sandbox)
+	@rm -rf $(sandbox) || true
+
+clean: geoaddress_none-clean nsvia_full-clean

@@ -20,17 +20,17 @@ files:
     name: Eixos de via
 
 parts:
-  geoaddress-novia: # config própria desse template, em sao paulo seria array
+  geoaddress_none: # config própria desse template, em sao paulo seria array
         p: 1a   # identifcador do layer, pode ter mais de um por file
         file: 1
         orig_filename: NRO_IMOVEL  # incluir numa pasta isolada todos os NRO_IMOVEL
         tabname:  geoaddress
-  namespace-full:
+  nsvia_full:
         p: 2a
         file: 2
         orig_filename: Bairros_LC12112_16
         tabname:  namespace
-  via-full:
+  via_full:
         p: 3a
         file: 3
         orig_filename: EixosLogradouros

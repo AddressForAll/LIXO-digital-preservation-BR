@@ -38,9 +38,9 @@ part3_path  =$(orig)/$(part3_file)
 
 
 all:
-	@echo Requer comandos $(need_commands)
-	@echo Principais targets implementados neste makefile:
-	@echo geoaddress-novia namespace-full 
+	@echo "Requer comandos $(need_commands)."
+	@echo "Principais targets implementados neste makefile:"
+	@echo " geoaddress_none via_full nsvia_full"
 
 ## ## ## ## ## ## ## ## ##
 ## Make targets of the Project AddressForAll
@@ -52,15 +52,15 @@ makedirs: clean_sandbox
 	@mkdir -p $(pg_io)
 
 
-geoaddress-novia: tabname = pk$(fullPkID)_p1_geoaddress
-geoaddress-novia: makedirs
-	@# pk27_p1 - ETL extrating to PostgreSQL/PostGIS the "geoaddress-novia" datatype (point with house_number but no via name)
+geoaddress_none: tabname = pk$(fullPkID)_p1_geoaddress
+geoaddress_none: makedirs $(part1_path)
+	@# pk27_p1 - ETL extrating to PostgreSQL/PostGIS the "geoaddress_none" datatype (point with house_number but no via name)
 	@echo
-	@echo "-- Incluindo dados tipo geoaddress-novia do arquivo-1 do package-$(fullPkID) na base $(pg_db) --"
+	@echo "-- Incluindo dados tipo geoaddress_none do arquivo-1 do package-$(fullPkID) na base $(pg_db) --"
 	@echo " Tema do arquivo-1: $(part1_name)"
 	@echo " Hash do arquivo-1: $(part1_file)"
 	@echo " Tabela do layer geoaddress sem nome de rua, só com numero predial: $(tabname)"
-	@echo " Parte do arquivo que representa a tabela: $(part1_path)"
+	@echo " Sub-arquivos do arquivo-1 com o conteúdo alvo: NRO_IMOVEL.*"
 	@echo "Run with tmux and sudo! (DANGER: seems not idempotent on psql)"
 	@whoami
 	@printf "Above user is root? If not, you have permissions for all paths?\n [press ENTER for yes else ^C]"
@@ -76,23 +76,66 @@ geoaddress-novia: makedirs
 	@read _tudo_bem_
 	@echo Executando shp2pgsql ...
 	cd $(sandbox);	shp2pgsql -s 952013 NRO_IMOVEL.shp $(tabname) | psql -q $(pg_uri_db) 2> /dev/null
-	# assert das assinaturas precisa ser baseado em diff, ideal ter um shell ou python para isso, gerando erro se não bater.
-	# falta tabem usar funcao que gera assinatura conforme tipo de dado  postado.
-	#psql $(pg_uri_db) -c "SELECT ingest.getmeta_to_file('NRO_IMOVEL.shp','geoaddress-novia',$(pkid))"
+	# falta o assert das assinaturas, na preservação digital precisaria ser baseado em diff.
+	# as assinaturas dependem do tipo de geometria (ponto, linha ou rea), requerem função especializada (comprovando reprodutibilidade).
 	psql $(pg_uri_db) -c "SELECT ingest.any_load('$(sandbox)/NRO_IMOVEL.shp','geoaddress_none','$(tabname)',$(pkid),array['gid','textstring'])"
 	@echo FIM.
 
-geoaddress-novia-clean:
+geoaddress_none-clean:
 	rm -f $(sandbox)/NRO_IMOVEL.* || true
 	psql $(pg_uri_db) -c "DROP TABLE IF EXISTS $(tabname) CASCADE"
 
 
-namespace-full: sandbox
-	@echo ok!
+## ## ## ##
 
+nsvia_full: tabname = pk$(fullPkID)_p2_namespace
+nsvia_full: makedirs $(part2_path)
+	@# pk27_p2 - ETL extrating to PostgreSQL/PostGIS the "nsvia_full" datatype (zone with name)
+	@echo
+	@echo "-- Incluindo dados tipo nsvia_full do arquivo-2 do package-$(fullPkID) na base $(pg_db) --"
+	@echo " Tema do arquivo-2: $(part2_name)"
+	@echo " Hash do arquivo-2: $(part2_file)"
+	@echo " Tabela do layer geoaddress sem nome de rua, só com numero predial: $(tabname)"
+	@echo " Sub-arquivos do arquivo-2 com o conteúdo alvo: Bairros_LC12112_16.*"
+
+nsvia_full-clean:
+	rm -f $(sandbox)/Bairros_LC12112_16.* || true
+	psql $(pg_uri_db) -c "DROP TABLE IF EXISTS $(tabname) CASCADE"
+
+
+## ## ## ##
+
+via_full: tabname = pk$(fullPkID)_p3_via
+via_full: makedirs $(part3_path)
+	@# pk27_p3 - ETL extrating to PostgreSQL/PostGIS the "via_full" datatype (street axes)
+	@echo
+	@echo "-- Incluindo dados tipo via_full do arquivo-3 do package-$(fullPkID) na base $(pg_db) --"
+	@echo " Tema do arquivo-3: $(part3_name)"
+	@echo " Hash do arquivo-3: $(part3_file)"
+	@echo " Tabela do layer geoaddress sem nome de rua, só com numero predial: $(tabname)"
+	@echo " Sub-arquivos do arquivo-3 com o conteúdo alvo: EixosLogradouros.*"
+
+via_full-clean:
+	rm -f $(sandbox)/EixosLogradouros.* || true
+	psql $(pg_uri_db) -c "DROP TABLE IF EXISTS $(tabname) CASCADE"
+
+
+
+## ## ## ##
+wget_files:
+	@echo "Under construction, need to check that orig path is not /var/www! [ENTER if not else ^C]"
+	@echo $(orig)
+	@read _ENTER_OK_
+	@cd $(orig); wget http://preserv.addressforall.org/download/fbc62efdbd0f16a7db03b5b775c50c9425367a8dee8a85d9b53e4475bbdb99d2.zip
+	@cd $(orig); wget http://preserv.addressforall.org/download/258772459588f7941ac6eeda7c6839df02d58741cf6bc3e48825aecd60418251.zip
+	@cd $(orig); wget http://preserv.addressforall.org/download/c35e3b2825d3da122a74c6c8dd5f3157a3bd6201208d2a6d13dec433a6ded9fc.zip
+
+## ## ## ##
 
 clean_sandbox:
-	@rm -rf $(sandbox)
+	@rm -rf $(sandbox) || true
+
+clean: geoaddress_none-clean nsvia_full-clean
 
 
 ## ############################
