@@ -193,7 +193,7 @@ clean: geoaddress_none-clean nsvia_full-clean via_full-clean
 
 thisTplFile = digital-preservation-BR/src/maketemplates/make_ref027a.mustache.mk
 
-baseSrc      = /opt/gits/_a4a
+baseSrc      = /opt/gits
 srcPy        =  $(baseSrc)/digital-preservation/src/run_mustache.py
 mkme_input0  =  $(baseSrc)/digital-preservation-BR/src/maketemplates/commomFirst.yaml
 mkme_srcTplLast  =  $(baseSrc)/digital-preservation-BR/src/maketemplates/commomLast.mustache.mk

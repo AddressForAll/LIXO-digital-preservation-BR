@@ -35,3 +35,7 @@ parts:
         file: 3
         orig_filename: EixosLogradouros
         tabname:  via
+        view_select: >-
+                     gid, CDIDECAT || iif(NMIDEPRE>'',' ' || NMIDEPRE,''::text) || ' ' || NMIDELOG AS via_name,  
+                     NRIMPINI, NRIMPFIN, NRPARINI, NRPARFIN, geom
+        array: ['gid','via_name','NRIMPINI', 'NRIMPFIN', 'NRPARINI', 'NRPARFIN']

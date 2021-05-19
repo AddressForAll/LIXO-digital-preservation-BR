@@ -1,37 +1,26 @@
 pkid:      14
 pkversion: 1
-schemaId_input:    ref014a  # ID do JSON-schema de input, ref no preimeiro template a usar este padrão de input.
-schemaId_template: ref014a  # ID do makefile.mustache, ref no preimeiro package a usar o template.
+schemaId_input:    ref027a  # ID do JSON-schema de input, ref no preimeiro template a usar este padrão de input.
+schemaId_template: ref027a  # ID do makefile.mustache, ref no preimeiro package a usar o template.
 thisTplFile_root: digital-preservation-BR
 need_commands:    7z psql shp2pgsql
 srid: 31982
 files:
   -
     p:    1
-    file: fbc62efdbd0f16a7db03b5b775c50c9425367a8dee8a85d9b53e4475bbdb99d2.zip
-    name: Imóveis
-  -
-    p:    2
-    file: 258772459588f7941ac6eeda7c6839df02d58741cf6bc3e48825aecd60418251.zip
-    name: Bairros
-  -
-    p:    3
     file: d101e729d51ddfc33e4a866684074487c5a2601c7c84d4eca01ff9bbca186cda.rar
-    name: Eixos de via
+    name: Todos os shapes
 
 parts:
-  geoaddress_none: # config própria desse template, em sao paulo seria array
-        p: 1a   # identifcador do layer, pode ter mais de um por file
+  parcel_none:
+        p: 1a
         file: 1
-        orig_filename: NRO_IMOVEL  # incluir numa pasta isolada todos os NRO_IMOVEL
-        tabname:  geoaddress
-  nsvia_full:
-        p: 2a
-        file: 2
-        orig_filename: Bairros_LC12112_16
-        tabname:  namespace
+        orig_filename: lote_numero_predial
+        tabname:  lotes
   via_full:
-        p: 3a
-        file: 3
+        p: 1b
+        file: 1
         orig_filename: sistema_viario
         tabname:  via
+        view_select: gid, TIPO || ' ' || NOME AS via_name,geom
+        array: ['gid','via_name']
