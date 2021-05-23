@@ -80,7 +80,7 @@ geoaddress_none: makedirs $(part1_path)
 	# as assinaturas dependem do tipo de geometria (ponto, linha ou rea), requerem função especializada (comprovando reprodutibilidade).
 	# função ingest.any_load deveria converter lista de cols conforme padrões geoaddress_none
 	psql $(pg_uri_db) -c "CREATE VIEW vw_$(tabname) AS SELECT gid, textstring as house_number, setor, last_edi_1 as dateModified, geom FROM $(tabname)"
-	psql $(pg_uri_db) -c "SELECT ingest.any_load('$(sandbox)/NRO_IMOVEL.shp','geoaddress_none','vw_$(tabname)',$(pkid),array['gid','house_number','setor','dateModified'])"
+	psql $(pg_uri_db) -c "SELECT ingest.any_load('$(sandbox)/NRO_IMOVEL.shp','geoaddress_none','vw_$(tabname)',$(pkid),array['gid', 'house_number', 'setor', 'dateModified'])"
 	psql $(pg_uri_db) -c "DROP VIEW vw_$(tabname)"
 	@echo "Confira os resultados nas tabelas ingest.layer_file e ingest.feature_asis".
 	@echo FIM.
@@ -151,13 +151,8 @@ via_full: makedirs $(part3_path)
 	@read _tudo_bem_
 	@echo Executando shp2pgsql ...
 	cd $(sandbox);	shp2pgsql -s 952013 EixosLogradouros.shp $(tabname) | psql -q $(pg_uri_db) 2> /dev/null
-	psql $(pg_uri_db) -c "\
-	CREATE VIEW vw_$(tabname) AS \
-	   SELECT gid, CDIDECAT || iif(NMIDEPRE>'',' ' || NMIDEPRE,''::text) || ' ' || NMIDELOG AS via_name,\
-		        NRIMPINI, NRIMPFIN, NRPARINI, NRPARFIN, geom \
-     FROM $(tabname) ORDER BY 1, 2, 4 \
-	"
-	psql $(pg_uri_db) -c "SELECT ingest.any_load('$(sandbox)/EixosLogradouros.shp','via_full','vw_$(tabname)',$(pkid),array['gid','via_name','NRIMPINI', 'NRIMPFIN', 'NRPARINI', 'NRPARFIN'])"
+	psql $(pg_uri_db) -c "CREATE VIEW vw_$(tabname) AS SELECT gid, CDIDECAT || iif(NMIDEPRE>'',' ' || NMIDEPRE,''::text) || ' ' || NMIDELOG AS via_name,   NRIMPINI, NRIMPFIN, NRPARINI, NRPARFIN, geom FROM $(tabname) ORDER BY 1, 2"
+	psql $(pg_uri_db) -c "SELECT ingest.any_load('$(sandbox)/EixosLogradouros.shp','via_full','vw_$(tabname)',$(pkid),array['gid', 'via_name', 'NRIMPINI', 'NRIMPFIN', 'NRPARINI', 'NRPARFIN'])"
 	psql $(pg_uri_db) -c "DROP VIEW vw_$(tabname)"
 	@echo "Confira os resultados nas tabelas ingest.layer_file e ingest.feature_asis".
 	@echo FIM.

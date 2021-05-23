@@ -68,13 +68,45 @@ via_full: makedirs $(part1_path)
 	@echo Executando shp2pgsql ...
 	cd $(sandbox);	shp2pgsql -s 31982 sistema_viario.shp $(tabname) | psql -q $(pg_uri_db) 2> /dev/null
 	psql $(pg_uri_db) -c "CREATE VIEW vw_$(tabname) AS SELECT gid, TIPO || ' ' || NOME AS via_name,geom FROM $(tabname) ORDER BY 1, 2"
-	psql $(pg_uri_db) -c "SELECT ingest.any_load('$(sandbox)/sistema_viario.shp','via_full','vw_$(tabname)',$(pkid),array['gid','via_name'])"
+	psql $(pg_uri_db) -c "SELECT ingest.any_load('$(sandbox)/sistema_viario.shp','via_full','vw_$(tabname)',$(pkid),array['gid', 'via_name'])"
 	psql $(pg_uri_db) -c "DROP VIEW vw_$(tabname)"
 	@echo "Confira os resultados nas tabelas ingest.layer_file e ingest.feature_asis".
 	@echo FIM.
 
 via_full-clean:
 	rm -f $(sandbox)/sistema_viario.* || true
+	psql $(pg_uri_db) -c "DROP TABLE IF EXISTS $(tabname) CASCADE"
+
+
+## ## ## ##
+
+parcel_none: tabname = pk$(fullPkID)_p1_lotes
+parcel_none: makedirs $(part1_path)
+	@# pk14_p1 - ETL extrating to PostgreSQL/PostGIS the "parcel_none" datatype (street axes)
+	@echo
+	@echo "-- Incluindo dados tipo parcel_none do arquivo-1 do package-$(fullPkID) na base $(pg_db) --"
+	@echo " Tema do arquivo-1: $(part1_name)"
+	@echo " Nome-hash do arquivo-1: $(part1_file)"
+	@echo " Tabela do layer geoaddress sem nome de rua, só com numero predial: $(tabname)"
+	@echo " Sub-arquivos do arquivo-1 com o conteúdo alvo: lote_numero_predial.*"
+	@tput bold
+	@echo Extraindo ....
+	@tput sgr0
+	cd $(sandbox);  7z e -y  $(part1_path) lote_numero_predial.* > /dev/null
+	@echo "Conferindo se SRID esta configurado:"
+	@psql $(pg_uri_db) -c "SELECT srid, proj4text FROM spatial_ref_sys where srid=31982"
+	@echo "Tudo bem até aqui?  [ENTER para continuar ou ^C para rodar WS/ingest-step1]"
+	@read _tudo_bem_
+	@echo Executando shp2pgsql ...
+	cd $(sandbox);	shp2pgsql -s 31982 lote_numero_predial.shp $(tabname) | psql -q $(pg_uri_db) 2> /dev/null
+	psql $(pg_uri_db) -c "CREATE VIEW vw_$(tabname) AS SELECT gid, geom FROM $(tabname) ORDER BY 1, 2"
+	psql $(pg_uri_db) -c "SELECT ingest.any_load('$(sandbox)/lote_numero_predial.shp','parcel_none','vw_$(tabname)',$(pkid),array['gid'])"
+	psql $(pg_uri_db) -c "DROP VIEW vw_$(tabname)"
+	@echo "Confira os resultados nas tabelas ingest.layer_file e ingest.feature_asis".
+	@echo FIM.
+
+parcel_none-clean:
+	rm -f $(sandbox)/lote_numero_predial.* || true
 	psql $(pg_uri_db) -c "DROP TABLE IF EXISTS $(tabname) CASCADE"
 
 
@@ -102,7 +134,7 @@ clean: geoaddress_none-clean nsvia_full-clean via_full-clean
 
 thisTplFile = digital-preservation-BR/src/maketemplates/make_ref027a.mustache.mk
 
-baseSrc      = /opt/gits
+baseSrc      = /opt/gits/_a4a
 srcPy        =  $(baseSrc)/digital-preservation/src/run_mustache.py
 mkme_input0  =  $(baseSrc)/digital-preservation-BR/src/maketemplates/commomFirst.yaml
 mkme_srcTplLast  =  $(baseSrc)/digital-preservation-BR/src/maketemplates/commomLast.mustache.mk

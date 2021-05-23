@@ -77,8 +77,8 @@ geoaddress_none: makedirs $(part{{file}}_path)
 	# falta o assert das assinaturas, na preservação digital precisaria ser baseado em diff.
 	# as assinaturas dependem do tipo de geometria (ponto, linha ou rea), requerem função especializada (comprovando reprodutibilidade).
 	# função ingest.any_load deveria converter lista de cols conforme padrões geoaddress_none
-	psql $(pg_uri_db) -c "CREATE VIEW vw_$(tabname) AS SELECT gid, textstring as house_number, setor, last_edi_1 as dateModified, geom FROM $(tabname)"
-	psql $(pg_uri_db) -c "SELECT ingest.any_load('$(sandbox)/{{orig_filename}}.shp','geoaddress_none','vw_$(tabname)',$(pkid),array['gid','house_number','setor','dateModified'])"
+	psql $(pg_uri_db) -c "CREATE VIEW vw_$(tabname) AS SELECT {{{view_select}}} FROM $(tabname)"
+	psql $(pg_uri_db) -c "SELECT ingest.any_load('$(sandbox)/{{orig_filename}}.shp','geoaddress_none','vw_$(tabname)',$(pkid),array{{array}})"
 	psql $(pg_uri_db) -c "DROP VIEW vw_$(tabname)"
 	@echo "Confira os resultados nas tabelas ingest.layer_file e ingest.feature_asis".
 	@echo FIM.
@@ -164,6 +164,40 @@ via_full-clean:
 	psql $(pg_uri_db) -c "DROP TABLE IF EXISTS $(tabname) CASCADE"
 
 {{/via_full}}
+
+## ## ## ##
+{{#parcel_none}}
+
+parcel_none: tabname = pk$(fullPkID)_p{{file}}_{{tabname}}
+parcel_none: makedirs $(part{{file}}_path)
+	@# pk{{pkid}}_p{{file}} - ETL extrating to PostgreSQL/PostGIS the "parcel_none" datatype (street axes)
+	@echo
+	@echo "-- Incluindo dados tipo parcel_none do arquivo-{{file}} do package-$(fullPkID) na base $(pg_db) --"
+	@echo " Tema do arquivo-{{file}}: $(part{{file}}_name)"
+	@echo " Nome-hash do arquivo-{{file}}: $(part{{file}}_file)"
+	@echo " Tabela do layer geoaddress sem nome de rua, só com numero predial: $(tabname)"
+	@echo " Sub-arquivos do arquivo-{{file}} com o conteúdo alvo: {{orig_filename}}.*"
+	@tput bold
+	@echo Extraindo ....
+	@tput sgr0
+	cd $(sandbox);  7z e -y  $(part{{file}}_path) {{orig_filename}}.* > /dev/null
+	@echo "Conferindo se SRID esta configurado:"
+	@psql $(pg_uri_db) -c "SELECT srid, proj4text FROM spatial_ref_sys where srid={{srid}}"
+	@echo "Tudo bem até aqui?  [ENTER para continuar ou ^C para rodar WS/ingest-step1]"
+	@read _tudo_bem_
+	@echo Executando shp2pgsql ...
+	cd $(sandbox);	shp2pgsql -s {{srid}} {{orig_filename}}.shp $(tabname) | psql -q $(pg_uri_db) 2> /dev/null
+	psql $(pg_uri_db) -c "CREATE VIEW vw_$(tabname) AS SELECT {{{view_select}}} FROM $(tabname) ORDER BY 1, 2"
+	psql $(pg_uri_db) -c "SELECT ingest.any_load('$(sandbox)/{{orig_filename}}.shp','parcel_none','vw_$(tabname)',$(pkid),array{{array}})"
+	psql $(pg_uri_db) -c "DROP VIEW vw_$(tabname)"
+	@echo "Confira os resultados nas tabelas ingest.layer_file e ingest.feature_asis".
+	@echo FIM.
+
+parcel_none-clean:
+	rm -f $(sandbox)/{{orig_filename}}.* || true
+	psql $(pg_uri_db) -c "DROP TABLE IF EXISTS $(tabname) CASCADE"
+
+{{/parcel_none}}
 
 {{/parts}}
 

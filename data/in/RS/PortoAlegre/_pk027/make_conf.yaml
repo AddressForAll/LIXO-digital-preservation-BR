@@ -25,6 +25,8 @@ parts:
         file: 1
         orig_filename: NRO_IMOVEL  # incluir numa pasta isolada todos os NRO_IMOVEL
         tabname:  geoaddress
+        view_select: gid, textstring as house_number, setor, last_edi_1 as dateModified, geom
+        array: ['gid','house_number','setor','dateModified']
   nsvia_full:
         p: 2a
         file: 2

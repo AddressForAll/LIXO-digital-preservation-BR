@@ -17,6 +17,8 @@ parts:
         file: 1
         orig_filename: lote_numero_predial
         tabname:  lotes
+        view_select: gid, geom
+        array: ['gid']
   via_full:
         p: 1b
         file: 1

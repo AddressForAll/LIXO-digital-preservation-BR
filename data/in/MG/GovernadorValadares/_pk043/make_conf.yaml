@@ -1,0 +1,72 @@
+pkid:      43
+pkversion: 1
+schemaId_input:    ref027a  # ID do JSON-schema de input, ref no preimeiro template a usar este padrão de input.
+schemaId_template: ref027a  # ID do makefile.mustache, ref no preimeiro package a usar o template.
+thisTplFile_root: digital-preservation-BR
+need_commands:    7z psql shp2pgsql
+srid: 31984
+files:
+  -
+    p:    1
+    file: 2e79fdf013a8de68e071c2f2a9911bc98196254bc9b9f39482cb0941a146b485.zip
+    name: Planilha de Endereços
+  -
+    p:    2
+    file: 98248f643e60829689b398b2852981cfd12b11799a640d93b27223dfc4346948.rar
+    name: Lotes
+  -
+    p:    3
+    file: 2bcdbd6a2ddf4fd810147a106616f404c69a9c38bc02531fe3fa9f27acab25a6.zip
+    name: Quadras
+  -
+    p:    4
+    file: 0cc1b05163361968a5681e971c8ab1395fcca1ba4b48150a7522a90b836727e3.zip
+    name: Bairros
+  -
+    p:    5
+    file: 437a5012420b1bdc748ea571eabfa0aee6154c41196fe898c383d76e61a5c5db.zip
+    name: Eixos
+#Correspondência entre as colunas da planilha e colunas do shapefile:
+#    * `Setor` -> `cd_setor`
+#    * `Quadra` -> `nr_quadra`
+#    * `Lote` ->  `nr_lote`
+parts:
+  address_noid:
+        p: 1a   
+        file: 1
+        orig_filename: Logradouros - Gov. Valadares.xlsx
+        tabname:  address
+        view_select: Setor, Quadra, Lote, Logradouro, Número
+        array: ['gid','via_name','poiter_number','geom']
+  parcel_ext:
+        p: 2a
+        file: 2
+        orig_filename: lote_inscricao_geometria
+        tabname:  parcel
+        view_select: gid, cd_distrit, cd_setor, nr_quadra, nr_lote, geom
+        array: ['gid','via_name', 'geom']
+  genericvia_ext:
+        p: 3a
+        file: 3
+        orig_filename: st_quadraPolygon
+        tabname:  genericvia
+        view_select: gid, id_quadra, geom
+        array: ['gid','via_name', 'geom']
+  nsvia_none:
+        p: 4a
+        file: 4
+        orig_filename: st_bairroPolygon
+        tabname:  nsvia
+        view_select: gid,  geom
+        array: ['gid', 'geom']
+  via_fill:
+        p: 5a
+        file: 5
+        orig_filename: view_st_logradouro_eixoLine
+        tabname:  nsvia
+        view_select: gid,  descricao as via_name, geom
+        array: ['gid', 'via_name', 'geom']
+        codec: -W iso-8859-1
+
+
+
