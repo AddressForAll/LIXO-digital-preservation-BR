@@ -36,35 +36,34 @@ parts:
         file: 1
         orig_filename: Logradouros - Gov. Valadares.xlsx
         tabname:  address
-        view_select: Setor, Quadra, Lote, Logradouro, Número
-        array: ['gid','via_name','poiter_number','geom']
+        sql_select: ['row_number() OVER () AS gid','"Logradouro" AS via_name', '"Número" AS house_number', '"Setor" AS setor', '"Quadra" AS quadra' , '"Lote" AS lote']
   parcel_ext:
         p: 2a
         file: 2
         orig_filename: lote_inscricao_geometria
         tabname:  parcel
-        view_select: gid, cd_distrit, cd_setor, nr_quadra, nr_lote, geom
+        sql_select: gid, cd_distrit, cd_setor, nr_quadra, nr_lote, geom
         array: ['gid','via_name', 'geom']
-  genericvia_ext:
+  genericvia_ext: 
         p: 3a
         file: 3
         orig_filename: st_quadraPolygon
         tabname:  genericvia
-        view_select: gid, id_quadra, geom
-        array: ['gid','via_name', 'geom']
+        sql_select: gid, id_quadra, geom
+        array: ['gid','geom']
   nsvia_none:
         p: 4a
         file: 4
         orig_filename: st_bairroPolygon
         tabname:  nsvia
-        view_select: gid,  geom
+        sql_select: gid,  geom
         array: ['gid', 'geom']
   via_fill:
         p: 5a
         file: 5
         orig_filename: view_st_logradouro_eixoLine
         tabname:  nsvia
-        view_select: gid,  descricao as via_name, geom
+        sql_select: gid,  descricao as via_name, geom
         array: ['gid', 'via_name', 'geom']
         codec: -W iso-8859-1
 

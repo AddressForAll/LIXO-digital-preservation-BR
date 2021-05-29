@@ -19,7 +19,7 @@ parts:
         tabname:  nsvia
         view_select: Teste2_P_1 as namespace_name, geom
         array: ['gid','namespace_name','geom']
-        srid: 3857
+        srid_local: 3857
   via_full:
         p: 1b
         file: 1
@@ -35,7 +35,7 @@ parts:
         tabname:  via
         view_select:  gid, Nome_logra as via_name, Num_imovel as geoaddress_number, geom
         array: ['gid','via_name', 'geoaddress_number', 'geom']
-        srid: 31983
+        srid_local: 31983
   parcel_none:
         p: 1d
         file: 1
@@ -43,7 +43,7 @@ parts:
         tabname:  parcel
         view_select:  gid, BAIRRO as namespace_name, geom
         array: ['gid','namespace_name', 'geom']
-        srid: 31983
+        srid_local: 31983
 # Não importei praça - Carlos 23/05/2021
   genericvia_full:
         p: 1d
@@ -52,5 +52,5 @@ parts:
         tabname:  genericvia
         view_select:  gid, QUADRA as genericvia_number, geom
         array: ['gid','genericvia_number', 'geom']
-        srid: 31983
+        srid_local: 31983
 
