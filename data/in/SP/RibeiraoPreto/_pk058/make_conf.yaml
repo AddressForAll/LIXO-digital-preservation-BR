@@ -1,0 +1,29 @@
+pkid:      58
+pkversion: 1
+schemaId_input:    ref027a  # ID do JSON-schema de input, ref no preimeiro template a usar este padrão de input.
+schemaId_template: ref027a  # ID do makefile.mustache, ref no preimeiro package a usar o template.
+thisTplFile_root: digital-preservation-BR
+need_commands:    7z psql shp2pgsql
+srid: 31983
+files:
+  -
+    p:    1
+    file: 6cd0d4b475e61b8cbd078787ea8b38ebdd051a1def026ca476d4a83d40354738.zip
+    name: Todos os shapes
+
+parts:
+  genericvia_full:
+        p: 1a
+        file: 1
+        orig_filename: lotes
+        tabname:  genericvia
+        sql_select: gid, NRO_IMOV as pointer_number, geom
+        # não importei COD_DV_LOG 
+        array: ['gid','pointer_number', 'geom']
+  genericvia_none:
+        p: 1b
+        file: 1
+        orig_filename: quadras
+        tabname:  genericvia
+        sql_select: gid, geom
+        array: ['gid','geom']
