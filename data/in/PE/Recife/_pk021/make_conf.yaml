@@ -1,0 +1,28 @@
+pkid:      21
+pkversion: 1
+schemaId_input:    ref027a  # ID do JSON-schema de input, ref no preimeiro template a usar este padrão de input.
+schemaId_template: ref027a  # ID do makefile.mustache, ref no preimeiro package a usar o template.
+thisTplFile_root: digital-preservation-BR
+need_commands:    7z psql shp2pgsql
+srid: 31985
+files:
+  -
+    p:    1
+    file: 04fffd56aef1c5a53cb35e5864b940b0b103e6e4752adcff7d4f30a2cb99ddb6.zip
+    name: Todos os shapes
+
+parts:
+  via_full:
+        p: 1a
+        file: 1
+        orig_filename: TrechoLogradouros
+        tabname:  via
+        view_select: gid, NLGPAVOFIC AS via_name, geom
+        array: ['gid','via_name', 'geom']
+  nsvia_full:
+        p: 1b
+        file: 1
+        orig_filename: Bairros
+        tabname:  nsvia
+        view_select: gid, EBAIRRNO_1 AS nv_name, geom
+        array: ['gid','ns_name','geom']
