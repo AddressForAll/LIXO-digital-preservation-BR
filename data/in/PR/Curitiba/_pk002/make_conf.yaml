@@ -1,0 +1,34 @@
+pkid:      02
+pkversion: 1
+schemaId_input:    ref027a  # ID do JSON-schema de input, ref no preimeiro template a usar este padrão de input.
+schemaId_template: ref027a  # ID do makefile.mustache, ref no preimeiro package a usar o template.
+thisTplFile_root: digital-preservation-BR
+need_commands:    7z psql shp2pgsql
+srid: 31982
+files:
+  -
+    p:    1
+    file: a6f6dc4a8cd4bd9dcf19104bb409c2164fd07b53818a6e1c28c4aaab94f5c895.zip
+    name: Pontos de endereço
+  -
+    p:    2
+    file: 3b67226b43d2093e81204c1ed089eafafe0ffd92ce8fe98bd8db1f45b2e3bfb1.zip
+    name: Lotes
+
+parts:
+  geoaddress_full:
+        p: 1a
+        file: 1
+        # tem que descompactar num_predial_curitiba_201902_distancia_20metros_eixo_rua.rar
+        orig_filename: num_predial_curitiba_201902_distancia_20metros_eixo_rua.geojson
+        tabname:  lotes
+        view_select: gid, num_pred as point_number, geom
+        array: ['gid', 'point_number', 'geom']
+        # não importei logradouro 
+  genericvia_full:
+        p: 2a
+        file: 2
+        orig_filename: LOTES_201902
+        tabname:  genericvia
+        view_select: gid, NME_LOGRAD as via_name, NUM_PREDIA as poiter_number
+        array: ['gid','via_name', 'poiter_number', 'geom']
