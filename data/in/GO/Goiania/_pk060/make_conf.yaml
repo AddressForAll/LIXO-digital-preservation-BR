@@ -1,0 +1,56 @@
+pkid:      60
+pkversion: 1
+schemaId_input:    ref027a  # ID do JSON-schema de input, ref no preimeiro template a usar este padrão de input.
+schemaId_template: ref027a  # ID do makefile.mustache, ref no preimeiro package a usar o template.
+thisTplFile_root: digital-preservation-BR
+need_commands:    7z psql shp2pgsql
+srid: 31982
+files:
+  -
+    p:    1
+    file: db2d3b64a2494ff53212d276645986490890025d2b5d1fc5a1b90af7e7bbdf39.zip
+    name: Lotes
+  -
+    p:    2
+    file: db2d3b64a2494ff53212d276645986490890025d2b5d1fc5a1b90af7e7bbdf39.zip
+    name: Lotes
+  -
+    p:    3
+    file: 981d55ac26d0131ff4040aeca1444ad2310e20b89ceeac70c9d4ca12caf5151b.zip
+    name: Bairros
+  -
+    p:    4
+    file: 926566fc01aa45a22ede663e66e371ce9e70e730e7f4e28b10b3bdf19d67fd38.zip
+    name: Eixos
+
+parts:
+  parcel_none:
+        p: 1a
+        file: 1
+        orig_filename: lot
+        tabname:  parcel
+        view_select: gid, geom
+        array: ['gid','geom']
+        # não coloquei id e nm_lot 
+  genericvia_none:
+        p: 2a
+        file: 2
+        orig_filename: qdr
+        tabname:  genericvia
+        view_select: gid, geom
+        array: ['gid','geom']
+        # não coloquei nm_qdr
+  nsvia_full:
+        p: 3a
+        file: 3
+        orig_filename: bai
+        tabname:  nsvia
+        view_select: gid, nm AS nsvia_name, geom
+        array: ['gid', 'nsvia_name', 'geom']
+  via_full:
+        p: 3a
+        file: 3
+        orig_filename: seg
+        tabname:  via
+        view_select: gid, tp_log || ' ' || nm_log AS via_name, geom
+        array: ['gid', 'via_name', 'geom']

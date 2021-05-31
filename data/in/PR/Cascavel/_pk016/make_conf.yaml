@@ -1,0 +1,45 @@
+pkid:      16
+pkversion: 1
+schemaId_input:    ref027a  # ID do JSON-schema de input, ref no preimeiro template a usar este padrão de input.
+schemaId_template: ref027a  # ID do makefile.mustache, ref no preimeiro package a usar o template.
+thisTplFile_root: digital-preservation-BR
+need_commands:    7z psql shp2pgsql
+srid: 31982
+files:
+  -
+    p:    1
+    file: 305df61c61e90caef0a0409a09b7d01a56beb6e107ae4430188617c7058f02a1.zip
+    name: Bairros
+  -
+    p:    2
+    file: f4fe1f604f927b1d07ae56ec11ea9e3c4c64a4d02c01ce80ad041beadab165dc.zip
+    name: Eixos
+  -
+    p:    3
+    file: ae8dc027fe9e0983b553508c3a313061f7f466c50d66124c86c96254f70c4c15.zip
+    name: Lotes
+
+parts:
+  nsvia_full:
+        p: 1a
+        file: 1
+        orig_filename: Bairros
+        tabname:  nsvia
+        sql_select: gid, nmbairro AS nsvia_name, geom
+        array: ['gid','nsvia_name','geom']
+        codec: -W iso-8859-1
+  via_full:
+        p: 2a
+        file: 2
+        orig_filename: Logradouros
+        tabname:  via
+        view_select: gid, tipolograd || ' ' || nmlogradou AS via_name, geom
+        array: ['gid','via_name', 'geom']
+  genericvia_full:
+        p: 3a
+        file: 3
+        orig_filename: Lotes
+        tabname:  via
+        view_select: gid, logradouro AS via_name, numerologr AS pointer_number, geom
+        array: ['gid','via_name','pointer_number', 'geom']
+        codec: -W iso-8859-1

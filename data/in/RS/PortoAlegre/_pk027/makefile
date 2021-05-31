@@ -85,7 +85,16 @@ geoaddress_none: makedirs $(part1_path)
 	@read _tudo_bem_
 	@echo Executando shp2pgsql ...
 	cd $(sandbox);	shp2pgsql -s 952013 NRO_IMOVEL.shp $(tabname) | psql -q $(pg_uri_db) 2> /dev/null
+<<<<<<< HEAD
 	psql $(pg_uri_db) -c "SELECT ingest.any_load('$(sandbox)/NRO_IMOVEL.shp','$(layername)','$(tabname)','$(fullPkID)',array['gid', 'textstring as house_number', 'setor', 'last_edi_1 as dateModified', 'geom'])"
+=======
+	# falta o assert das assinaturas, na preservação digital precisaria ser baseado em diff.
+	# as assinaturas dependem do tipo de geometria (ponto, linha ou rea), requerem função especializada (comprovando reprodutibilidade).
+	# função ingest.any_load deveria converter lista de cols conforme padrões geoaddress_none
+	psql $(pg_uri_db) -c "CREATE VIEW vw_$(tabname) AS SELECT gid, textstring as house_number, setor, last_edi_1 as dateModified, geom FROM $(tabname)"
+	psql $(pg_uri_db) -c "SELECT ingest.any_load('$(sandbox)/NRO_IMOVEL.shp','geoaddress_none','vw_$(tabname)',$(pkid),array['gid', 'house_number', 'setor', 'dateModified'])"
+	psql $(pg_uri_db) -c "DROP VIEW vw_$(tabname)"
+>>>>>>> 8b7c34d38dd8243ca6bca62cb48631250cd65fab
 	@echo "Confira os resultados nas tabelas ingest.layer_file e ingest.feature_asis".
 	@echo FIM.
 
@@ -173,11 +182,16 @@ via_full: makedirs $(part3_path)
 	@read _tudo_bem_
 	@echo Executando shp2pgsql ...
 	cd $(sandbox);	shp2pgsql -s 952013 EixosLogradouros.shp $(tabname) | psql -q $(pg_uri_db) 2> /dev/null
+<<<<<<< HEAD
 	psql $(pg_uri_db) -c "CREATE VIEW vw_$(tabname) AS \
   SELECT gid, CDIDECAT || iif(NMIDEPRE>'',' ' || NMIDEPRE,''::text) || ' ' || NMIDELOG AS via_name,\
          NRIMPINI, NRIMPFIN, NRPARINI, NRPARFIN, geom \
   FROM $(tabname)"
 	psql $(pg_uri_db) -c "SELECT ingest.any_load('$(sandbox)/EixosLogradouros.shp','$(layername)','vw_$(tabname)','$(fullPkID)',array[]::text[])"
+=======
+	psql $(pg_uri_db) -c "CREATE VIEW vw_$(tabname) AS SELECT gid, CDIDECAT || iif(NMIDEPRE>'',' ' || NMIDEPRE,''::text) || ' ' || NMIDELOG AS via_name,   NRIMPINI, NRIMPFIN, NRPARINI, NRPARFIN, geom FROM $(tabname) ORDER BY 1, 2"
+	psql $(pg_uri_db) -c "SELECT ingest.any_load('$(sandbox)/EixosLogradouros.shp','via_full','vw_$(tabname)',$(pkid),array['gid', 'via_name', 'NRIMPINI', 'NRIMPFIN', 'NRPARINI', 'NRPARFIN'])"
+>>>>>>> 8b7c34d38dd8243ca6bca62cb48631250cd65fab
 	psql $(pg_uri_db) -c "DROP VIEW vw_$(tabname)"
 	@echo "Confira os resultados nas tabelas ingest.layer_file e ingest.feature_asis".
 	@echo FIM.
@@ -214,7 +228,7 @@ clean: geoaddress_none-clean nsvia_full-clean via_full-clean
 
 thisTplFile = digital-preservation-BR/src/maketemplates/make_ref027a.mustache.mk
 
-baseSrc      = /opt/gits/_a4a
+baseSrc      = /opt/gits
 srcPy        =  $(baseSrc)/digital-preservation/src/run_mustache.py
 mkme_input0  =  $(baseSrc)/digital-preservation-BR/src/maketemplates/commomFirst.yaml
 mkme_srcTplLast  =  $(baseSrc)/digital-preservation-BR/src/maketemplates/commomLast.mustache.mk

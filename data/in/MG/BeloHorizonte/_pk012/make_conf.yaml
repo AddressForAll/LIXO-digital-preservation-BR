@@ -1,0 +1,34 @@
+pkid:      12
+pkversion: 1
+schemaId_input:    ref027a  # ID do JSON-schema de input, ref no preimeiro template a usar este padrão de input.
+schemaId_template: ref027a  # ID do makefile.mustache, ref no preimeiro package a usar o template.
+thisTplFile_root: digital-preservation-BR
+need_commands:    7z psql shp2pgsql
+srid: 31983
+files:
+  -
+    p:    1
+    file: fbc62efdbd0f16a7db03b5b775c50c9425367a8dee8a85d9b53e4475bbdb99d2.zip
+    name: Pontos de Endereço
+  -
+    p:    2
+    file: 7d7d0661683a8eebd95d544c47dd0e254fc75e3d916fe9900a3bd9fb7b2cc378.zip
+    name: Vias
+
+parts:
+  geoaddress_full: # config própria desse template, em sao paulo seria array
+        p: 1a   # identifcador do layer, pode ter mais de um por file
+        file: 1
+        orig_filename: ENDERECO.csv
+        tabname:  geoaddress
+        view_select: TODO : row_number() OVER () as gid, SIGLA_TIPO_LOGRADOURO || ' ' || NOME_LOGRADOURO as via_name,
+                     NUMERO_IMOVEL || Iff(LETRA_IMOVEL,LETRA_IMOVEL,'') as pointer_number,
+                     ST_GeomFromText(GEOMETRIA,31983) as geom
+        array: ['gid','via_name','poiter_number','geom']
+  via_full:
+        p: 2a
+        file: 2
+        orig_filename: LOGRADOUROLine
+        tabname:  via
+        view_select:  gid, TIPO_LOGRA || ' ' || NOME_LOGRA AS via_name, geom
+        array: ['gid','via_name', 'geom']

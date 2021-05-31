@@ -1,0 +1,56 @@
+pkid:      33
+pkversion: 1
+schemaId_input:    ref027a  # ID do JSON-schema de input, ref no preimeiro template a usar este padrão de input.
+schemaId_template: ref027a  # ID do makefile.mustache, ref no preimeiro package a usar o template.
+thisTplFile_root: digital-preservation-BR
+need_commands:    7z psql shp2pgsql
+files:
+  -
+    p:    1
+    file: 058a6022054e8b3f9ba81f25f7511b58cbd4ad616b0510033b917f3f7f9f23d5.rar
+    name: GDB Geodatabase 
+  -
+
+parts:
+  nsvia_full: 
+        p: 1a   
+        file: 1
+        orig_filename: OpenStreetMap.gdb/Bairros
+        tabname:  nsvia
+        view_select: Teste2_P_1 as namespace_name, geom
+        array: ['gid','namespace_name','geom']
+        srid_local: 3857
+  via_full:
+        p: 1b
+        file: 1
+        orig_filename: OpenStreetMap.gdb/Logradouros
+        tabname:  via
+        view_select:  gid, TIPO_LOGRA || ' ' || NOME_LOGRA as via_name, geom
+        array: ['gid','via_name', 'geom']
+        srid: 31983
+  geoaddress_full:
+        p: 1c
+        file: 1
+        orig_filename: OpenStreetMap.gdb/Endereco
+        tabname:  via
+        view_select:  gid, Nome_logra as via_name, Num_imovel as geoaddress_number, geom
+        array: ['gid','via_name', 'geoaddress_number', 'geom']
+        srid_local: 31983
+  parcel_none:
+        p: 1d
+        file: 1
+        orig_filename: OpenStreetMap.gdb/Lotes
+        tabname:  parcel
+        view_select:  gid, BAIRRO as namespace_name, geom
+        array: ['gid','namespace_name', 'geom']
+        srid_local: 31983
+# Não importei praça - Carlos 23/05/2021
+  genericvia_full:
+        p: 1d
+        file: 1
+        orig_filename: OpenStreetMap.gdb/Quadras
+        tabname:  genericvia
+        view_select:  gid, QUADRA as genericvia_number, geom
+        array: ['gid','genericvia_number', 'geom']
+        srid_local: 31983
+

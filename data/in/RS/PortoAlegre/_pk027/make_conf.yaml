@@ -1,23 +1,27 @@
 pkid:      27
-pkversion: 2
+pkversion: 1
 schemaId_input:    ref027a  # ID do JSON-schema de input, ref no preimeiro template a usar este padrão de input.
 schemaId_template: ref027a  # ID do makefile.mustache, ref no preimeiro package a usar o template.
 thisTplFile_root: digital-preservation-BR
 need_commands:    7z psql shp2pgsql
-srid: 952013
+srid: 31982
 files:
   -
     p:    1
-    file: fbc62efdbd0f16a7db03b5b775c50c9425367a8dee8a85d9b53e4475bbdb99d2.zip
-    name: Imóveis
+    file: 51a6beb9fca43e0fb45727138982f7806b8df52fce53f5e0e31edd61bfbc21b9.rar
+    name: Lotes
   -
     p:    2
-    file: 258772459588f7941ac6eeda7c6839df02d58741cf6bc3e48825aecd60418251.zip
-    name: Bairros
+    file: f4d3819f9853e85e43bf7a58de7f257eed5f63bcf36daed1c4db0f2701544adc.zip
+    name: Eixos
   -
     p:    3
-    file: c35e3b2825d3da122a74c6c8dd5f3157a3bd6201208d2a6d13dec433a6ded9fc.zip
-    name: Eixos de via
+    file: 9600dcba403c8dc0b066c8f429507e4672966a01c93119923f75361a6ebc64c0.zip
+    name: Bairros
+  -
+    p:    4
+    file: 9600dcba403c8dc0b066c8f429507e4672966a01c93119923f75361a6ebc64c0.zip
+    name: Quadras
 
 parts:
 

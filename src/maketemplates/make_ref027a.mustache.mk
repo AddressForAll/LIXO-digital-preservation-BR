@@ -2,7 +2,7 @@
 ## Template file reference: digital-preservation-BR/data/in/RS/PortoAlegre/_pk027
 ##
 
-## BASIC CONFIGS
+## BASIC CONFIG
 pg_io  ={{pg_io}}
 orig   ={{orig}}
 pg_uri ={{pg_uri}}
@@ -93,7 +93,6 @@ nsvia_full-clean:
 
 
 {{#via_full}} ## ## ## ##
-
 via_full: layername = via_full
 via_full: tabname = pk$(fullPkID)_p{{file}}_{{tabname}}
 via_full: makedirs $(part{{file}}_path)
@@ -109,6 +108,24 @@ via_full-clean:
 	psql $(pg_uri_db) -c "DROP TABLE IF EXISTS $(tabname) CASCADE"
 
 {{/via_full}}
+
+
+{{#parcel_none}} ## ## ## ##
+parcel_none: layername = parcel_none
+parcel_none: tabname = pk$(fullPkID)_p{{file}}_{{tabname}}
+parcel_none: makedirs $(part{{file}}_path)
+	@# pk{{pkid}}_p{{file}} - ETL extrating to PostgreSQL/PostGIS the "parcel_none" datatype (street axes)
+{{>common002_layerHeader}}
+	cd $(sandbox);  7z e -y  $(part{{file}}_path) {{orig_filename}}.* > /dev/null
+{{>common003_shp2pgsql}}
+{{>common001_pgAny_load}}
+	@echo FIM.
+
+parcel_none-clean:
+	rm -f $(sandbox)/{{orig_filename}}.* || true
+	psql $(pg_uri_db) -c "DROP TABLE IF EXISTS $(tabname) CASCADE"
+
+{{/parcel_none}}
 
 {{/parts}}
 

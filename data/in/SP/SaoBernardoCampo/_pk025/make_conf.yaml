@@ -1,0 +1,58 @@
+pkid:      25
+pkversion: 1
+schemaId_input:    ref027a  # ID do JSON-schema de input, ref no preimeiro template a usar este padrão de input.
+schemaId_template: ref027a  # ID do makefile.mustache, ref no preimeiro package a usar o template.
+thisTplFile_root: digital-preservation-BR
+need_commands:    7z psql shp2pgsql
+srid: 31983
+files:
+  -
+    p:    1
+    file: 22ecd5ef4ca76adef213fa422d9b5e4198f0667df598c511c30e512bb10aaedd.zip
+    name: Pontos de endereço
+  -
+    p:    2
+    file: d4985405060cc1887962a4278b4d68ada6ffd3ed72f296bd72d65abc4897cd2d.zip
+    name: Lotes 
+  -
+    p:    3
+    file: 3269bacc09d450b4d7496a2bc749ece94b1f48462ba0aae70d902404256bc433.zip
+    name: Eixos
+  -
+    p:    4
+    file: 350b605174967b94ef49ce1bbac0352dd76e2175e5eae1b8e5b730cd9950d133.zip
+    name: Bairros
+
+parts:
+  geoaddress_full: # config própria desse template, em sao paulo seria array
+        p: 1a   # identifcador do layer, pode ter mais de um por file
+        file: 1
+        orig_filename: Q_Endereco_SBC
+        tabname:  geoaddress
+        sql_select: gid, NOME_COMPL as via_name, Numero as pointer_number, geom
+        array: ['gid','via_name','poiter_number','geom']
+        codec: -W iso-8859-1
+  genericvia_full:
+        p: 2a
+        file: 2
+        orig_filename: LOTE
+        tabname:  genericvia
+        sql_select:  gid, QUADRA as genericvia_number, UNIDADE as building_number,  geom  
+        # ficou de fora ZONA (int): número de zona fiscal.
+        array: ['gid','genericvia_number','building_number','geom']
+  via_full:
+        p: 3a
+        file: 3
+        orig_filename: LOGRADOURO
+        tabname:  via
+        sql_select:  gid,NOME as via_name, DENOMINADA as via_type, ORIGEM as via_original
+        array: ['gid','via_name','via_type','via_original','geom']
+  nsvia_full:
+        p: 4a
+        file: 4
+        orig_filename: BAIRRO
+        tabname:  nsvia
+        sql_select:  gid,NOME as nsvia_name, ZONA as nsvia_type, geom
+        array: ['gid','nsvia_name', 'nsvia_type', 'geom']
+        codec: -W iso-8859-1
+        srid_local: 31982

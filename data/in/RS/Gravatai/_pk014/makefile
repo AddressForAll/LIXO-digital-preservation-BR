@@ -21,20 +21,12 @@ thisTplFile_root = digital-preservation-BR
 
 need_commands   ="7z psql shp2pgsql" # and a prepared database ingest1
 
-part1_file  =fbc62efdbd0f16a7db03b5b775c50c9425367a8dee8a85d9b53e4475bbdb99d2.zip
-part1_name  =Imóveis
-
-part2_file  =258772459588f7941ac6eeda7c6839df02d58741cf6bc3e48825aecd60418251.zip
-part2_name  =Bairros
-
-part3_file  =d101e729d51ddfc33e4a866684074487c5a2601c7c84d4eca01ff9bbca186cda.rar
-part3_name  =Eixos de via
+part1_file  =d101e729d51ddfc33e4a866684074487c5a2601c7c84d4eca01ff9bbca186cda.rar
+part1_name  =Todos os shapes
 
 ## COMPOSED VARS
 pg_uri_db   =$(pg_uri)/$(pg_db)
 part1_path  =$(orig)/$(part1_file)
-part2_path  =$(orig)/$(part2_file)
-part3_path  =$(orig)/$(part3_file)
 
 
 all:
@@ -52,112 +44,31 @@ makedirs: clean_sandbox
 	@mkdir -p $(pg_io)
 
 
-geoaddress_none: tabname = pk$(fullPkID)_p1_geoaddress
-geoaddress_none: makedirs $(part1_path)
-	@# pk14_p1 - ETL extrating to PostgreSQL/PostGIS the "geoaddress_none" datatype (point with house_number but no via name)
+## ## ## ##
+
+## ## ## ##
+
+via_full: tabname = pk$(fullPkID)_p1_via
+via_full: makedirs $(part1_path)
+	@# pk14_p1 - ETL extrating to PostgreSQL/PostGIS the "via_full" datatype (street axes)
 	@echo
-	@echo "-- Incluindo dados tipo geoaddress_none do arquivo-1 do package-$(fullPkID) na base $(pg_db) --"
+	@echo "-- Incluindo dados tipo via_full do arquivo-1 do package-$(fullPkID) na base $(pg_db) --"
 	@echo " Tema do arquivo-1: $(part1_name)"
 	@echo " Nome-hash do arquivo-1: $(part1_file)"
 	@echo " Tabela do layer geoaddress sem nome de rua, só com numero predial: $(tabname)"
-	@echo " Sub-arquivos do arquivo-1 com o conteúdo alvo: NRO_IMOVEL.*"
-	@echo "Run with tmux and sudo! (DANGER: seems not idempotent on psql)"
-	@whoami
-	@printf "Above user is root? If not, you have permissions for all paths?\n [press ENTER for yes else ^C]"
-	@read _press_enter_
-	psql $(pg_uri_db) -c "DROP TABLE IF EXISTS $(tabname) CASCADE"
+	@echo " Sub-arquivos do arquivo-1 com o conteúdo alvo: sistema_viario.*"
 	@tput bold
 	@echo Extraindo ....
 	@tput sgr0
-	cd $(sandbox);  7z e -y  $(part1_path) NRO_IMOVEL.* > /dev/null
-	@echo "Conferindo se SRID esta configurado:"
-	@psql $(pg_uri_db) -c "SELECT srid, proj4text FROM spatial_ref_sys where srid=31982"
-	@echo "Tudo bem até aqui?  [ENTER para continuar ou ^C para rodar WS/ingest-step1]"
-	@read _tudo_bem_
-	@echo Executando shp2pgsql ...
-	cd $(sandbox);	shp2pgsql -s 31982 NRO_IMOVEL.shp $(tabname) | psql -q $(pg_uri_db) 2> /dev/null
-	# falta o assert das assinaturas, na preservação digital precisaria ser baseado em diff.
-	# as assinaturas dependem do tipo de geometria (ponto, linha ou rea), requerem função especializada (comprovando reprodutibilidade).
-	# função ingest.any_load deveria converter lista de cols conforme padrões geoaddress_none
-	psql $(pg_uri_db) -c "CREATE VIEW vw_$(tabname) AS SELECT gid, textstring as house_number, setor, last_edi_1 as dateModified, geom FROM $(tabname)"
-	psql $(pg_uri_db) -c "SELECT ingest.any_load('$(sandbox)/NRO_IMOVEL.shp','geoaddress_none','vw_$(tabname)',$(pkid),array['gid','house_number','setor','dateModified'])"
-	psql $(pg_uri_db) -c "DROP VIEW vw_$(tabname)"
-	@echo "Confira os resultados nas tabelas ingest.layer_file e ingest.feature_asis".
-	@echo FIM.
-
-geoaddress_none-clean:
-	rm -f $(sandbox)/NRO_IMOVEL.* || true
-	psql $(pg_uri_db) -c "DROP TABLE IF EXISTS $(tabname) CASCADE"
-
-
-## ## ## ##
-
-nsvia_full: tabname = pk$(fullPkID)_p2_namespace
-nsvia_full: makedirs $(part2_path)
-	@# pk14_p2 - ETL extrating to PostgreSQL/PostGIS the "nsvia_full" datatype (zone with name)
-	@echo
-	@echo "-- Incluindo dados tipo nsvia_full do arquivo-2 do package-$(fullPkID) na base $(pg_db) --"
-	@echo " Tema do arquivo-2: $(part2_name)"
-	@echo " Nome-hash do arquivo-2: $(part2_file)"
-	@echo " Tabela do layer geoaddress sem nome de rua, só com numero predial: $(tabname)"
-	@echo " Sub-arquivos do arquivo-2 com o conteúdo alvo: Bairros_LC12112_16.*"
-	@tput bold
-	@echo Extraindo ....
-	@tput sgr0
-	cd $(sandbox);  7z e -y  $(part2_path) Bairros_LC12112_16.* > /dev/null
-	@echo "Conferindo se SRID esta configurado:"
-	@psql $(pg_uri_db) -c "SELECT srid, proj4text FROM spatial_ref_sys where srid=31982"
-	@echo "Tudo bem até aqui?  [ENTER para continuar ou ^C para rodar WS/ingest-step1]"
-	@read _tudo_bem_
-	@echo Executando shp2pgsql ...
-	cd $(sandbox);	shp2pgsql -s 31982 Bairros_LC12112_16.shp $(tabname) | psql -q $(pg_uri_db) 2> /dev/null
-	psql $(pg_uri_db) -c "\
-	CREATE VIEW vw_$(tabname) AS \
-	  SELECT row_number() OVER () as gid, * FROM ( \
-	    SELECT upper(trim(nome)) as nome, count(*) n, round(sum(st_area(geom))) area, \
-	       max(data_edica) dateModified, ST_UNION(geom) as geom \
-	    FROM pk27_2_p2_namespace group by 1 order by 1 \
-		) t\
-	"
-	psql $(pg_uri_db) -c "SELECT ingest.any_load('$(sandbox)/Bairros_LC12112_16.shp','geoaddress_none','vw_$(tabname)',$(pkid),array['gid','nome','n','area','dateModified'])"
-	psql $(pg_uri_db) -c "DROP VIEW vw_$(tabname)"
-	@echo "Confira os resultados nas tabelas ingest.layer_file e ingest.feature_asis".
-	@echo FIM.
-
-nsvia_full-clean: tabname = pk$(fullPkID)_p2_namespace
-nsvia_full-clean:
-	rm -f $(sandbox)/Bairros_LC12112_16.* || true
-	psql $(pg_uri_db) -c "DROP TABLE IF EXISTS $(tabname) CASCADE;  DROP VIEW IF EXISTS vw_$(tabname) CASCADE;"
-
-
-## ## ## ##
-
-via_full: tabname = pk$(fullPkID)_p3_via
-via_full: makedirs $(part3_path)
-	@# pk14_p3 - ETL extrating to PostgreSQL/PostGIS the "via_full" datatype (street axes)
-	@echo
-	@echo "-- Incluindo dados tipo via_full do arquivo-3 do package-$(fullPkID) na base $(pg_db) --"
-	@echo " Tema do arquivo-3: $(part3_name)"
-	@echo " Nome-hash do arquivo-3: $(part3_file)"
-	@echo " Tabela do layer geoaddress sem nome de rua, só com numero predial: $(tabname)"
-	@echo " Sub-arquivos do arquivo-3 com o conteúdo alvo: sistema_viario.*"
-	@tput bold
-	@echo Extraindo ....
-	@tput sgr0
-	cd $(sandbox);  7z e -y  $(part3_path) sistema_viario.* > /dev/null
+	cd $(sandbox);  7z e -y  $(part1_path) sistema_viario.* > /dev/null
 	@echo "Conferindo se SRID esta configurado:"
 	@psql $(pg_uri_db) -c "SELECT srid, proj4text FROM spatial_ref_sys where srid=31982"
 	@echo "Tudo bem até aqui?  [ENTER para continuar ou ^C para rodar WS/ingest-step1]"
 	@read _tudo_bem_
 	@echo Executando shp2pgsql ...
 	cd $(sandbox);	shp2pgsql -s 31982 sistema_viario.shp $(tabname) | psql -q $(pg_uri_db) 2> /dev/null
-	psql $(pg_uri_db) -c "\
-	CREATE VIEW vw_$(tabname) AS \
-	   SELECT gid, NOME || ' ' || UPPER(NOME) AS via_name,\
-		        geom \
-     FROM $(tabname) ORDER BY 1, 2 \
-	"
-	psql $(pg_uri_db) -c "SELECT ingest.any_load('$(sandbox)/sistema_viario.shp','via_full','vw_$(tabname)',$(pkid),array['gid','via_name'])"
+	psql $(pg_uri_db) -c "CREATE VIEW vw_$(tabname) AS SELECT gid, TIPO || ' ' || NOME AS via_name,geom FROM $(tabname) ORDER BY 1, 2"
+	psql $(pg_uri_db) -c "SELECT ingest.any_load('$(sandbox)/sistema_viario.shp','via_full','vw_$(tabname)',$(pkid),array['gid', 'via_name'])"
 	psql $(pg_uri_db) -c "DROP VIEW vw_$(tabname)"
 	@echo "Confira os resultados nas tabelas ingest.layer_file e ingest.feature_asis".
 	@echo FIM.
@@ -167,14 +78,44 @@ via_full-clean:
 	psql $(pg_uri_db) -c "DROP TABLE IF EXISTS $(tabname) CASCADE"
 
 
+## ## ## ##
+
+parcel_none: tabname = pk$(fullPkID)_p1_lotes
+parcel_none: makedirs $(part1_path)
+	@# pk14_p1 - ETL extrating to PostgreSQL/PostGIS the "parcel_none" datatype (street axes)
+	@echo
+	@echo "-- Incluindo dados tipo parcel_none do arquivo-1 do package-$(fullPkID) na base $(pg_db) --"
+	@echo " Tema do arquivo-1: $(part1_name)"
+	@echo " Nome-hash do arquivo-1: $(part1_file)"
+	@echo " Tabela do layer geoaddress sem nome de rua, só com numero predial: $(tabname)"
+	@echo " Sub-arquivos do arquivo-1 com o conteúdo alvo: lote_numero_predial.*"
+	@tput bold
+	@echo Extraindo ....
+	@tput sgr0
+	cd $(sandbox);  7z e -y  $(part1_path) lote_numero_predial.* > /dev/null
+	@echo "Conferindo se SRID esta configurado:"
+	@psql $(pg_uri_db) -c "SELECT srid, proj4text FROM spatial_ref_sys where srid=31982"
+	@echo "Tudo bem até aqui?  [ENTER para continuar ou ^C para rodar WS/ingest-step1]"
+	@read _tudo_bem_
+	@echo Executando shp2pgsql ...
+	cd $(sandbox);	shp2pgsql -s 31982 lote_numero_predial.shp $(tabname) | psql -q $(pg_uri_db) 2> /dev/null
+	psql $(pg_uri_db) -c "CREATE VIEW vw_$(tabname) AS SELECT gid, geom FROM $(tabname) ORDER BY 1, 2"
+	psql $(pg_uri_db) -c "SELECT ingest.any_load('$(sandbox)/lote_numero_predial.shp','parcel_none','vw_$(tabname)',$(pkid),array['gid'])"
+	psql $(pg_uri_db) -c "DROP VIEW vw_$(tabname)"
+	@echo "Confira os resultados nas tabelas ingest.layer_file e ingest.feature_asis".
+	@echo FIM.
+
+parcel_none-clean:
+	rm -f $(sandbox)/lote_numero_predial.* || true
+	psql $(pg_uri_db) -c "DROP TABLE IF EXISTS $(tabname) CASCADE"
+
+
 
 ## ## ## ##
 wget_files:
 	@echo "Under construction, need to check that orig path is not /var/www! or use orig=x [ENTER if not else ^C]"
 	@echo $(orig)
 	@read _ENTER_OK_
-	@cd $(orig); wget http://preserv.addressforall.org/download/fbc62efdbd0f16a7db03b5b775c50c9425367a8dee8a85d9b53e4475bbdb99d2.zip
-	@cd $(orig); wget http://preserv.addressforall.org/download/258772459588f7941ac6eeda7c6839df02d58741cf6bc3e48825aecd60418251.zip
 	@cd $(orig); wget http://preserv.addressforall.org/download/d101e729d51ddfc33e4a866684074487c5a2601c7c84d4eca01ff9bbca186cda.rar
 	@echo "Please, if orig not default, run 'make _target_ orig=$(orig)'"
 
@@ -191,7 +132,7 @@ clean: geoaddress_none-clean nsvia_full-clean via_full-clean
 ## SELF-GENERATE MAKE (make me)
 ##
 
-thisTplFile = digital-preservation-BR/src/maketemplates/make_ref014a.mustache.mk
+thisTplFile = digital-preservation-BR/src/maketemplates/make_ref027a.mustache.mk
 
 baseSrc      = /opt/gits/_a4a
 srcPy        =  $(baseSrc)/digital-preservation/src/run_mustache.py

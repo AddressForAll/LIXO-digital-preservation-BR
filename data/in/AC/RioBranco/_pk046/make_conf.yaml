@@ -1,0 +1,43 @@
+pkid:      46
+pkversion: 1
+schemaId_input:    ref027a  # ID do JSON-schema de input, ref no preimeiro template a usar este padrão de input.
+schemaId_template: ref027a  # ID do makefile.mustache, ref no preimeiro package a usar o template.
+thisTplFile_root: digital-preservation-BR
+need_commands:    7z psql shp2pgsql
+srid: 32719 
+files:
+  -
+    p:    1
+    file: d96f47270e22336cf4660f742ae4dba5694f15c6833363167c91d9fc9929871b.zip
+    name: Lotes
+  -
+    p:    2
+    file: 73d02ba0ae4b0a994a629f7d06f0a027259f5c1d97e53f9b771fecd345c2a02b.zip
+    name: Bairros
+  -
+    p:    3
+    file: 29d68e5ce006079b06b710cc2df3aa08d6cb6934f32bc0b29fc46d3e8272ff77.rar
+    name: Eixos
+
+parts:
+  genericvia_full:
+        p: 1a
+        file: 1
+        orig_filename: rb_20201116
+        tabname:  genericvia
+        sql_select: gid, nomelog AS via_name, endereco_n AS point_number
+        array: ['gid','via_name', 'point_number']
+  nsvia_full:
+        p: 2a
+        file: 2
+        orig_filename: bairros
+        tabname:  nsvia
+        sql_select: gid, name AS ns_name, geom
+        array: ['gid','ns_name','geom']
+  via_full:
+        p: 3a
+        file: 3
+        orig_filename: logradouros
+        tabname:  via
+        sql_select: gid, Tipo || ' ' || Nome AS via_name, geom
+        array: ['gid','via_name','geom']
