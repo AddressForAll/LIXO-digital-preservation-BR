@@ -20,18 +20,36 @@ files:
     name: Eixos de via
 
 parts:
+
   geoaddress_none: # config própria desse template, em sao paulo seria array
         p: 1a   # identifcador do layer, pode ter mais de um por file
         file: 1
-        orig_filename: NRO_IMOVEL  # incluir numa pasta isolada todos os NRO_IMOVEL
         tabname:  geoaddress
+        sql_select: ['gid', 'textstring as house_number', 'setor', 'last_edi_1 as dateModified', 'geom']
+        orig_filename: NRO_IMOVEL  # incluir numa pasta isolada todos os NRO_IMOVEL
+
   nsvia_full:
         p: 2a
         file: 2
-        orig_filename: Bairros_LC12112_16
         tabname:  namespace
+        query_view: |-
+          CREATE VIEW vw_$(tabname) AS \
+            SELECT row_number() OVER () as gid, * \
+            FROM ( \
+              SELECT upper(trim(nome)) as nome, count(*) n, round(sum(st_area(geom))) area, \
+                     max(data_edica) dateModified, ST_UNION(geom) as geom \
+              FROM $(tabname)\
+              GROUP BY 1 ORDER BY 1 \
+            ) t
+        orig_filename: Bairros_LC12112_16
+
   via_full:
         p: 3a
         file: 3
-        orig_filename: EixosLogradouros
         tabname:  via
+        query_view: |-
+          CREATE VIEW vw_$(tabname) AS \
+            SELECT gid, CDIDECAT || iif(NMIDEPRE>'',' ' || NMIDEPRE,''::text) || ' ' || NMIDELOG AS via_name,\
+                   NRIMPINI, NRIMPFIN, NRPARINI, NRPARFIN, geom \
+            FROM $(tabname)
+        orig_filename: EixosLogradouros

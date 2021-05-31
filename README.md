@@ -1,13 +1,13 @@
 # Digital-preservation-BR
 [Preservação digital](https://en.wikipedia.org/wiki/Digital_preservation) das principais fontes  do **banco de dados AddressForAll-Brasil**, mantido pelo [Instituto ITGS](http://addressforall.org/).
 
-Ao Brasil foram atribuídos: no contexto ISO&nbsp;3166&#8209;2 o geocódigo **BR** e número  **76**; na Wikidata o identificador	[Q155](http://wikidata.org/entity/Q155); no OpenStreetMap o identificador de [*relation* 59470](http://osm.org/relation/59470).
+Ao Brasil foram atribuídos: no contexto [ISO&nbsp;3166](https://en.wikipedia.org/wiki/ISO_3166) o geocódigo [**BR**](https://en.wikipedia.org/wiki/ISO_3166-2:BR) e número  [**76**](https://en.wikipedia.org/wiki/ISO_3166-1_numeric); na Wikidata o identificador	[Q155](http://wikidata.org/entity/Q155); no OpenStreetMap o identificador de [*relation* 59470](http://osm.org/relation/59470).
 
 ## Organização territorial e seus geocódigos
 
 O território nacional e suas subdivisões adminisrativas representam **jurisdições**:
 
-* O país está dividido em 16 Estados federados (e 1 distrito federal - DF), geridos por representantes eleitos democraticamente nos respectivos territórios. <br/>Os geocódigos das Unidades da Federação (Estados e DF) seguem a convenção registrada pela [ISO&nbsp;3166&#8209;2:BR](https://en.wikipedia.org/wiki/ISO_3166-2:BR). O IBGE também fixou geocódigos numéricos. No OpenStreetMap convenciona-se o que a subdivisão por UF corresponde ao *nível administrativo 2*. <!--, abaixo da subdivisão por regiões (*nível 1* composto por Norte, Nordeste, Centro-Oeste, Sudeste e Sul).  Key:admin_level--> 
+* O país está dividido em 16 Estados federados (e 1 distrito federal - DF), geridos por representantes eleitos democraticamente nos respectivos territórios. <br/>Os geocódigos das Unidades da Federação (Estados e DF) seguem a convenção registrada pela [ISO&nbsp;3166&#8209;2:BR](https://en.wikipedia.org/wiki/ISO_3166-2:BR). O IBGE também fixou geocódigos numéricos. No OpenStreetMap convenciona-se o que a subdivisão por UF corresponde ao *nível administrativo 2*. <!--, abaixo da subdivisão por regiões (*nível 1* composto por Norte, Nordeste, Centro-Oeste, Sudeste e Sul).  Key:admin_level-->
 
 * Os Estados são subdivididos em um total de 5500 municípios, geridos por representantes eleitos democraticamente nos respectivos territórios.<br/>Apesar de não existirem geocódigos oficiais, existem propostas (incompativeis) de padronização. Neste projeto demos preferência pela proposta do DER-SP que criou códigos de 3 letras para cada município do estado de SP.   O IBGE  fixou geocódigos numéricos para os municípios. No OpenStreetMap convenciona-se o que os municípios correspondem ao *nível administrativo 4*.
 
@@ -17,11 +17,11 @@ A jurisdição que atribui nomes às ruas e define o sistema de numeração pred
 Neste git são mantidos apenas metadados, ou seja, descritores das entidades, tais como nomes e geocódigos, mas mapas e outros dados, armazenados externamente por serem muito grandes. Os metadados foram organizados da seguinte forma, na pasta [`/data`](./data):
 
 * [`/data/in`](./data/in): dados originais de **entrada**, ou seja, metadados fornecidos para o sistema.
-   * [`br-jurisdiction.csv`](./data/in/br-jurisdiction.csv): jurisdições (de todos os níveis). 
+   * [`br-jurisdiction.csv`](./data/in/br-jurisdiction.csv): jurisdições (de todos os níveis).
    * [`br-donor.csv`](./data/in/br-donor.csv): doadores de pacotes de dados. Metadados das instituições que fornecem dados oficiais.
    * [`br-donatedPack.csv`](./data/in/br-donatedPack.csv): descritores dos arquivos doados.
    * *packages* (pastas `_packXX`): pacotes hash e demais descritores dos arquivos armazenados externamente, bem como `makefile` e demais descritores de processo para desempacotar esses arquivos e leva-los ao banco de dados (PostregSQL). Por exemplo [`/data/in/MG/BeloHorizonte/_pk012`](./data/in/MG/BeloHorizonte/_pk012).
- 
+
 * [`/data/out`](./data/out): resultados gerados pelo sistema (**saída**), ou seja, metadados criados a partir dos algorimos e estatísticas aplicados aos dados.
 
 
@@ -29,7 +29,7 @@ Neste git são mantidos apenas metadados, ou seja, descritores das entidades, ta
 
 # OPERAÇÃO DESTE GIT
 
-Neste repositório são registrados apenas dados de gestão, metadados dos arquivos doados (*input* de geometrias) e relatórios. 
+Neste repositório são registrados apenas dados de gestão, metadados dos arquivos doados (*input* de geometrias) e relatórios.
 
 Os metadados relativos a datasets são relativos ao arquivo comprimido contendo um ou mais pacotes de dados preservados (doação), relativos a um doador e uma data específicos. Metadados típicos são o número de bytes (file size), o tipo de arquivo (ex. `.zip` ou  `.gz`), a data de aceitação ou registro, o CNPJ da entidade doadora, o hash SHA256 do arquivo, etc. Vide pasta `/data` deste git.
 
@@ -38,7 +38,7 @@ Os relatórios são como um blog de anúncio de atos de registro, em geral com u
 # CONCEITOS
 Apresentação dos principais conceitos e diretivas adotadas na AddressForAll e no seu Projeto de Preservação Digital.
 
-## Fontes primárias 
+## Fontes primárias
 As [fontes de dados primárias](https://en.wikipedia.org/wiki/Primary_source) podem ter diversas origens e diferentes metodologias de coleta. De especial interesse para o Instituto AddressForAll, num contexto de preservação de longo prazo (décadas), são as fontes de dados relativos a endereços postais de cada município do Brasil. Cada fonte consiste de um conjunto de dados sistematizados e publicados **por uma instituição** (nacional ou internacional) com idoniedade reconhecida pela comunidade local.
 
 As fontes primárias estão relacionadas aos [dados brutos](https://en.wikipedia.org/wiki/Raw_data), quando tidos como ["verdade de campo" ou  "verdade oficial"](https://wiki.openstreetmap.org/wiki/Ground_truth_and_Official_truth), e com o trabalho mobilizado pela instituição para sistematizar, consolidar ou transformar os dados brutos em dados geográficos consistentes. Dois exemplos ilustrativos:
@@ -50,7 +50,7 @@ As fontes primárias estão relacionadas aos [dados brutos](https://en.wikipedia
 ### Fontes OpenStreetMap Geofabrik
 O [mapa OSM](https://www.openstreetmap.org/about) cobre todo o planeta, é mantido pela [Openstreetmap Foundation](https://blog.osmfoundation.org/about/), uma fundação inglesa registrada sob *Company Registration Number 05912761*.
 
-O [planeta inteiro](https://planet.openstreetmap.org/) é uma massa de dados tão grande que inviabiliza filtragem de dados específicos. Diversos recortes do mapa OSM são [gerados por membros da OSMF](https://wiki.openstreetmap.org/wiki/Planet.osm), entre eles a  [empresa alemã, Geofabrik](https://www.geofabrik.de/geofabrik/openstreetmap.html) (*USt-Id DE222535480*). Seus recortes são considerados fiáveis e utilizados por governos e empresas por todo o mundo, portanto  amplamente auditados. Por orientação do projeto  [OSM-Stable Brasil](https://github.com/OSMBrasil/stable) ([docs](http://addressforall.org/osms/)),  o Instituto AddressForAll também  faz uso desses recortes. 
+O [planeta inteiro](https://planet.openstreetmap.org/) é uma massa de dados tão grande que inviabiliza filtragem de dados específicos. Diversos recortes do mapa OSM são [gerados por membros da OSMF](https://wiki.openstreetmap.org/wiki/Planet.osm), entre eles a  [empresa alemã, Geofabrik](https://www.geofabrik.de/geofabrik/openstreetmap.html) (*USt-Id DE222535480*). Seus recortes são considerados fiáveis e utilizados por governos e empresas por todo o mundo, portanto  amplamente auditados. Por orientação do projeto  [OSM-Stable Brasil](https://github.com/OSMBrasil/stable) ([docs](http://addressforall.org/osms/)),  o Instituto AddressForAll também  faz uso desses recortes.
 
 Os metadados dos arquivos preservados estão descritos no *git* do projeto, [git/OSMBrasil/stable/brazil-latest.osm.md](https://github.com/OSMBrasil/stable/blob/master/brazil-latest.osm.md#dump-opensstreetmap-do-brasil).
 
@@ -86,4 +86,3 @@ A *Plataforma de Projetos* do *Instituto AdddressForAll* foi concebida para a ge
 O presente projeto de preservação digital é um deles, e um subconjunto das suas entregas é utilizado no *Projeto AddressForAll*. Abaixo um diagrama que resume o passo-a-passo da preservação e como ele se relaciona com atividades de outros projetos.
 
 ![](https://github.com/AddressForAll/specifications/raw/master/docs/assets-spec02/image5.png)
- 

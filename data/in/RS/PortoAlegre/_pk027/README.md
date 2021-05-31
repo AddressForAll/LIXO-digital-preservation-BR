@@ -77,11 +77,11 @@ Teste no QGIS:
 
 ## TM-POA
 O arquivo `NRO_IMOVEL.prj`, por um [bug de interface do software `shp2pgsql`](https://nelsonslog.wordpress.com/2012/08/10/shp2pgsql-and-prj-files/),
-eh ignorado sem aviso. 
+eh ignorado sem aviso.
 
 A partir da publicação do [Decreto municipal n° 18.315 de 2013](https://web.archive.org/web/20200324034734/http://lproweb.procempa.com.br/pmpa/prefpoa/spm/usu_doc/decreto_18.315.pdf)
 foi instituído o Sistema Cartográfico de Referência de Porto Alegre,
-definido pelo sistema geodésico de referência SIRGAS2000 (equiparado ao WGS84) e projeção cartográfica TM-POA. 
+definido pelo sistema geodésico de referência SIRGAS2000 (equiparado ao WGS84) e projeção cartográfica TM-POA.
 O artigo 1º do decreto pode ser traduzido para a seguinte [definicao Proj](https://proj.org/):
 ```
 +proj=tmerc +lat_0=0 +lon_0=-51 +k=0.999995 +x_0=300000 +y_0=5000000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs
@@ -93,6 +93,13 @@ Transversa de Mercator para Porto Alegre (TM-POA).
 
 Na AddressForAll o TM-POA recebeu o SRID 952013.
 
-# GitHub
-Issues:
+# Issues:
 * https://github.com/AddressForAll/digital-preservation-BR/issues/3
+
+-------------------
+
+## Make
+
+Para gerar todos os layers aqui descritos,  `make all_layers`. Os dados "originais filtrados" serão todos gravados nas tabelas `ingest.layer_file` e `ingest.feature_asis`.
+
+Para a geração de um só layer ou baixando dados em outra origem, ou usando uma base diferente da `ingest1`, usar demais parâmetros. Exemplo: `make pg_db=ingest2 orig=/tmp/sandOrig nsvia_full`.

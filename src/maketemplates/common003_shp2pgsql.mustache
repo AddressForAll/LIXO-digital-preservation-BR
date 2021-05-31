@@ -1,0 +1,8 @@
+{{#srid}}
+	@echo "Conferindo se SRID {{.}} esta configurado:"
+	@psql $(pg_uri_db) -c "SELECT srid, proj4text FROM spatial_ref_sys where srid={{.}}"
+	@echo "Tudo bem até aqui?  [ENTER para continuar ou ^C para rodar WS/ingest-step1]"
+	@read _tudo_bem_
+{{/srid}}
+	@echo Executando shp2pgsql ...
+	cd $(sandbox);	shp2pgsql -s {{srid}} {{orig_filename}}.shp $(tabname) | psql -q $(pg_uri_db) 2> /dev/null
