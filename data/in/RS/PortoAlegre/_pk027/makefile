@@ -2,14 +2,14 @@
 ## Template file reference: digital-preservation-BR/data/in/RS/PortoAlegre/_pk027
 ##
 
-## BASIC CONFIGS
+## BASIC CONFIG
 pg_io  =/tmp/pg_io
 orig   =/var/www/preserv.addressforall.org/download
 pg_uri =postgres://postgres@localhost
 sandbox_root=/tmp/sandbox
 
 pkid = 27
-fullPkID=27_2
+fullPkID=27_1
 sandbox=$(sandbox_root)/_pk$(fullPkID)
 
 ## USER CONFIGS
@@ -21,20 +21,24 @@ thisTplFile_root = digital-preservation-BR
 
 need_commands   ="7z psql shp2pgsql" # and a prepared database ingest1
 
-part1_file  =fbc62efdbd0f16a7db03b5b775c50c9425367a8dee8a85d9b53e4475bbdb99d2.zip
-part1_name  =Imóveis
+part1_file  =51a6beb9fca43e0fb45727138982f7806b8df52fce53f5e0e31edd61bfbc21b9.rar
+part1_name  =Lotes
 
-part2_file  =258772459588f7941ac6eeda7c6839df02d58741cf6bc3e48825aecd60418251.zip
-part2_name  =Bairros
+part2_file  =f4d3819f9853e85e43bf7a58de7f257eed5f63bcf36daed1c4db0f2701544adc.zip
+part2_name  =Eixos
 
-part3_file  =c35e3b2825d3da122a74c6c8dd5f3157a3bd6201208d2a6d13dec433a6ded9fc.zip
-part3_name  =Eixos de via
+part3_file  =9600dcba403c8dc0b066c8f429507e4672966a01c93119923f75361a6ebc64c0.zip
+part3_name  =Bairros
+
+part4_file  =9600dcba403c8dc0b066c8f429507e4672966a01c93119923f75361a6ebc64c0.zip
+part4_name  =Quadras
 
 ## COMPOSED VARS
 pg_uri_db   =$(pg_uri)/$(pg_db)
 part1_path  =$(orig)/$(part1_file)
 part2_path  =$(orig)/$(part2_file)
 part3_path  =$(orig)/$(part3_file)
+part4_path  =$(orig)/$(part4_file)
 
 
 all:
@@ -79,22 +83,13 @@ geoaddress_none: makedirs $(part1_path)
 	@echo Extracting ....
 	@tput sgr0
 	cd $(sandbox);  7z e -y  $(part1_path) NRO_IMOVEL.* > /dev/null
-	@echo "Conferindo se SRID 952013 esta configurado:"
-	@psql $(pg_uri_db) -c "SELECT srid, proj4text FROM spatial_ref_sys where srid=952013"
+	@echo "Conferindo se SRID 31982 esta configurado:"
+	@psql $(pg_uri_db) -c "SELECT srid, proj4text FROM spatial_ref_sys where srid=31982"
 	@echo "Tudo bem até aqui?  [ENTER para continuar ou ^C para rodar WS/ingest-step1]"
 	@read _tudo_bem_
 	@echo Executando shp2pgsql ...
-	cd $(sandbox);	shp2pgsql -s 952013 NRO_IMOVEL.shp $(tabname) | psql -q $(pg_uri_db) 2> /dev/null
-<<<<<<< HEAD
+	cd $(sandbox);	shp2pgsql -s 31982 NRO_IMOVEL.shp $(tabname) | psql -q $(pg_uri_db) 2> /dev/null
 	psql $(pg_uri_db) -c "SELECT ingest.any_load('$(sandbox)/NRO_IMOVEL.shp','$(layername)','$(tabname)','$(fullPkID)',array['gid', 'textstring as house_number', 'setor', 'last_edi_1 as dateModified', 'geom'])"
-=======
-	# falta o assert das assinaturas, na preservação digital precisaria ser baseado em diff.
-	# as assinaturas dependem do tipo de geometria (ponto, linha ou rea), requerem função especializada (comprovando reprodutibilidade).
-	# função ingest.any_load deveria converter lista de cols conforme padrões geoaddress_none
-	psql $(pg_uri_db) -c "CREATE VIEW vw_$(tabname) AS SELECT gid, textstring as house_number, setor, last_edi_1 as dateModified, geom FROM $(tabname)"
-	psql $(pg_uri_db) -c "SELECT ingest.any_load('$(sandbox)/NRO_IMOVEL.shp','geoaddress_none','vw_$(tabname)',$(pkid),array['gid', 'house_number', 'setor', 'dateModified'])"
-	psql $(pg_uri_db) -c "DROP VIEW vw_$(tabname)"
->>>>>>> 8b7c34d38dd8243ca6bca62cb48631250cd65fab
 	@echo "Confira os resultados nas tabelas ingest.layer_file e ingest.feature_asis".
 	@echo FIM.
 
@@ -127,12 +122,12 @@ nsvia_full: makedirs $(part2_path)
 	@echo Extracting ....
 	@tput sgr0
 	cd $(sandbox);  7z e -y  $(part2_path) Bairros_LC12112_16.* > /dev/null
-	@echo "Conferindo se SRID 952013 esta configurado:"
-	@psql $(pg_uri_db) -c "SELECT srid, proj4text FROM spatial_ref_sys where srid=952013"
+	@echo "Conferindo se SRID 31982 esta configurado:"
+	@psql $(pg_uri_db) -c "SELECT srid, proj4text FROM spatial_ref_sys where srid=31982"
 	@echo "Tudo bem até aqui?  [ENTER para continuar ou ^C para rodar WS/ingest-step1]"
 	@read _tudo_bem_
 	@echo Executando shp2pgsql ...
-	cd $(sandbox);	shp2pgsql -s 952013 Bairros_LC12112_16.shp $(tabname) | psql -q $(pg_uri_db) 2> /dev/null
+	cd $(sandbox);	shp2pgsql -s 31982 Bairros_LC12112_16.shp $(tabname) | psql -q $(pg_uri_db) 2> /dev/null
 	psql $(pg_uri_db) -c "CREATE VIEW vw_$(tabname) AS \
   SELECT row_number() OVER () as gid, * \
   FROM ( \
@@ -154,7 +149,6 @@ nsvia_full-clean:
 
 
  ## ## ## ##
-
 via_full: layername = via_full
 via_full: tabname = pk$(fullPkID)_p3_via
 via_full: makedirs $(part3_path)
@@ -176,22 +170,17 @@ via_full: makedirs $(part3_path)
 	@echo Extracting ....
 	@tput sgr0
 	cd $(sandbox);  7z e -y  $(part3_path) EixosLogradouros.* > /dev/null
-	@echo "Conferindo se SRID 952013 esta configurado:"
-	@psql $(pg_uri_db) -c "SELECT srid, proj4text FROM spatial_ref_sys where srid=952013"
+	@echo "Conferindo se SRID 31982 esta configurado:"
+	@psql $(pg_uri_db) -c "SELECT srid, proj4text FROM spatial_ref_sys where srid=31982"
 	@echo "Tudo bem até aqui?  [ENTER para continuar ou ^C para rodar WS/ingest-step1]"
 	@read _tudo_bem_
 	@echo Executando shp2pgsql ...
-	cd $(sandbox);	shp2pgsql -s 952013 EixosLogradouros.shp $(tabname) | psql -q $(pg_uri_db) 2> /dev/null
-<<<<<<< HEAD
+	cd $(sandbox);	shp2pgsql -s 31982 EixosLogradouros.shp $(tabname) | psql -q $(pg_uri_db) 2> /dev/null
 	psql $(pg_uri_db) -c "CREATE VIEW vw_$(tabname) AS \
   SELECT gid, CDIDECAT || iif(NMIDEPRE>'',' ' || NMIDEPRE,''::text) || ' ' || NMIDELOG AS via_name,\
          NRIMPINI, NRIMPFIN, NRPARINI, NRPARFIN, geom \
   FROM $(tabname)"
 	psql $(pg_uri_db) -c "SELECT ingest.any_load('$(sandbox)/EixosLogradouros.shp','$(layername)','vw_$(tabname)','$(fullPkID)',array[]::text[])"
-=======
-	psql $(pg_uri_db) -c "CREATE VIEW vw_$(tabname) AS SELECT gid, CDIDECAT || iif(NMIDEPRE>'',' ' || NMIDEPRE,''::text) || ' ' || NMIDELOG AS via_name,   NRIMPINI, NRIMPFIN, NRPARINI, NRPARFIN, geom FROM $(tabname) ORDER BY 1, 2"
-	psql $(pg_uri_db) -c "SELECT ingest.any_load('$(sandbox)/EixosLogradouros.shp','via_full','vw_$(tabname)',$(pkid),array['gid', 'via_name', 'NRIMPINI', 'NRIMPFIN', 'NRPARINI', 'NRPARFIN'])"
->>>>>>> 8b7c34d38dd8243ca6bca62cb48631250cd65fab
 	psql $(pg_uri_db) -c "DROP VIEW vw_$(tabname)"
 	@echo "Confira os resultados nas tabelas ingest.layer_file e ingest.feature_asis".
 	@echo FIM.
@@ -202,15 +191,18 @@ via_full-clean:
 
 
 
+
+
 ## ## ## ##
 wget_files:
 	@echo "Under construction, need to check that orig path is not /var/www! or use orig=x [ENTER if not else ^C]"
 	@echo $(orig)
 	@read _ENTER_OK_
 	mkdir -p $(orig)
-	@cd $(orig); wget http://preserv.addressforall.org/download/fbc62efdbd0f16a7db03b5b775c50c9425367a8dee8a85d9b53e4475bbdb99d2.zip
-	@cd $(orig); wget http://preserv.addressforall.org/download/258772459588f7941ac6eeda7c6839df02d58741cf6bc3e48825aecd60418251.zip
-	@cd $(orig); wget http://preserv.addressforall.org/download/c35e3b2825d3da122a74c6c8dd5f3157a3bd6201208d2a6d13dec433a6ded9fc.zip
+	@cd $(orig); wget http://preserv.addressforall.org/download/51a6beb9fca43e0fb45727138982f7806b8df52fce53f5e0e31edd61bfbc21b9.rar
+	@cd $(orig); wget http://preserv.addressforall.org/download/f4d3819f9853e85e43bf7a58de7f257eed5f63bcf36daed1c4db0f2701544adc.zip
+	@cd $(orig); wget http://preserv.addressforall.org/download/9600dcba403c8dc0b066c8f429507e4672966a01c93119923f75361a6ebc64c0.zip
+	@cd $(orig); wget http://preserv.addressforall.org/download/9600dcba403c8dc0b066c8f429507e4672966a01c93119923f75361a6ebc64c0.zip
 	@echo "Please, if orig not default, run 'make _target_ orig=$(orig)'"
 
 
@@ -228,7 +220,7 @@ clean: geoaddress_none-clean nsvia_full-clean via_full-clean
 
 thisTplFile = digital-preservation-BR/src/maketemplates/make_ref027a.mustache.mk
 
-baseSrc      = /opt/gits
+baseSrc      = /opt/gits/_a4a
 srcPy        =  $(baseSrc)/digital-preservation/src/run_mustache.py
 mkme_input0  =  $(baseSrc)/digital-preservation-BR/src/maketemplates/commomFirst.yaml
 mkme_srcTplLast  =  $(baseSrc)/digital-preservation-BR/src/maketemplates/commomLast.mustache.mk
