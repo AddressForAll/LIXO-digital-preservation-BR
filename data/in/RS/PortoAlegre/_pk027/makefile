@@ -21,24 +21,20 @@ thisTplFile_root = digital-preservation-BR
 
 need_commands   ="7z psql shp2pgsql" # and a prepared database ingest1
 
-part1_file  =51a6beb9fca43e0fb45727138982f7806b8df52fce53f5e0e31edd61bfbc21b9.rar
-part1_name  =Lotes
+part1_file  =fbc62efdbd0f16a7db03b5b775c50c9425367a8dee8a85d9b53e4475bbdb99d2.zip
+part1_name  =Imóveis
 
-part2_file  =f4d3819f9853e85e43bf7a58de7f257eed5f63bcf36daed1c4db0f2701544adc.zip
-part2_name  =Eixos
+part2_file  =258772459588f7941ac6eeda7c6839df02d58741cf6bc3e48825aecd60418251.zip
+part2_name  =Bairros
 
-part3_file  =9600dcba403c8dc0b066c8f429507e4672966a01c93119923f75361a6ebc64c0.zip
-part3_name  =Bairros
-
-part4_file  =9600dcba403c8dc0b066c8f429507e4672966a01c93119923f75361a6ebc64c0.zip
-part4_name  =Quadras
+part3_file  =c35e3b2825d3da122a74c6c8dd5f3157a3bd6201208d2a6d13dec433a6ded9fc.zip
+part3_name  =Eixos
 
 ## COMPOSED VARS
 pg_uri_db   =$(pg_uri)/$(pg_db)
 part1_path  =$(orig)/$(part1_file)
 part2_path  =$(orig)/$(part2_file)
 part3_path  =$(orig)/$(part3_file)
-part4_path  =$(orig)/$(part4_file)
 
 
 all:
@@ -199,10 +195,9 @@ wget_files:
 	@echo $(orig)
 	@read _ENTER_OK_
 	mkdir -p $(orig)
-	@cd $(orig); wget http://preserv.addressforall.org/download/51a6beb9fca43e0fb45727138982f7806b8df52fce53f5e0e31edd61bfbc21b9.rar
-	@cd $(orig); wget http://preserv.addressforall.org/download/f4d3819f9853e85e43bf7a58de7f257eed5f63bcf36daed1c4db0f2701544adc.zip
-	@cd $(orig); wget http://preserv.addressforall.org/download/9600dcba403c8dc0b066c8f429507e4672966a01c93119923f75361a6ebc64c0.zip
-	@cd $(orig); wget http://preserv.addressforall.org/download/9600dcba403c8dc0b066c8f429507e4672966a01c93119923f75361a6ebc64c0.zip
+	@cd $(orig); wget http://preserv.addressforall.org/download/fbc62efdbd0f16a7db03b5b775c50c9425367a8dee8a85d9b53e4475bbdb99d2.zip
+	@cd $(orig); wget http://preserv.addressforall.org/download/258772459588f7941ac6eeda7c6839df02d58741cf6bc3e48825aecd60418251.zip
+	@cd $(orig); wget http://preserv.addressforall.org/download/c35e3b2825d3da122a74c6c8dd5f3157a3bd6201208d2a6d13dec433a6ded9fc.zip
 	@echo "Please, if orig not default, run 'make _target_ orig=$(orig)'"
 
 
