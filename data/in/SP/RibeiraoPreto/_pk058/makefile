@@ -1,78 +1,100 @@
+##
+## Template file reference: digital-preservation-BR/data/in/RS/PortoAlegre/_pk027
+##
 
-# PWD:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
+## BASIC CONFIG
 pg_io  =/tmp/pg_io
-ori    =/var/www/preserv.addressforall.org/download
-pg_uri ="postgres://postgres@localhost/ingest1"
+orig   =/var/www/preserv.addressforall.org/download
+pg_uri =postgres://postgres@localhost
+sandbox_root=/tmp/sandbox
 
-RECEBIDOS_ZIP   =$(ori)/6cd0d4b475e61b8cbd078787ea8b38ebdd051a1def026ca476d4a83d40354738.zip
-EIXOS_EXTRACT   =lograd
-LOTES_EXTRACT   =lotes
-QUADRAS_EXTRACT =quadras
+pkid = 58
+fullPkID=58_1
+sandbox=$(sandbox_root)/_pk$(fullPkID)
+
+## USER CONFIGS
+pg_db  =ingest1
+thisTplFile_root = digital-preservation-BR
+
+## ## ## ## ## ## ##
+## THIS_MAKE, _pk58
+
+need_commands   ="7z psql shp2pgsql" # and a prepared database ingest1
+
+part1_file  =6cd0d4b475e61b8cbd078787ea8b38ebdd051a1def026ca476d4a83d40354738.zip
+part1_name  =Todos os shapes
+
+## COMPOSED VARS
+pg_uri_db   =$(pg_uri)/$(pg_db)
+part1_path  =$(orig)/$(part1_file)
 
 
 all:
-	@echo Favor consultar as opcoes de target
+	@echo "Requer comandos $(need_commands)."
+	@echo "Targets implementados no all_layers:"
+	@echo " geoaddress_none via_full nsvia_full"
+	@echo "Targets opcionais e ferramentas: me wget_files clean"
 
-etl_toPgis_quadras:
-# ETL extrating to PostgreSQL/PostGIS the "quadras" datatype (point and house number)
-	@echo "Creating table ingest.pk058_quadras on PostGIS"
-	@whoami
-	@echo "Run with tmux and sudo! (DANGER: seems not idempotent on psql)"
-	mkdir -p $(pg_io)
-	psql $(pg_uri) -c "drop table if exists quadras cascade; drop table if exists ingest.pk058_quadras cascade;"
-	@tput bold
-	@echo Extraindo ....
-	@tput sgr0
-	cd $(pg_io) ; 7z e -y  $(RECEBIDOS_ZIP) $(QUADRAS_EXTRACT).* > /dev/null
-	@echo Executando shp2pgsql ...
-	@( cd $(pg_io) ; shp2pgsql -s 31983 $(QUADRAS_EXTRACT).shp quadras | psql -q $(pg_uri) 2> /dev/null  )
-	@echo "Conferira se bate o perfil:  11090 | 6090485.55 | 18.40 | 19623.47 |  7454.39"
-	psql $(pg_uri) -c "SELECT count(*) n, round(max(a),2) a_max, round(min(a),2) a_min, round(avg(a),2) a_avg, round(percentile_disc(0.5) WITHIN GROUP ( ORDER BY a),2) a_median FROM ( select  st_area(geom) a from quadras ) t"
-	psql $(pg_uri) -c "CREATE TABLE ingest.pk058_quadras AS select gid, QUADRA, ST_centroid(ST_Transform(geom,4326)) as geom FROM quadras"
-	@echo Limpando...
-	rm $(pg_io)/$(QUADRAS_EXTRACT).*
-	psql $(pg_uri) -c "drop table quadras cascade"
-	@echo FIM.
+all_layers: geoaddress_none via_full nsvia_full
+	@echo "--ALL LAYERS--"
 
-etl_toPgis_lotes:
-# ETL extrating to PostgreSQL/PostGIS the "lotes" datatype (point and house number)
-	@echo "Creating table ingest.pk058_lotes on PostGIS"
-	@whoami
-	@echo "Run with tmux and sudo! (DANGER: seems not idempotent on psql)"
-	mkdir -p $(pg_io)
-	psql $(pg_uri) -c "drop table if exists lotes cascade; drop table if exists ingest.pk058_lotes cascade;"
-	@tput bold
-	@echo Extraindo ....
-	@tput sgr0
-	cd $(pg_io) ; 7z e -y  $(RECEBIDOS_ZIP) $(LOTES_EXTRACT).* > /dev/null
-	@echo Executando shp2pgsql ...
-	@( cd $(pg_io) ; shp2pgsql -s 31983 $(LOTES_EXTRACT).shp lotes | psql -q $(pg_uri) 2> /dev/null  )
-	@echo "Conferira se bate o perfil:  227365 | 5420493.43 |  0.00 | 872.28 |   210.91 "
-	psql $(pg_uri) -c "SELECT count(*) n, round(max(a),2) a_max, round(min(a),2) a_min, round(avg(a),2) a_avg, round(percentile_disc(0.5) WITHIN GROUP ( ORDER BY a),2) a_median FROM ( select  st_area(geom) a from lotes ) t"
-	psql $(pg_uri) -c "CREATE TABLE ingest.pk058_lotes AS select gid,NRO_IMOV, COD_DV_LOG, ST_centroid(ST_Transform(geom,4326)) as geom FROM lotes"
-	@echo Limpando...
-	rm $(pg_io)/$(LOTES_EXTRACT).*
-	psql $(pg_uri) -c "drop table lotes cascade"
-	@echo FIM.
 
-etl_toPgis_eixos:
-# ETL extrating to PostgreSQL/PostGIS the "eixos" datatype (point and house number)
-	@echo "Creating table ingest.pk058_eixos on PostGIS"
-	@whoami
-	@echo "Run with tmux and sudo! (DANGER: seems not idempotent on psql)"
-	mkdir -p $(pg_io)
-	psql $(pg_uri) -c "drop table if exists eixos cascade; drop table if exists ingest.pk058_eixos cascade;"
-	@tput bold
-	@echo Extraindo ....
-	@tput sgr0
-	cd $(pg_io) ; 7z e -y  $(RECEBIDOS_ZIP) $(EIXOS_EXTRACT).* > /dev/null
-	@echo Executando shp2pgsql ...
-	@( cd $(pg_io) ; shp2pgsql -s 31983 $(EIXOS_EXTRACT).shp eixos | psql -q $(pg_uri) 2> /dev/null  )
-	@echo "Conferira se bate o perfil:  32119 |  0.00 |  0.00 |  0.00 |     0.00 "
-	psql $(pg_uri) -c "SELECT count(*) n, round(max(a),2) a_max, round(min(a),2) a_min, round(avg(a),2) a_avg, round(percentile_disc(0.5) WITHIN GROUP ( ORDER BY a),2) a_median FROM ( select  st_area(geom) a from eixos ) t"
-	psql $(pg_uri) -c "CREATE TABLE ingest.pk058_eixos AS select gid, NOME_LOGR, COD_DV_LOG, ST_centroid(ST_Transform(geom,4326)) as geom FROM eixos"
-	@echo Limpando...
-	rm $(pg_io)/$(EIXOS_EXTRACT).*
-	psql $(pg_uri) -c "drop table eixos cascade"
-	@echo FIM.
+## ## ## ## ## ## ## ## ##
+## Make targets of the Project AddressForAll
+## man at https://github.com/AddressForAll/digital-preservation/wiki/makefile-generator
+
+makedirs: clean_sandbox
+	@mkdir -p $(sandbox_root)
+	@mkdir -p $(sandbox)
+	@mkdir -p $(pg_io)
+
+
+
+
+
+
+
+
+
+## ## ## ##
+wget_files:
+	@echo "Under construction, need to check that orig path is not /var/www! or use orig=x [ENTER if not else ^C]"
+	@echo $(orig)
+	@read _ENTER_OK_
+	mkdir -p $(orig)
+	@cd $(orig); wget http://preserv.addressforall.org/download/6cd0d4b475e61b8cbd078787ea8b38ebdd051a1def026ca476d4a83d40354738.zip
+	@echo "Please, if orig not default, run 'make _target_ orig=$(orig)'"
+
+
+## ## ## ##
+
+clean_sandbox:
+	@rm -rf $(sandbox) || true
+
+clean: geoaddress_none-clean nsvia_full-clean via_full-clean
+
+
+## ############################
+## SELF-GENERATE MAKE (make me)
+##
+
+thisTplFile = digital-preservation-BR/src/maketemplates/make_ref027a.mustache.mk
+
+baseSrc      = /opt/gits
+srcPy        =  $(baseSrc)/digital-preservation/src/run_mustache.py
+mkme_input0  =  $(baseSrc)/digital-preservation-BR/src/maketemplates/commomFirst.yaml
+mkme_srcTplLast  =  $(baseSrc)/digital-preservation-BR/src/maketemplates/commomLast.mustache.mk
+mkme_srcTpl  =  $(baseSrc)/$(thisTplFile)
+mkme_input   = ./make_conf.yaml
+mkme_output  = /tmp/digitalPresservation-make_me.mk
+
+
+me: $(srcPy) $(mkme_input0) $(mkme_input) $(mkme_srcTpl)
+	@echo "-- Updating this make --"
+	python3 $(srcPy) -t $(mkme_srcTpl) --tplLast=$(mkme_srcTplLast) -i $(mkme_input) --input0=$(mkme_input0) > $(mkme_output)
+	@echo " Check diff, the '<' lines are the new ones... Something changed?"
+	@diff $(mkme_output) ./makefile || :
+	@echo "If some changes, and no error in the changes, move the script:"
+	@echo " mv ./makefile ./bk-makefile"
+	@echo " mv $(mkme_output) ./makefile"
 

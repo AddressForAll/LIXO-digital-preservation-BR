@@ -15,15 +15,13 @@ parts:
   genericvia_full:
         p: 1a
         file: 1
-        orig_filename: lotes
         tabname:  genericvia
-        sql_select: gid, NRO_IMOV as pointer_number, geom
+        sql_select: [ 'gid', 'NRO_IMOV as pointer_number', 'geom']
         # não importei COD_DV_LOG 
-        array: ['gid','pointer_number', 'geom']
+        orig_filename: lotes
   genericvia_none:
         p: 1b
         file: 1
-        orig_filename: quadras
         tabname:  genericvia
-        sql_select: gid, geom
-        array: ['gid','geom']
+        sql_select: ['gid', 'geom']
+        orig_filename: quadras

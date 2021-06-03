@@ -1,0 +1,30 @@
+pkid:      45
+pkversion: 1
+schemaId_input:    ref027a  # ID do JSON-schema de input, ref no preimeiro template a usar este padrão de input.
+schemaId_template: ref027a  # ID do makefile.mustache, ref no preimeiro package a usar o template.
+thisTplFile_root: digital-preservation-BR
+need_commands:    7z psql shp2pgsql
+srid: 4326 
+files:
+  -
+    p:    1
+    file: d101e729d51ddfc33e4a866684074487c5a2601c7c84d4eca01ff9bbca186cda.rar
+    name: Todos os shapes
+
+parts:
+  parcel_none:
+        p: 1a
+        file: 1
+        orig_filename: lote_numero_predial
+        tabname:  lotes
+        view_select: gid, geom
+        array: ['gid']
+        codec: -W iso-8859-1
+  via_full:
+        p: 1b
+        file: 1
+        orig_filename: sistema_viario
+        tabname:  via
+        view_select: gid, TIPO || ' ' || NOME AS via_name,geom
+        array: ['gid','via_name']
+        codec: -W iso-8859-1
