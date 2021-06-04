@@ -12,20 +12,16 @@ files:
     name: Lotes
   -
     p:    2
-    file: 02fcedda0ca8a158eae3a6883e0dbe58c2f836f03a5a4b6fe380fc9d60a00732.zip
-    name: Meios-fios
-  -
-    p:    3
     file: c0cd7b2a4cc67b5d49a4d296f41b564b23464364ab746adc6d2206d5dd9249af.zip
     name: Bairros
   -
-    p:    4
+    p:    3
     file: 3984d1a48b63d858fdfbe7829e493d1c35650546eb84039a59f9008de9bc4871.zip
     name: Quadras
 
 parts:
 
-  genericvia_none: 
+  parcel_none: 
         p: 1a   
         file: 1
         tabname:  genericvia
@@ -33,23 +29,17 @@ parts:
         orig_filename: LOTES
         codec: -W iso-8859-1
 
-  genericvia_none:  # repetiu o tipo de dado mas não tem informação
-        p: 2a   
-        file: 2
-        tabname:  genericvia
-        sql_select: ['gid', 'geom'] # tem que trabalhar nos códigos de CODGIS e LOTE
-        orig_filename: SISTVIARIO_SIRGAS2000
-
   nsvia_full:
-        p: 3a
-        file: 3
+        p: 2a
+        file: 2
         tabname:  nsvia
         sql_select: ['gid', 'BAIRRO AS nsvia_name','geom'] 
         orig_filename: BAIRROS
+        codec: -W iso-8859-1
 
-  genericvia_none:
-        p: 4a
-        file: 4
+  block_none:
+        p: 3a
+        file: 3
         tabname:  genericvia
         sql_select: ['gid', 'DISTR ', 'SETOR', 'QUADRA', 'CODGIS','geom'] 
-        orig_filename: BAIRROS
+        orig_filename: BAIRRO
