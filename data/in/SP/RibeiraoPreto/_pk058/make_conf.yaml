@@ -12,16 +12,21 @@ files:
     name: Todos os shapes
 
 parts:
-  genericvia_full:
+  via_full:
         p: 1a
         file: 1
-        tabname:  genericvia
-        sql_select: [ 'gid', 'NRO_IMOV as pointer_number', 'geom']
-        # não importei COD_DV_LOG 
+        tabname:  via
+        sql_select: [ 'gid', 'NRO_IMOV as pointer_number', 'COD_DV_LOG', 'geom']
         orig_filename: lotes
-  genericvia_none:
+  parcel_full:
         p: 1b
         file: 1
-        tabname:  genericvia
-        sql_select: ['gid', 'geom']
+        tabname:  lotes
+        sql_select: ['gid', 'NRO_IMOV house_number','COD_DV_LOG', 'geom']
+        orig_filename: quadras
+  parcel_full:
+        p: 1c
+        file: 1
+        tabname:  parcel
+        sql_select: ['gid', 'QUADRA', 'geom']
         orig_filename: quadras
