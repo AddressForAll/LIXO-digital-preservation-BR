@@ -24,33 +24,31 @@ files:
     name: Eixos
 
 parts:
-  parcel_none:
+  parcel:
+        subtype: none
         p: 1a
         file: 1
-        orig_filename: lot
         tabname:  parcel
-        view_select: gid, geom
-        array: ['gid','geom']
-        # não coloquei id e nm_lot 
-  genericvia_none:
+        sql_select: ['gid','id', 'nm_lot', 'geom']
+        orig_filename: lot
+  genericvia:
+        subtype: none
         p: 2a
         file: 2
-        orig_filename: qdr
         tabname:  genericvia
-        view_select: gid, geom
-        array: ['gid','geom']
-        # não coloquei nm_qdr
-  nsvia_full:
+        sql_select: ['gid','nm_qdr','geom']
+        orig_filename: qdr
+  nsvia:
+        subtype: full
         p: 3a
         file: 3
-        orig_filename: bai
         tabname:  nsvia
-        view_select: gid, nm AS nsvia_name, geom
-        array: ['gid', 'nsvia_name', 'geom']
-  via_full:
+        sql_select: ['gid', 'nm AS nsvia_name', 'geom']
+        orig_filename: bai
+  via:
+        subtype: full
         p: 3a
         file: 3
-        orig_filename: seg
         tabname:  via
-        view_select: gid, tp_log || ' ' || nm_log AS via_name, geom
-        array: ['gid', 'via_name', 'geom']
+        sql_select: ['gid', "tp_log || ' ' || nm_log AS via_name", 'geom']
+        orig_filename: seg
