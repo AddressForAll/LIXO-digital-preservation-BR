@@ -85,7 +85,7 @@ geoaddress_none: makedirs $(part1_path)
 	@read _tudo_bem_
 	@echo Executando shp2pgsql ...
 	cd $(sandbox);	shp2pgsql -s 31982 NRO_IMOVEL.shp $(tabname) | psql -q $(pg_uri_db) 2> /dev/null
-	psql $(pg_uri_db) -c "SELECT ingest.any_load('$(sandbox)/NRO_IMOVEL.shp','$(layername)','$(tabname)','$(fullPkID)',array['gid', 'textstring as house_number', 'setor', 'last_edi_1 as dateModified', 'geom'])"
+	psql $(pg_uri_db) -c "SELECT ingest.any_load('$(sandbox)/NRO_IMOVEL.shp','$(layername)','$(tabname)','$(fullPkID)','$(part1_file)',array['gid', 'textstring as house_number', 'setor', 'last_edi_1 as dateModified', 'geom'])"
 	@echo "Confira os resultados nas tabelas ingest.layer_file e ingest.feature_asis".
 	@echo FIM.
 
@@ -132,7 +132,7 @@ nsvia_full: makedirs $(part2_path)
     FROM $(tabname)\
     GROUP BY 1 ORDER BY 1 \
   ) t"
-	psql $(pg_uri_db) -c "SELECT ingest.any_load('$(sandbox)/Bairros_LC12112_16.shp','$(layername)','vw_$(tabname)','$(fullPkID)',array[]::text[])"
+	psql $(pg_uri_db) -c "SELECT ingest.any_load('$(sandbox)/Bairros_LC12112_16.shp','$(layername)','vw_$(tabname)','$(fullPkID)','$(part2_file)',array[]::text[])"
 	psql $(pg_uri_db) -c "DROP VIEW vw_$(tabname)"
 	@echo "Confira os resultados nas tabelas ingest.layer_file e ingest.feature_asis".
 	@echo FIM.
@@ -176,7 +176,7 @@ via_full: makedirs $(part3_path)
   SELECT gid, CDIDECAT || iif(NMIDEPRE>'',' ' || NMIDEPRE,''::text) || ' ' || NMIDELOG AS via_name,\
          NRIMPINI, NRIMPFIN, NRPARINI, NRPARFIN, geom \
   FROM $(tabname)"
-	psql $(pg_uri_db) -c "SELECT ingest.any_load('$(sandbox)/EixosLogradouros.shp','$(layername)','vw_$(tabname)','$(fullPkID)',array[]::text[])"
+	psql $(pg_uri_db) -c "SELECT ingest.any_load('$(sandbox)/EixosLogradouros.shp','$(layername)','vw_$(tabname)','$(fullPkID)','$(part3_file)',array[]::text[])"
 	psql $(pg_uri_db) -c "DROP VIEW vw_$(tabname)"
 	@echo "Confira os resultados nas tabelas ingest.layer_file e ingest.feature_asis".
 	@echo FIM.
