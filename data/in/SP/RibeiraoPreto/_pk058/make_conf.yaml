@@ -4,6 +4,7 @@ schemaId_input:    ref027a  # ID do JSON-schema de input, ref no preimeiro templ
 schemaId_template: ref027a  # ID do makefile.mustache, ref no preimeiro package a usar o template.
 thisTplFile_root: digital-preservation-BR
 need_commands:    7z psql shp2pgsql
+layers: via parcel block
 srid: 31983
 files:
   -
@@ -12,21 +13,24 @@ files:
     name: Todos os shapes
 
 parts:
-  via_full:
-        p: 1a
-        file: 1
-        tabname:  via
-        sql_select: [ 'gid', 'NRO_IMOV as pointer_number', 'COD_DV_LOG', 'geom']
-        orig_filename: lotes
-  parcel_full:
-        p: 1b
-        file: 1
-        tabname:  lotes
-        sql_select: ['gid', 'NRO_IMOV house_number','COD_DV_LOG', 'geom']
-        orig_filename: quadras
-  parcel_full:
-        p: 1c
-        file: 1
-        tabname:  parcel
-        sql_select: ['gid', 'QUADRA', 'geom']
-        orig_filename: quadras
+  via:
+    subtype: full
+    p: 1a
+    file: 1
+    tabname:  via
+    sql_select: [ 'gid', '"NOME_LOGR" AS via_name', '"COD_DV_LOG" AS cod_dv_log', 'geom']
+    orig_filename: lotes
+  parcel:
+    subtype: ext
+    p: 1b
+    file: 1
+    tabname:  lotes
+    sql_select: ['gid', '"NRO_IMOV" AS house_number','"COD_DV_LOG" AS cod_dv_log', 'geom']
+    orig_filename: quadras
+  block:
+    subtype: full
+    p: 1c
+    file: 1
+    tabname:  parcel
+    sql_select: ['gid', '"QUADRA"', 'geom']
+    orig_filename: quadras

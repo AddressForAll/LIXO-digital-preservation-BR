@@ -40,10 +40,10 @@ part3_path  =$(orig)/$(part3_file)
 all:
 	@echo "Requer comandos $(need_commands)."
 	@echo "Targets implementados no all_layers:"
-	@echo " geoaddress_none via_full nsvia_full"
+	@echo " geoaddress nsvia via"
 	@echo "Targets opcionais e ferramentas: me wget_files clean"
 
-all_layers: geoaddress_none via_full nsvia_full
+all_layers: geoaddress nsvia via
 	@echo "--ALL LAYERS--"
 
 
@@ -56,12 +56,12 @@ makedirs: clean_sandbox
 	@mkdir -p $(sandbox)
 	@mkdir -p $(pg_io)
 
- ## ## ## ##
 
-geoaddress_none: layername = geoaddress_none
-geoaddress_none: tabname = pk$(fullPkID)_p1_geoaddress
-geoaddress_none: makedirs $(part1_path)
-	@# pk27_p1 - ETL extrating to PostgreSQL/PostGIS the "geoaddress_none" datatype (point with house_number but no via name)
+ ## ## ## ##
+geoaddress: layername = geoaddress_none
+geoaddress: tabname = pk$(fullPkID)_p1_geoaddress
+geoaddress: makedirs $(part1_path)
+	@# pk27_p1 - ETL extrating to PostgreSQL/PostGIS the "geoaddress" datatype (point with house_number but no via name)
 	@echo
 	@echo "------------------------------------------"
 	@echo "------ Layer tipo $(layername)  ------"
@@ -89,18 +89,17 @@ geoaddress_none: makedirs $(part1_path)
 	@echo "Confira os resultados nas tabelas ingest.layer_file e ingest.feature_asis".
 	@echo FIM.
 
-geoaddress_none-clean:
+geoaddress-clean:
 	rm -f $(sandbox)/NRO_IMOVEL.* || true
 	psql $(pg_uri_db) -c "DROP TABLE IF EXISTS $(tabname) CASCADE"
 
 
 
  ## ## ## ##
-
-nsvia_full: layername = nsvia_full
-nsvia_full: tabname = pk$(fullPkID)_p2_namespace
-nsvia_full: makedirs $(part2_path)
-	@# pk27_p2 - ETL extrating to PostgreSQL/PostGIS the "nsvia_full" datatype (zone with name)
+nsvia: layername = nsvia_full
+nsvia: tabname = pk$(fullPkID)_p2_namespace
+nsvia: makedirs $(part2_path)
+	@# pk27_p2 - ETL extrating to PostgreSQL/PostGIS the "nsvia" datatype (zone with name)
 	@echo
 	@echo "------------------------------------------"
 	@echo "------ Layer tipo $(layername)  ------"
@@ -137,18 +136,18 @@ nsvia_full: makedirs $(part2_path)
 	@echo "Confira os resultados nas tabelas ingest.layer_file e ingest.feature_asis".
 	@echo FIM.
 
-nsvia_full-clean: tabname = pk$(fullPkID)_p2_namespace
-nsvia_full-clean:
+nsvia-clean: tabname = pk$(fullPkID)_p2_namespace
+nsvia-clean:
 	rm -f $(sandbox)/Bairros_LC12112_16.* || true
 	psql $(pg_uri_db) -c "DROP TABLE IF EXISTS $(tabname) CASCADE;  DROP VIEW IF EXISTS vw_$(tabname) CASCADE;"
 
 
 
  ## ## ## ##
-via_full: layername = via_full
-via_full: tabname = pk$(fullPkID)_p3_via
-via_full: makedirs $(part3_path)
-	@# pk27_p3 - ETL extrating to PostgreSQL/PostGIS the "via_full" datatype (street axes)
+via: layername = via_full
+via: tabname = pk$(fullPkID)_p3_via
+via: makedirs $(part3_path)
+	@# pk27_p3 - ETL extrating to PostgreSQL/PostGIS the "via" datatype (street axes)
 	@echo
 	@echo "------------------------------------------"
 	@echo "------ Layer tipo $(layername)  ------"
@@ -181,9 +180,10 @@ via_full: makedirs $(part3_path)
 	@echo "Confira os resultados nas tabelas ingest.layer_file e ingest.feature_asis".
 	@echo FIM.
 
-via_full-clean:
+via-clean:
 	rm -f $(sandbox)/EixosLogradouros.* || true
 	psql $(pg_uri_db) -c "DROP TABLE IF EXISTS $(tabname) CASCADE"
+
 
 
 
@@ -206,7 +206,7 @@ wget_files:
 clean_sandbox:
 	@rm -rf $(sandbox) || true
 
-clean: geoaddress_none-clean nsvia_full-clean via_full-clean
+clean: geoaddress-clean nsvia-clean via-clean
 
 
 ## ############################
