@@ -8,7 +8,7 @@ srid: 31983
 files:
   -
     p:    1
-    file: fbc62efdbd0f16a7db03b5b775c50c9425367a8dee8a85d9b53e4475bbdb99d2.zip
+    file: 1ce29a555565be5f540ab0c6f93ac55797c368293e0a6bfb479a645a5a23f542.zip
     name: Pontos de Endereço
   -
     p:    2
@@ -16,19 +16,19 @@ files:
     name: Vias
 
 parts:
-  geoaddress_full: # config própria desse template, em sao paulo seria array
-        p: 1a   # identifcador do layer, pode ter mais de um por file
+  geoaddress:
+        subtype: full 
+        p: 1a   
         file: 1
-        orig_filename: ENDERECO.csv
         tabname:  geoaddress
-        view_select: TODO : row_number() OVER () as gid, SIGLA_TIPO_LOGRADOURO || ' ' || NOME_LOGRADOURO as via_name,
-                     NUMERO_IMOVEL || Iff(LETRA_IMOVEL,LETRA_IMOVEL,'') as pointer_number,
-                     ST_GeomFromText(GEOMETRIA,31983) as geom
-        array: ['gid','via_name','poiter_number','geom']
-  via_full:
+        sql_select: ['row_number() OVER () as gid', 'SIGLA_TIPO_LOGRADOURO || ' ' || NOME_LOGRADOURO as via_name',
+                     "NUMERO_IMOVEL || Iff(LETRA_IMOVEL,LETRA_IMOVEL,'') as house_number",
+                     'ST_GeomFromText(GEOMETRIA,31983) as geom']
+        orig_filename: ENDERECO.csv
+  via:
+        subtype: full 
         p: 2a
         file: 2
-        orig_filename: LOGRADOUROLine
         tabname:  via
-        view_select:  gid, TIPO_LOGRA || ' ' || NOME_LOGRA AS via_name, geom
-        array: ['gid','via_name', 'geom']
+        sql_select:  ['gid', "TIPO_LOGRA || ' ' || NOME_LOGRA AS via_name", 'geom']
+        orig_filename: LOGRADOUROLine
