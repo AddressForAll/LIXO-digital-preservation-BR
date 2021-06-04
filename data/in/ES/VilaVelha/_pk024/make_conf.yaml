@@ -24,7 +24,7 @@ parts:
   parcel_none: 
         p: 1a   
         file: 1
-        tabname:  genericvia
+        tabname:  parcel
         sql_select: ['gid', 'CODGIS', 'LOTE', 'geom'] # tem que trabalhar nos códigos de CODGIS e LOTE
         orig_filename: LOTES
         codec: -W iso-8859-1
@@ -41,5 +41,6 @@ parts:
         p: 3a
         file: 3
         tabname:  genericvia
-        sql_select: ['gid', 'DISTR ', 'SETOR', 'QUADRA', 'CODGIS','geom'] 
+        sql_select: ['gid', 'DISTR', 'SETOR', 'QUADRA', 'CODGIS','geom'] 
         orig_filename: BAIRRO
+        codec: -W iso-8859-1
