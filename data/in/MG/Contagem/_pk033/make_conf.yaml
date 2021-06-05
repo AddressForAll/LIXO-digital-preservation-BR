@@ -12,45 +12,45 @@ files:
   -
 
 parts:
-  nsvia_full: 
+  nsvia:
+        subtype: full
         p: 1a   
         file: 1
-        orig_filename: OpenStreetMap.gdb/Bairros
         tabname:  nsvia
-        view_select: Teste2_P_1 as namespace_name, geom
-        array: ['gid','namespace_name','geom']
-        srid_local: 3857
-  via_full:
+        sql_select: ['gid','Teste2_P_1 AS namespace_name','geom']
+        orig_filename: OpenStreetMap.gdb/Bairros
+        srid: 3857
+  via:
+        subtype: full
         p: 1b
         file: 1
-        orig_filename: OpenStreetMap.gdb/Logradouros
         tabname:  via
-        view_select:  gid, TIPO_LOGRA || ' ' || NOME_LOGRA as via_name, geom
-        array: ['gid','via_name', 'geom']
+        sql_select:  ['gid', "TIPO_LOGRA || ' ' || NOME_LOGRA AS via_name", 'geom']
+        orig_filename: OpenStreetMap.gdb/Logradouros
         srid: 31983
-  geoaddress_full:
+  geoaddress:
+        subtype: full
         p: 1c
         file: 1
         orig_filename: OpenStreetMap.gdb/Endereco
         tabname:  via
-        view_select:  gid, Nome_logra as via_name, Num_imovel as geoaddress_number, geom
-        array: ['gid','via_name', 'geoaddress_number', 'geom']
+        sql_select:  ['gid', 'Nome_logra AS via_name', 'Num_imovel AS house_number', 'geom']
         srid_local: 31983
-  parcel_none:
+  parcel:
+        subtype: ext # Ver Pontos de endereço.
         p: 1d
         file: 1
-        orig_filename: OpenStreetMap.gdb/Lotes
         tabname:  parcel
-        view_select:  gid, BAIRRO as namespace_name, geom
-        array: ['gid','namespace_name', 'geom']
+        sql_select:  ['gid', 'BAIRRO AS namespace_name', 'geom']
+        orig_filename: OpenStreetMap.gdb/Lotes
         srid_local: 31983
 # Não importei praça - Carlos 23/05/2021
-  genericvia_full:
+  genericvia:
+        subtype: full
         p: 1d
         file: 1
         orig_filename: OpenStreetMap.gdb/Quadras
         tabname:  genericvia
-        view_select:  gid, QUADRA as genericvia_number, geom
-        array: ['gid','genericvia_number', 'geom']
+        sql_select:  ['gid', 'QUADRA AS genericvia_number', 'geom']
         srid_local: 31983
 
