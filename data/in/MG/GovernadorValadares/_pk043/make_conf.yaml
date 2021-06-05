@@ -26,45 +26,46 @@ files:
     p:    5
     file: 437a5012420b1bdc748ea571eabfa0aee6154c41196fe898c383d76e61a5c5db.zip
     name: Eixos
-#Correspondência entre as colunas da planilha e colunas do shapefile:
+#Correspondência entre AS colunas da planilha e colunas do shapefile:
 #    * `Setor` -> `cd_setor`
 #    * `Quadra` -> `nr_quadra`
 #    * `Lote` ->  `nr_lote`
 parts:
-  address_noid:
+  address:
+        subtype: noid
         p: 1a   
         file: 1
         orig_filename: Logradouros - Gov. Valadares.xlsx
         tabname:  address
         sql_select: ['row_number() OVER () AS gid','"Logradouro" AS via_name', '"Número" AS house_number', '"Setor" AS setor', '"Quadra" AS quadra' , '"Lote" AS lote']
-  parcel_ext:
+  parcel:
+        subtype: ext
         p: 2a
         file: 2
-        orig_filename: lote_inscricao_geometria
         tabname:  parcel
-        sql_select: gid, cd_distrit, cd_setor, nr_quadra, nr_lote, geom
-        array: ['gid','via_name', 'geom']
-  genericvia_ext: 
+        sql_select: ['gid', 'cd_distrit', 'cd_setor', 'nr_quadra', 'nr_lote', 'geom']
+        orig_filename: lote_inscricao_geometria
+  block: 
+        subtype: ext
         p: 3a
         file: 3
-        orig_filename: st_quadraPolygon
         tabname:  genericvia
-        sql_select: gid, id_quadra, geom
-        array: ['gid','geom']
-  nsvia_none:
+        sql_select: ['gid', 'id_quadra', 'geom']
+        orig_filename: st_quadraPolygon
+  nsvia:
+        subtype: none
         p: 4a
         file: 4
-        orig_filename: st_bairroPolygon
         tabname:  nsvia
-        sql_select: gid,  geom
-        array: ['gid', 'geom']
-  via_fill:
+        sql_select: ['gid', 'geom']
+        orig_filename: st_bairroPolygon
+  via:
+        subtype: full
         p: 5a
         file: 5
+        tabname:  via
+        sql_select: ['gid', 'descricao AS via_name', 'geom']
         orig_filename: view_st_logradouro_eixoLine
-        tabname:  nsvia
-        sql_select: gid,  descricao as via_name, geom
-        array: ['gid', 'via_name', 'geom']
         codec: -W iso-8859-1
 
 
