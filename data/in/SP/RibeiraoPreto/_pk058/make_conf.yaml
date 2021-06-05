@@ -6,6 +6,7 @@ thisTplFile_root: digital-preservation-BR
 need_commands:    7z psql shp2pgsql
 layers: via parcel block
 srid: 31983
+
 files:
   -
     p:    1
@@ -19,14 +20,14 @@ parts:
     file: 1
     tabname:  via
     sql_select: [ 'gid', '"NOME_LOGR" AS via_name', '"COD_DV_LOG" AS cod_dv_log', 'geom']
-    orig_filename: lotes
+    orig_filename: lograd
   parcel:
     subtype: ext
     p: 1b
     file: 1
     tabname:  lotes
     sql_select: ['gid', '"NRO_IMOV" AS house_number','"COD_DV_LOG" AS cod_dv_log', 'geom']
-    orig_filename: quadras
+    orig_filename: lotes
   block:
     subtype: full
     p: 1c

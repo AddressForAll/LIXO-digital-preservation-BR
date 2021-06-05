@@ -62,10 +62,48 @@ via: makedirs $(part1_path)
 	@echo "------------------------------------------"
 	@echo "------ Layer tipo $(layername)  ------"
 	@echo "-- Incluindo dados do arquivo-1 do package-$(fullPkID) na base $(pg_db) --"
-	@echo " Tema do arquivo-1: $(part1_name)"
+	@echo " Nome-hash do arquivo-1: $(part1_file)"
+	@echo " Tabela do layer geoaddress sem nome de rua, só com numero predial: $(tabname)"
+	@echo " Sub-arquivos do arquivo-1 com o conteúdo alvo: lograd.*"
+	@echo " Tema dos sub-arquivos: $(part1_name)"
+	@echo "Run with tmux and sudo! (DANGER: seems not idempotent on psql)"
+	@whoami
+	@printf "Above user is root? If not, you have permissions for all paths?\n [press ENTER for yes else ^C]"
+	@read _press_enter_
+	psql $(pg_uri_db) -c "DROP TABLE IF EXISTS $(tabname) CASCADE"
+	@tput bold
+	@echo Extracting ....
+	@tput sgr0
+	cd $(sandbox);  7z e -y  $(part1_path) lograd.* > /dev/null
+	@echo "Conferindo se SRID 31983 esta configurado:"
+	@psql $(pg_uri_db) -c "SELECT srid, proj4text FROM spatial_ref_sys where srid=31983"
+	@echo "Tudo bem até aqui?  [ENTER para continuar ou ^C para rodar WS/ingest-step1]"
+	@read _tudo_bem_
+	@echo Executando shp2pgsql ...
+	cd $(sandbox);	shp2pgsql -s 31983 lograd.shp $(tabname) | psql -q $(pg_uri_db) 2> /dev/null
+	psql $(pg_uri_db) -c "SELECT ingest.any_load('$(sandbox)/lograd.shp','$(layername)','$(tabname)','$(fullPkID)','$(part1_file)',array['gid', '"NOME_LOGR" AS via_name', '"COD_DV_LOG" AS cod_dv_log', 'geom'])"
+	@echo "Confira os resultados nas tabelas ingest.layer_file e ingest.feature_asis".
+	@echo FIM.
+
+via-clean:
+	rm -f $(sandbox)/lograd.* || true
+	psql $(pg_uri_db) -c "DROP TABLE IF EXISTS $(tabname) CASCADE"
+
+
+
+ ## ## ## ##
+parcel: layername = parcel_ext
+parcel: tabname = pk$(fullPkID)_p1_lotes
+parcel: makedirs $(part1_path)
+	@# pk58_p1 - ETL extrating to PostgreSQL/PostGIS the "parcel" datatype (street axes)
+	@echo
+	@echo "------------------------------------------"
+	@echo "------ Layer tipo $(layername)  ------"
+	@echo "-- Incluindo dados do arquivo-1 do package-$(fullPkID) na base $(pg_db) --"
 	@echo " Nome-hash do arquivo-1: $(part1_file)"
 	@echo " Tabela do layer geoaddress sem nome de rua, só com numero predial: $(tabname)"
 	@echo " Sub-arquivos do arquivo-1 com o conteúdo alvo: lotes.*"
+	@echo " Tema dos sub-arquivos: $(part1_name)"
 	@echo "Run with tmux and sudo! (DANGER: seems not idempotent on psql)"
 	@whoami
 	@printf "Above user is root? If not, you have permissions for all paths?\n [press ENTER for yes else ^C]"
@@ -81,50 +119,12 @@ via: makedirs $(part1_path)
 	@read _tudo_bem_
 	@echo Executando shp2pgsql ...
 	cd $(sandbox);	shp2pgsql -s 31983 lotes.shp $(tabname) | psql -q $(pg_uri_db) 2> /dev/null
-	psql $(pg_uri_db) -c "SELECT ingest.any_load('$(sandbox)/lotes.shp','$(layername)','$(tabname)','$(fullPkID)','$(part1_file)',array['gid', '"NOME_LOGR" AS via_name', '"COD_DV_LOG" AS cod_dv_log', 'geom'])"
-	@echo "Confira os resultados nas tabelas ingest.layer_file e ingest.feature_asis".
-	@echo FIM.
-
-via-clean:
-	rm -f $(sandbox)/lotes.* || true
-	psql $(pg_uri_db) -c "DROP TABLE IF EXISTS $(tabname) CASCADE"
-
-
-
- ## ## ## ##
-parcel: layername = parcel_ext
-parcel: tabname = pk$(fullPkID)_p1_lotes
-parcel: makedirs $(part1_path)
-	@# pk58_p1 - ETL extrating to PostgreSQL/PostGIS the "parcel" datatype (street axes)
-	@echo
-	@echo "------------------------------------------"
-	@echo "------ Layer tipo $(layername)  ------"
-	@echo "-- Incluindo dados do arquivo-1 do package-$(fullPkID) na base $(pg_db) --"
-	@echo " Tema do arquivo-1: $(part1_name)"
-	@echo " Nome-hash do arquivo-1: $(part1_file)"
-	@echo " Tabela do layer geoaddress sem nome de rua, só com numero predial: $(tabname)"
-	@echo " Sub-arquivos do arquivo-1 com o conteúdo alvo: quadras.*"
-	@echo "Run with tmux and sudo! (DANGER: seems not idempotent on psql)"
-	@whoami
-	@printf "Above user is root? If not, you have permissions for all paths?\n [press ENTER for yes else ^C]"
-	@read _press_enter_
-	psql $(pg_uri_db) -c "DROP TABLE IF EXISTS $(tabname) CASCADE"
-	@tput bold
-	@echo Extracting ....
-	@tput sgr0
-	cd $(sandbox);  7z e -y  $(part1_path) quadras.* > /dev/null
-	@echo "Conferindo se SRID 31983 esta configurado:"
-	@psql $(pg_uri_db) -c "SELECT srid, proj4text FROM spatial_ref_sys where srid=31983"
-	@echo "Tudo bem até aqui?  [ENTER para continuar ou ^C para rodar WS/ingest-step1]"
-	@read _tudo_bem_
-	@echo Executando shp2pgsql ...
-	cd $(sandbox);	shp2pgsql -s 31983 quadras.shp $(tabname) | psql -q $(pg_uri_db) 2> /dev/null
-	psql $(pg_uri_db) -c "SELECT ingest.any_load('$(sandbox)/quadras.shp','$(layername)','$(tabname)','$(fullPkID)','$(part1_file)',array['gid', '"NRO_IMOV" AS house_number', '"COD_DV_LOG" AS cod_dv_log', 'geom'])"
+	psql $(pg_uri_db) -c "SELECT ingest.any_load('$(sandbox)/lotes.shp','$(layername)','$(tabname)','$(fullPkID)','$(part1_file)',array['gid', '"NRO_IMOV" AS house_number', '"COD_DV_LOG" AS cod_dv_log', 'geom'])"
 	@echo "Confira os resultados nas tabelas ingest.layer_file e ingest.feature_asis".
 	@echo FIM.
 
 parcel-clean:
-	rm -f $(sandbox)/quadras.* || true
+	rm -f $(sandbox)/lotes.* || true
 	psql $(pg_uri_db) -c "DROP TABLE IF EXISTS $(tabname) CASCADE"
 
 
@@ -137,10 +137,10 @@ block: makedirs $(part1_path)
 	@echo "------------------------------------------"
 	@echo "------ Layer tipo $(layername)  ------"
 	@echo "-- Incluindo dados do arquivo-1 do package-$(fullPkID) na base $(pg_db) --"
-	@echo " Tema do arquivo-1: $(part1_name)"
 	@echo " Nome-hash do arquivo-1: $(part1_file)"
 	@echo " Tabela do layer geoaddress sem nome de rua, só com numero predial: $(tabname)"
 	@echo " Sub-arquivos do arquivo-1 com o conteúdo alvo: quadras.*"
+	@echo " Tema dos sub-arquivos: $(part1_name)"
 	@echo "Run with tmux and sudo! (DANGER: seems not idempotent on psql)"
 	@whoami
 	@printf "Above user is root? If not, you have permissions for all paths?\n [press ENTER for yes else ^C]"

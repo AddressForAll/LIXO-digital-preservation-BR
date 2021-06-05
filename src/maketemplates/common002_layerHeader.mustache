@@ -2,10 +2,10 @@
 	@echo "------------------------------------------"
 	@echo "------ Layer tipo $(layername)  ------"
 	@echo "-- Incluindo dados do arquivo-{{file}} do package-$(fullPkID) na base $(pg_db) --"
-	@echo " Tema do arquivo-{{file}}: $(part{{file}}_name)"
 	@echo " Nome-hash do arquivo-{{file}}: $(part{{file}}_file)"
 	@echo " Tabela do layer geoaddress sem nome de rua, só com numero predial: $(tabname)"
 	@echo " Sub-arquivos do arquivo-{{file}} com o conteúdo alvo: {{orig_filename}}.*"
+	@echo " Tema dos sub-arquivos: $(part{{file}}_name)"
 	@echo "Run with tmux and sudo! (DANGER: seems not idempotent on psql)"
 	@whoami
 	@printf "Above user is root? If not, you have permissions for all paths?\n [press ENTER for yes else ^C]"
