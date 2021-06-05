@@ -12,17 +12,26 @@ files:
     name: Todos os shapes
 
 parts:
-  via_full:
+  parcel:
+        subtype: full
         p: 1a
         file: 1
-        orig_filename: TrechoLogradouros
         tabname:  via
-        view_select: gid, NLGPAVOFIC AS via_name, geom
-        array: ['gid','via_name', 'geom']
-  nsvia_full:
+        sql_select: ['gid', 'ENDNUMERO AS house_number','QTDPAVIMEN','NMEDIFICAC', 'geom']
+        orig_filename: TrechoLogradouros
+        codec: -W iso-8859-1
+  via:
+        subtype: full
         p: 1b
         file: 1
-        orig_filename: Bairros
+        tabname:  via
+        sql_select: ['gid', 'NLGPAVOFIC AS via_name', 'geom']
+        orig_filename: TrechoLogradouros
+        codec: -W iso-8859-1
+  nsvia_full:
+        p: 1c
+        file: 1
         tabname:  nsvia
-        view_select: gid, EBAIRRNO_1 AS nv_name, geom
-        array: ['gid','ns_name','geom']
+        view_select: ['gid', 'EBAIRRNO_1 AS ns_name', 'geom']
+        orig_filename: Bairros
+        codec: -W iso-8859-1
