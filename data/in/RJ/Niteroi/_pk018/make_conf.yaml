@@ -20,23 +20,23 @@ files:
     name: Bairros
 
 parts:
-  genericvia_none:
+  parcel:
+        subtype: none
         p: 1a
         file: 1
         orig_filename: Lotes
         tabname:  genericvia
-        view_select: gid, geom
-        array: ['gid','geom']
-        # não coloquei tx_insct (string): número de inscrição.
-  via_full:
+        sql_select: ['gid', 'tx_insct', 'geom']
+  via:
+        subtype: full
         p: 2b
         file: 2
         orig_filename: Logradouro
         tabname:  via
-        view_select: gid, ST_TYPE || ' ' || ST_NO AS via_name, CMTY_L AS nsvia_name_left, CMTY_R AS nsvia_name_right, geom
-        array: ['gid','via_name','via_name', 'nsvia_name_left', 'nsvia_name_right', 'geom']
+        view_select: ['gid', "ST_TYPE || ' ' || ST_NO AS via_name", 'CMTY_L AS nsvia_name_left', 'CMTY_R AS nsvia_name_right', 'geom']
         # não coloquei Legislacao (string): lei da denominação (para outros projetos).
-  nsvia_ext:
+  nsvia:
+        subtype: ext # Usar os dados de via para montar o poligono de bairro
         p: 2b
         file: 2
         orig_filename: Limite_de_Bairros
