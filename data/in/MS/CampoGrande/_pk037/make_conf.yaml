@@ -13,14 +13,16 @@ files:
 
 parts:
 
-  genericvia_full: 
+  parcel: 
+        subtype: full
         p: 1a   
         file: 1
         tabname:  genericvia
-        sql_select: ['gid', 'RUAIMO AS via_name', 'NRPORTA AS point_number', 'COMPLEMENT AS point_info','QUADRA','LOTE', 'geom']
+        sql_select: ['gid', 'RUAIMO AS via_name', 'NRPORTA AS house_number', 'COMPLEMENT AS house_info','QUADRA','LOTE', 'geom']
         orig_filename: Open Street/IMOVEL_2020_Logradouro
 
-  nsvia_full:
+  nsvia:
+        subtype: full
         p: 1b
         file: 1
         tabname:  nsvia
