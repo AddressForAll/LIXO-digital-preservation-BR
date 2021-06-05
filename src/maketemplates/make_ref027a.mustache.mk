@@ -7,6 +7,7 @@ pg_io  ={{pg_io}}
 orig   ={{orig}}
 pg_uri ={{pg_uri}}
 sandbox_root={{sandbox}}
+need_commands= 7z v16+; psql v12+; shp2pgsql v3+; {{need_extra_commands}}
 
 pkid = {{pkid}}
 fullPkID={{pkid}}_{{pkversion}}
@@ -19,8 +20,6 @@ thisTplFile_root = {{thisTplFile_root}}
 ## ## ## ## ## ## ##
 ## THIS_MAKE, _pk{{pkid}}
 
-need_commands   ="{{need_commands}}" # and a prepared database {{pg_db}}
-
 {{#files}}
 part{{p}}_file  ={{file}}
 part{{p}}_name  ={{name}}
@@ -32,29 +31,21 @@ pg_uri_db   =$(pg_uri)/$(pg_db)
 part{{p}}_path  =$(orig)/$(part{{p}}_file)
 {{/files}}
 
-
 all:
-	@echo "Requer comandos $(need_commands)."
-	@echo "Targets implementados no all_layers:"
-	@echo " {{layers}}"
-	@echo "Targets opcionais e ferramentas: me wget_files clean"
+	@echo "=== Resumo deste makefile de recuperação de dados preservados ==="
+	@printf "Targets para a geração de layers:\n\tall_layers {{#layers_keys}}{{.}} {{/layers_keys}}\n"
+	@printf "Demais targets implementados:\n\tclean wget_files me\n"
+	@echo "A gereação de layers requer os seguintes comandos e versões:\n\t$(need_commands)"
 
-all_layers: {{layers}}
+all_layers: {{#layers_keys}}{{.}} {{/layers_keys}}
 	@echo "--ALL LAYERS--"
 
-
 ## ## ## ## ## ## ## ## ##
-## Make targets of the Project AddressForAll
-## man at https://github.com/AddressForAll/digital-preservation/wiki/makefile-generator
+## ## ## ## ## ## ## ## ##
+## Make targets of the Project Digital Preservation
+{{#layers}}
 
-makedirs: clean_sandbox
-	@mkdir -p $(sandbox_root)
-	@mkdir -p $(sandbox)
-	@mkdir -p $(pg_io)
-
-{{#parts}}
-
-{{#geoaddress}} ## ## ## ##
+{{#geoaddress}}## ## ## ## sponsored by Project AddressForAll
 geoaddress: layername = geoaddress_{{subtype}}
 geoaddress: tabname = pk$(fullPkID)_p{{file}}_{{tabname}}
 geoaddress: makedirs $(part{{file}}_path)
@@ -72,7 +63,7 @@ geoaddress-clean:
 {{/geoaddress}}
 
 
-{{#nsvia}} ## ## ## ##
+{{#nsvia}}## ## ## ## sponsored by Project AddressForAll
 nsvia: layername = nsvia_{{subtype}}
 nsvia: tabname = pk$(fullPkID)_p{{file}}_{{tabname}}
 nsvia: makedirs $(part{{file}}_path)
@@ -91,7 +82,7 @@ nsvia-clean:
 {{/nsvia}}
 
 
-{{#via}} ## ## ## ##
+{{#via}}## ## ## ## sponsored by Project AddressForAll
 via: layername = via_{{subtype}}
 via: tabname = pk$(fullPkID)_p{{file}}_{{tabname}}
 via: makedirs $(part{{file}}_path)
@@ -109,7 +100,7 @@ via-clean:
 {{/via}}
 
 
-{{#parcel}} ## ## ## ##
+{{#parcel}}## ## ## ## sponsored by Project AddressForAll
 parcel: layername = parcel_{{subtype}}
 parcel: tabname = pk$(fullPkID)_p{{file}}_{{tabname}}
 parcel: makedirs $(part{{file}}_path)
@@ -126,7 +117,7 @@ parcel-clean:
 
 {{/parcel}}
 
-{{#block}} ## ## ## ##
+{{#block}}## ## ## ## sponsored by Project AddressForAll
 block: layername = block_{{subtype}}
 block: tabname = pk$(fullPkID)_p{{file}}_{{tabname}}
 block: makedirs $(part{{file}}_path)
@@ -143,9 +134,15 @@ block-clean:
 
 {{/block}}
 
-{{/parts}}
+{{/layers}}
+## ## ## ## ## ## ## ## ##
+## ## ## ## ## ## ## ## ##
 
-## ## ## ##
+makedirs: clean_sandbox
+	@mkdir -p $(sandbox_root)
+	@mkdir -p $(sandbox)
+	@mkdir -p $(pg_io)
+
 wget_files:
 	@echo "Under construction, need to check that orig path is not /var/www! or use orig=x [ENTER if not else ^C]"
 	@echo $(orig)

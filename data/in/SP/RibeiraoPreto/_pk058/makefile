@@ -7,6 +7,7 @@ pg_io  =/tmp/pg_io
 orig   =/var/www/preserv.addressforall.org/download
 pg_uri =postgres://postgres@localhost
 sandbox_root=/tmp/sandbox
+need_commands= 7z v16+; psql v12+; shp2pgsql v3+; 
 
 pkid = 58
 fullPkID=58_1
@@ -19,8 +20,6 @@ thisTplFile_root = digital-preservation-BR
 ## ## ## ## ## ## ##
 ## THIS_MAKE, _pk58
 
-need_commands   ="7z psql shp2pgsql" # and a prepared database ingest1
-
 part1_file  =6cd0d4b475e61b8cbd078787ea8b38ebdd051a1def026ca476d4a83d40354738.zip
 part1_name  =Todos os shapes
 
@@ -28,32 +27,24 @@ part1_name  =Todos os shapes
 pg_uri_db   =$(pg_uri)/$(pg_db)
 part1_path  =$(orig)/$(part1_file)
 
-
 all:
-	@echo "Requer comandos $(need_commands)."
-	@echo "Targets implementados no all_layers:"
-	@echo " via parcel block"
-	@echo "Targets opcionais e ferramentas: me wget_files clean"
+	@echo "=== Resumo deste makefile de recuperação de dados preservados ==="
+	@printf "Targets para a geração de layers:\n\tall_layers via parcel block \n"
+	@printf "Demais targets implementados:\n\tclean wget_files me\n"
+	@echo "A gereação de layers requer os seguintes comandos e versões:\n\t$(need_commands)"
 
-all_layers: via parcel block
+all_layers: via parcel block 
 	@echo "--ALL LAYERS--"
 
-
 ## ## ## ## ## ## ## ## ##
-## Make targets of the Project AddressForAll
-## man at https://github.com/AddressForAll/digital-preservation/wiki/makefile-generator
-
-makedirs: clean_sandbox
-	@mkdir -p $(sandbox_root)
-	@mkdir -p $(sandbox)
-	@mkdir -p $(pg_io)
+## ## ## ## ## ## ## ## ##
+## Make targets of the Project Digital Preservation
 
 
 
 
 
-
- ## ## ## ##
+## ## ## ## sponsored by Project AddressForAll
 via: layername = via_full
 via: tabname = pk$(fullPkID)_p1_via
 via: makedirs $(part1_path)
@@ -91,7 +82,7 @@ via-clean:
 
 
 
- ## ## ## ##
+## ## ## ## sponsored by Project AddressForAll
 parcel: layername = parcel_ext
 parcel: tabname = pk$(fullPkID)_p1_lotes
 parcel: makedirs $(part1_path)
@@ -128,7 +119,7 @@ parcel-clean:
 	psql $(pg_uri_db) -c "DROP TABLE IF EXISTS $(tabname) CASCADE"
 
 
- ## ## ## ##
+## ## ## ## sponsored by Project AddressForAll
 block: layername = block_full
 block: tabname = pk$(fullPkID)_p1_parcel
 block: makedirs $(part1_path)
@@ -165,8 +156,14 @@ block-clean:
 	psql $(pg_uri_db) -c "DROP TABLE IF EXISTS $(tabname) CASCADE"
 
 
+## ## ## ## ## ## ## ## ##
+## ## ## ## ## ## ## ## ##
 
-## ## ## ##
+makedirs: clean_sandbox
+	@mkdir -p $(sandbox_root)
+	@mkdir -p $(sandbox)
+	@mkdir -p $(pg_io)
+
 wget_files:
 	@echo "Under construction, need to check that orig path is not /var/www! or use orig=x [ENTER if not else ^C]"
 	@echo $(orig)

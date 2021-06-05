@@ -7,6 +7,7 @@ pg_io  =/tmp/pg_io
 orig   =/var/www/preserv.addressforall.org/download
 pg_uri =postgres://postgres@localhost
 sandbox_root=/tmp/sandbox
+need_commands= 7z v16+; psql v12+; shp2pgsql v3+; 
 
 pkid = 27
 fullPkID=27_1
@@ -18,8 +19,6 @@ thisTplFile_root = digital-preservation-BR
 
 ## ## ## ## ## ## ##
 ## THIS_MAKE, _pk27
-
-need_commands   ="7z psql shp2pgsql" # and a prepared database ingest1
 
 part1_file  =fbc62efdbd0f16a7db03b5b775c50c9425367a8dee8a85d9b53e4475bbdb99d2.zip
 part1_name  =Imóveis
@@ -36,28 +35,20 @@ part1_path  =$(orig)/$(part1_file)
 part2_path  =$(orig)/$(part2_file)
 part3_path  =$(orig)/$(part3_file)
 
-
 all:
-	@echo "Requer comandos $(need_commands)."
-	@echo "Targets implementados no all_layers:"
-	@echo " geoaddress nsvia via"
-	@echo "Targets opcionais e ferramentas: me wget_files clean"
+	@echo "=== Resumo deste makefile de recuperação de dados preservados ==="
+	@printf "Targets para a geração de layers:\n\tall_layers geoaddress nsvia via \n"
+	@printf "Demais targets implementados:\n\tclean wget_files me\n"
+	@echo "A gereação de layers requer os seguintes comandos e versões:\n\t$(need_commands)"
 
-all_layers: geoaddress nsvia via
+all_layers: geoaddress nsvia via 
 	@echo "--ALL LAYERS--"
 
-
 ## ## ## ## ## ## ## ## ##
-## Make targets of the Project AddressForAll
-## man at https://github.com/AddressForAll/digital-preservation/wiki/makefile-generator
+## ## ## ## ## ## ## ## ##
+## Make targets of the Project Digital Preservation
 
-makedirs: clean_sandbox
-	@mkdir -p $(sandbox_root)
-	@mkdir -p $(sandbox)
-	@mkdir -p $(pg_io)
-
-
- ## ## ## ##
+## ## ## ## sponsored by Project AddressForAll
 geoaddress: layername = geoaddress_none
 geoaddress: tabname = pk$(fullPkID)_p1_geoaddress
 geoaddress: makedirs $(part1_path)
@@ -95,7 +86,7 @@ geoaddress-clean:
 
 
 
- ## ## ## ##
+## ## ## ## sponsored by Project AddressForAll
 nsvia: layername = nsvia_full
 nsvia: tabname = pk$(fullPkID)_p2_namespace
 nsvia: makedirs $(part2_path)
@@ -143,7 +134,7 @@ nsvia-clean:
 
 
 
- ## ## ## ##
+## ## ## ## sponsored by Project AddressForAll
 via: layername = via_full
 via: tabname = pk$(fullPkID)_p3_via
 via: makedirs $(part3_path)
@@ -188,8 +179,14 @@ via-clean:
 
 
 
+## ## ## ## ## ## ## ## ##
+## ## ## ## ## ## ## ## ##
 
-## ## ## ##
+makedirs: clean_sandbox
+	@mkdir -p $(sandbox_root)
+	@mkdir -p $(sandbox)
+	@mkdir -p $(pg_io)
+
 wget_files:
 	@echo "Under construction, need to check that orig path is not /var/www! or use orig=x [ENTER if not else ^C]"
 	@echo $(orig)

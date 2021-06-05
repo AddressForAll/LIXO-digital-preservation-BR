@@ -5,7 +5,6 @@ schemaId_template: ref027a  # ID do makefile.mustache, ref no preimeiro package 
 thisTplFile_root: digital-preservation-BR
 need_commands:    7z psql shp2pgsql
 srid: 31982
-layers: geoaddress nsvia via
 files:
   -
     p:    1
@@ -20,7 +19,7 @@ files:
     file: c35e3b2825d3da122a74c6c8dd5f3157a3bd6201208d2a6d13dec433a6ded9fc.zip
     name: Eixos
 
-parts:
+layers:
 
   geoaddress: # config própria desse template, em sao paulo seria array
     subtype: none

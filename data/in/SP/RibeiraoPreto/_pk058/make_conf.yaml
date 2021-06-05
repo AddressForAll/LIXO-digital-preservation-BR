@@ -3,8 +3,6 @@ pkversion: 1
 schemaId_input:    ref027a  # ID do JSON-schema de input, ref no preimeiro template a usar este padrão de input.
 schemaId_template: ref027a  # ID do makefile.mustache, ref no preimeiro package a usar o template.
 thisTplFile_root: digital-preservation-BR
-need_commands:    7z psql shp2pgsql
-layers: via parcel block
 srid: 31983
 
 files:
@@ -13,7 +11,7 @@ files:
     file: 6cd0d4b475e61b8cbd078787ea8b38ebdd051a1def026ca476d4a83d40354738.zip
     name: Todos os shapes
 
-parts:
+layers:
   via:
     subtype: full
     p: 1a
