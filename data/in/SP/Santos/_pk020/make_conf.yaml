@@ -12,12 +12,12 @@ files:
     name: Pontos de endereço
 
 parts:
-  geoaddress_full: 
+  geoaddress: 
+        subtype: full
         p: 1a   
         file: 1
         orig_filename: LOTES_PONTO_S2K
         tabname:  geoaddress
-        sql_select: gid, L_NUMERO AS pointer_number, geom
-        array: ['gid','poiter_number','geom']
+        sql_select: ['gid', 'L_NUMERO AS pointer_number','X', 'Y', 'geom']
         codec: -W iso-8859-1
         # não adicionei X e Y. Precisa?
