@@ -16,19 +16,20 @@ files:
     name: Lotes
 
 parts:
-  geoaddress_full:
+  geoaddress:
+        subtupe: full
         p: 1a
         file: 1
         # tem que descompactar num_predial_curitiba_201902_distancia_20metros_eixo_rua.rar
-        orig_filename: num_predial_curitiba_201902_distancia_20metros_eixo_rua.geojson
+        orig_filename:
+                      - num_predial_curitiba_201902_distancia_20metros_eixo_rua.rar 
+                      - num_predial_curitiba_201902_distancia_20metros_eixo_rua.geojson
         tabname:  lotes
-        view_select: gid, num_pred as point_number, geom
-        array: ['gid', 'point_number', 'geom']
-        # não importei logradouro 
-  genericvia_full:
+        sql_select: ['gid', 'num_pred as house_number', 'logradouro', 'geom']
+  parcel:
+        subtupe: full
         p: 2a
         file: 2
         orig_filename: LOTES_201902
         tabname:  genericvia
-        view_select: gid, NME_LOGRAD as via_name, NUM_PREDIA as poiter_number
-        array: ['gid','via_name', 'poiter_number', 'geom']
+        sql_select: ['gid', 'NME_LOGRAD AS via_name', 'NUM_PREDIA AS poiter_number']
