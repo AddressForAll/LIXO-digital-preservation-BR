@@ -20,31 +20,32 @@ files:
     name: Bairros
 
 parts:
-  genericvia_full:
+  parcel:
+        subtype: full
         p: 1a
         file: 1
+        tabname:  parcel
+        sql_select: ['gid', "Tipo || ' ' || Logradouro AS via_name", 'Numero AS house_number', 'Bairro AS ns_name', 'geom']
         orig_filename: lote
-        tabname:  genericvia
-        sql_select: gid, Tipo || ' ' || Logradouro AS via_name, Numero AS point_number, Bairro AS ns_name, geom
-        array: ['gid','via_name', 'point_number', 'point_number', 'geom']
-  via_full:
+  via:
+        subtype: full
         p: 2a
         file: 2
-        orig_filename: Ruas
         tabname:  via
-        sql_select: gid, Ruas AS via_name, geom
-        array: ['gid','via_name','geom']
-  nsvia_full:
+        sql_select: ['gid', 'NOME AS via_name', 'geom']
+        #NOME ver README.md 
+        orig_filename: Ruas
+  nsvia:
+        subtype: full
         p: 3a
         file: 3
-        orig_filename: Bairros
         tabname:  nsvia
-        sql_select: gid, NOME AS ns_name, geom
-        array: ['gid','vs_name','geom']
-  genericvia_none:
+        sql_select: ['gid', 'NOME AS ns_name', 'geom']
+        orig_filename: Bairros
+  block:
+        subtype: none
         p: 3b
         file: 3
-        orig_filename: Quadras
         tabname:  genericvia
-        sql_select: gid, geom
-        array: ['gid','geom']
+        sql_select: ['gid', 'NumQuadra', 'geom']
+        orig_filename: Quadras
