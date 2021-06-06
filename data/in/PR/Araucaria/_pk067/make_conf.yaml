@@ -1,0 +1,38 @@
+pkid:      67
+pkversion: 1
+schemaId_input:    ref027a  # ID do JSON-schema de input, ref no preimeiro template a usar este padrão de input.
+schemaId_template: ref027a  # ID do makefile.mustache, ref no preimeiro package a usar o template.
+thisTplFile_root: digital-preservation-BR
+need_commands:    7z psql shp2pgsql
+srid: 29192
+files:
+  -
+    p:    1
+    file: 39cfe0ef43045a9bfaf872ffc648b8294151f73d431607220141cd248b45e260.zip
+    name: Todos os shapefiles
+
+layers:
+
+  via:
+    subtype: full
+    p: 1a
+    file: 1
+    tabname:  via
+    sql_select: ['gid', 'endereço AS via_name', 'geom']
+    orig_filename: Sistema Viário
+
+  nsvia:
+    subtype: full
+    p: 3a
+    file: 3
+    tabname:  via
+    sql_select: ['gid', 'nome AS ns_name', 'geom']
+    orig_filename: Bairros
+
+  nsvia: # rurais
+    subtype: full
+    p: 3a
+    file: 3
+    tabname:  via
+    sql_select: ['gid', 'nome AS ns_name', 'geom']
+    orig_filename: Localidades Rurais
