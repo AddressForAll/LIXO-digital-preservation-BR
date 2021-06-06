@@ -24,35 +24,33 @@ files:
     name: Bairros
 
 parts:
-  geoaddress_full: # config própria desse template, em sao paulo seria array
-        p: 1a   # identifcador do layer, pode ter mais de um por file
+  geoaddress:
+        subtype: full
+        p: 1a   
         file: 1
-        orig_filename: Q_Endereco_SBC
         tabname:  geoaddress
-        sql_select: gid, NOME_COMPL as via_name, Numero as pointer_number, geom
-        array: ['gid','via_name','poiter_number','geom']
+        sql_select: ['gid', 'NOME_COMPL as via_name', 'Numero as house_number', 'geom']
+        orig_filename: Q_Endereco_SBC
         codec: -W iso-8859-1
-  genericvia_full:
+  parcel:
+        subtype: none
         p: 2a
         file: 2
+        tabname:  parcel
+        sql_select:  ['gid', 'ZONA','QUADRA', 'UNIDADE',  'geom']  
         orig_filename: LOTE
-        tabname:  genericvia
-        sql_select:  gid, QUADRA as genericvia_number, UNIDADE as building_number,  geom  
-        # ficou de fora ZONA (int): número de zona fiscal.
-        array: ['gid','genericvia_number','building_number','geom']
-  via_full:
+  via:
+        subtype: full
         p: 3a
         file: 3
-        orig_filename: LOGRADOURO
         tabname:  via
-        sql_select:  gid,NOME as via_name, DENOMINADA as via_type, ORIGEM as via_original
-        array: ['gid','via_name','via_type','via_original','geom']
+        sql_select:  ['gid','NOME as via_name', 'DENOMINADA as via_type', 'ORIGEM as via_original']
+        orig_filename: LOGRADOURO
   nsvia_full:
         p: 4a
         file: 4
-        orig_filename: BAIRRO
         tabname:  nsvia
-        sql_select:  gid,NOME as nsvia_name, ZONA as nsvia_type, geom
-        array: ['gid','nsvia_name', 'nsvia_type', 'geom']
+        sql_select:  ['gid','NOME as nsvia_name', 'ZONA as nsvia_type', 'geom']
         codec: -W iso-8859-1
-        srid_local: 31982
+        orig_filename: BAIRRO
+        srid: 31982
