@@ -1,9 +1,7 @@
 pkid:      27
 pkversion: 1
-schemaId_input:    ref027a  # ID do JSON-schema de input, ref no preimeiro template a usar este padrão de input.
-schemaId_template: ref027a  # ID do makefile.mustache, ref no preimeiro package a usar o template.
-thisTplFile_root: digital-preservation-BR
-need_commands:    7z psql shp2pgsql
+schemaId_input:    ref027a
+schemaId_template: ref027a
 srid: 31982
 files:
   -
@@ -21,21 +19,20 @@ files:
 
 layers:
 
-  geoaddress: # config própria desse template, em sao paulo seria array
+  geoaddress:
     subtype: none
-    p: 1a   # identifcador do layer, pode ter mais de um por file
+    method: shp2sql
+    p: 1a
     file: 1
-    tabname:  geoaddress
-    sql_select: ['gid', 'textstring as house_number', 'setor', 'last_edi_1 as dateModified', 'geom']
-    orig_filename: NRO_IMOVEL  # incluir numa pasta isolada todos os NRO_IMOVEL
+    sql_select: ['gid', 'textstring AS house_number', 'setor', 'last_edi_1 AS dateModified', 'geom']
+    orig_filename: NRO_IMOVEL
 
   nsvia:
     subtype: full
+    method: shp2sql
     p: 2a
     file: 2
-    tabname:  namespace
     query_view: |-
-      CREATE VIEW vw_$(tabname) AS \
         SELECT row_number() OVER () as gid, * \
         FROM ( \
           SELECT upper(trim(nome)) as nome, count(*) n, round(sum(st_area(geom))) area, \
@@ -47,11 +44,10 @@ layers:
 
   via:
     subtype: full
+    method: shp2sql
     p: 3a
     file: 3
-    tabname:  via
     query_view: |-
-      CREATE VIEW vw_$(tabname) AS \
         SELECT gid, CDIDECAT || iif(NMIDEPRE>'',' ' || NMIDEPRE,''::text) || ' ' || NMIDELOG AS via_name,\
                NRIMPINI, NRIMPFIN, NRPARINI, NRPARFIN, geom \
         FROM $(tabname)

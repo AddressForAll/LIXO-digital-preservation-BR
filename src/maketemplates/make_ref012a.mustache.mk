@@ -1,9 +1,9 @@
 ##
-## Template file reference: digital-preservation-BR/data/in/RS/PortoAlegre/_pk027
-## tplId: 027a
+## Template file reference: digital-preservation-BR/data/in/MG/BeloHorizonte/_pk012
+## tpl_id: 012a
+## tplBasedOn_id: 027a
 ##
 tplInputSchema_id=027a
-
 
 ## BASIC CONFIG
 pg_io  ={{pg_io}}
@@ -26,6 +26,7 @@ thisTplFile_root = {{thisTplFile_root}}
 {{#files}}
 part{{p}}_file  ={{file}}
 part{{p}}_name  ={{name}}
+
 
 {{/files}}
 ## COMPOSED VARS
@@ -55,8 +56,7 @@ geoaddress: makedirs $(part{{file}}_path)
 	@# pk{{pkid}}_p{{file}} - ETL extrating to PostgreSQL/PostGIS the "geoaddress" datatype (point with house_number but no via name)
 {{>common002_layerHeader}}
 	cd $(sandbox);  7z e -y  $(part{{file}}_path) {{orig_filename}}.* > /dev/null
-{{>common003_shp2pgsql}}
-{{>common001_pgAny_load}}
+{{>common004_pgAny_loadDebug}}
 	@echo FIM.
 
 geoaddress-clean: tabname = pk$(fullPkID)_p{{file}}_geoaddress
@@ -125,7 +125,7 @@ parcel-clean:
 
 {{#block}}## ## ## ## sponsored by Project AddressForAll
 block: layername = block_{{subtype}}
-block: tabname = pk$(fullPkID)_p{{file}}_block
+block: tabname = pk$(fullPkID)_p{{file}}_{{tabname}}
 block: makedirs $(part{{file}}_path)
 	@# pk{{pkid}}_p{{file}} - ETL extrating to PostgreSQL/PostGIS the "block" datatype (street axes)
 {{>common002_layerHeader}}
@@ -134,7 +134,7 @@ block: makedirs $(part{{file}}_path)
 {{>common001_pgAny_load}}
 	@echo FIM.
 
-block-clean: tabname = pk$(fullPkID)_p{{file}}_block
+block-clean: tabname = pk$(fullPkID)_p{{file}}_{{tabname}}
 block-clean:
 	rm -f $(sandbox)/{{orig_filename}}.* || true
 	psql $(pg_uri_db) -c "DROP TABLE IF EXISTS $(tabname) CASCADE"

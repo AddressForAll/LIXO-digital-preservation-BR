@@ -1,6 +1,9 @@
 ##
 ## Template file reference: digital-preservation-BR/data/in/RS/PortoAlegre/_pk027
+## tplId: 027a
 ##
+tplInputSchema_id=027a
+
 
 ## BASIC CONFIG
 pg_io  =/tmp/pg_io
@@ -74,12 +77,23 @@ geoaddress: makedirs $(part1_path)
 	@psql $(pg_uri_db) -c "SELECT srid, proj4text FROM spatial_ref_sys where srid=31982"
 	@echo "Tudo bem até aqui?  [ENTER para continuar ou ^C para rodar WS/ingest-step1]"
 	@read _tudo_bem_
+ifeq ('shp2sql','shp2sql')
 	@echo Executando shp2pgsql ...
 	cd $(sandbox);	shp2pgsql -s 31982 NRO_IMOVEL.shp $(tabname) | psql -q $(pg_uri_db) 2> /dev/null
-	psql $(pg_uri_db) -c "SELECT ingest.any_load('$(sandbox)/NRO_IMOVEL.shp','$(layername)','$(tabname)','$(fullPkID)','$(part1_file)',array['gid', 'textstring as house_number', 'setor', 'last_edi_1 as dateModified', 'geom'])"
+else ('shp2sql','csv2sql')
+	@echo Executando csc2sql ...
+	psql $(pg_uri_db) -c "SELECT ingest.fdw_generate_direct_csv( '$(sandbox)/NRO_IMOVEL.csv', '$(tabname)' )"
+else
+	@echo "Bug? Executando métdo shp2sql sem comando especial..."
+endif
+	psql $(pg_uri_db) -c "SELECT ingest.any_load('shp2sql','$(sandbox)/NRO_IMOVEL','$(layername)','$(tabname)','$(fullPkID)','$(part1_file)',array['gid', 'textstring AS house_number', 'setor', 'last_edi_1 AS dateModified', 'geom'])"
 	@echo "Confira os resultados nas tabelas ingest.layer_file e ingest.feature_asis".
+ifeq ('shp2sql','csv2sql')
+	psql $(pg_uri_db) -c "DROP FOREIGN TABLE IF EXISTS $(tabname)"
+endif
 	@echo FIM.
 
+geoaddress-clean: tabname = pk$(fullPkID)_p1_geoaddress
 geoaddress-clean:
 	rm -f $(sandbox)/NRO_IMOVEL.* || true
 	psql $(pg_uri_db) -c "DROP TABLE IF EXISTS $(tabname) CASCADE"
@@ -88,7 +102,7 @@ geoaddress-clean:
 
 ## ## ## ## sponsored by Project AddressForAll
 nsvia: layername = nsvia_full
-nsvia: tabname = pk$(fullPkID)_p2_namespace
+nsvia: tabname = pk$(fullPkID)_p2_nsvia
 nsvia: makedirs $(part2_path)
 	@# pk27_p2 - ETL extrating to PostgreSQL/PostGIS the "nsvia" datatype (zone with name)
 	@echo
@@ -112,22 +126,31 @@ nsvia: makedirs $(part2_path)
 	@psql $(pg_uri_db) -c "SELECT srid, proj4text FROM spatial_ref_sys where srid=31982"
 	@echo "Tudo bem até aqui?  [ENTER para continuar ou ^C para rodar WS/ingest-step1]"
 	@read _tudo_bem_
+ifeq ('shp2sql','shp2sql')
 	@echo Executando shp2pgsql ...
 	cd $(sandbox);	shp2pgsql -s 31982 Bairros_LC12112_16.shp $(tabname) | psql -q $(pg_uri_db) 2> /dev/null
-	psql $(pg_uri_db) -c "CREATE VIEW vw_$(tabname) AS \
-  SELECT row_number() OVER () as gid, * \
-  FROM ( \
-    SELECT upper(trim(nome)) as nome, count(*) n, round(sum(st_area(geom))) area, \
-           max(data_edica) dateModified, ST_UNION(geom) as geom \
-    FROM $(tabname)\
-    GROUP BY 1 ORDER BY 1 \
-  ) t"
-	psql $(pg_uri_db) -c "SELECT ingest.any_load('$(sandbox)/Bairros_LC12112_16.shp','$(layername)','vw_$(tabname)','$(fullPkID)','$(part2_file)',array[]::text[])"
-	psql $(pg_uri_db) -c "DROP VIEW vw_$(tabname)"
+else ('shp2sql','csv2sql')
+	@echo Executando csc2sql ...
+	psql $(pg_uri_db) -c "SELECT ingest.fdw_generate_direct_csv( '$(sandbox)/Bairros_LC12112_16.csv', '$(tabname)' )"
+else
+	@echo "Bug? Executando métdo shp2sql sem comando especial..."
+endif
+	psql $(pg_uri_db) -c "CREATE VIEW vw2_$(tabname) AS SELECT row_number() OVER () as gid, * \
+FROM ( \
+  SELECT upper(trim(nome)) as nome, count(*) n, round(sum(st_area(geom))) area, \
+         max(data_edica) dateModified, ST_UNION(geom) as geom \
+  FROM $(tabname)\
+  GROUP BY 1 ORDER BY 1 \
+) t"
+	psql $(pg_uri_db) -c "SELECT ingest.any_load('shp2sql','$(sandbox)/Bairros_LC12112_16','$(layername)','vw2_$(tabname)','$(fullPkID)','$(part2_file)',array[]::text[])"
+	psql $(pg_uri_db) -c "DROP VIEW vw2_$(tabname)"
 	@echo "Confira os resultados nas tabelas ingest.layer_file e ingest.feature_asis".
+ifeq ('shp2sql','csv2sql')
+	psql $(pg_uri_db) -c "DROP FOREIGN TABLE IF EXISTS $(tabname)"
+endif
 	@echo FIM.
 
-nsvia-clean: tabname = pk$(fullPkID)_p2_namespace
+nsvia-clean: tabname = pk$(fullPkID)_p2_nsvia
 nsvia-clean:
 	rm -f $(sandbox)/Bairros_LC12112_16.* || true
 	psql $(pg_uri_db) -c "DROP TABLE IF EXISTS $(tabname) CASCADE;  DROP VIEW IF EXISTS vw_$(tabname) CASCADE;"
@@ -160,17 +183,27 @@ via: makedirs $(part3_path)
 	@psql $(pg_uri_db) -c "SELECT srid, proj4text FROM spatial_ref_sys where srid=31982"
 	@echo "Tudo bem até aqui?  [ENTER para continuar ou ^C para rodar WS/ingest-step1]"
 	@read _tudo_bem_
+ifeq ('shp2sql','shp2sql')
 	@echo Executando shp2pgsql ...
 	cd $(sandbox);	shp2pgsql -s 31982 EixosLogradouros.shp $(tabname) | psql -q $(pg_uri_db) 2> /dev/null
-	psql $(pg_uri_db) -c "CREATE VIEW vw_$(tabname) AS \
-  SELECT gid, CDIDECAT || iif(NMIDEPRE>'',' ' || NMIDEPRE,''::text) || ' ' || NMIDELOG AS via_name,\
-         NRIMPINI, NRIMPFIN, NRPARINI, NRPARFIN, geom \
-  FROM $(tabname)"
-	psql $(pg_uri_db) -c "SELECT ingest.any_load('$(sandbox)/EixosLogradouros.shp','$(layername)','vw_$(tabname)','$(fullPkID)','$(part3_file)',array[]::text[])"
-	psql $(pg_uri_db) -c "DROP VIEW vw_$(tabname)"
+else ('shp2sql','csv2sql')
+	@echo Executando csc2sql ...
+	psql $(pg_uri_db) -c "SELECT ingest.fdw_generate_direct_csv( '$(sandbox)/EixosLogradouros.csv', '$(tabname)' )"
+else
+	@echo "Bug? Executando métdo shp2sql sem comando especial..."
+endif
+	psql $(pg_uri_db) -c "CREATE VIEW vw3_$(tabname) AS SELECT gid, CDIDECAT || iif(NMIDEPRE>'',' ' || NMIDEPRE,''::text) || ' ' || NMIDELOG AS via_name,\
+       NRIMPINI, NRIMPFIN, NRPARINI, NRPARFIN, geom \
+FROM $(tabname)"
+	psql $(pg_uri_db) -c "SELECT ingest.any_load('shp2sql','$(sandbox)/EixosLogradouros','$(layername)','vw3_$(tabname)','$(fullPkID)','$(part3_file)',array[]::text[])"
+	psql $(pg_uri_db) -c "DROP VIEW vw3_$(tabname)"
 	@echo "Confira os resultados nas tabelas ingest.layer_file e ingest.feature_asis".
+ifeq ('shp2sql','csv2sql')
+	psql $(pg_uri_db) -c "DROP FOREIGN TABLE IF EXISTS $(tabname)"
+endif
 	@echo FIM.
 
+via-clean: tabname = pk$(fullPkID)_p3_via
 via-clean:
 	rm -f $(sandbox)/EixosLogradouros.* || true
 	psql $(pg_uri_db) -c "DROP TABLE IF EXISTS $(tabname) CASCADE"

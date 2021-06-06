@@ -4,7 +4,7 @@
 ## SELF-GENERATE MAKE (make me)
 ##
 
-thisTplFile = {{thisTplFile_root}}/src/maketemplates/make_{{schemaId_input}}.mustache.mk
+thisTplFile = {{thisTplFile_root}}/src/maketemplates/make_{{schemaId_template}}.mustache.mk
 
 baseSrc      = /opt/gits/_a4a
 srcPy        =  $(baseSrc)/digital-preservation/src/run_mustache.py
