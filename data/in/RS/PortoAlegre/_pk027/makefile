@@ -80,11 +80,10 @@ geoaddress: makedirs $(part1_path)
 ifeq ('shp2sql','shp2sql')
 	@echo Executando shp2pgsql ...
 	cd $(sandbox);	shp2pgsql -s 31982 NRO_IMOVEL.shp $(tabname) | psql -q $(pg_uri_db) 2> /dev/null
-else ('shp2sql','csv2sql')
+endif
+ifeq ('shp2sql','csv2sql')
 	@echo Executando csc2sql ...
 	psql $(pg_uri_db) -c "SELECT ingest.fdw_generate_direct_csv( '$(sandbox)/NRO_IMOVEL.csv', '$(tabname)' )"
-else
-	@echo "Bug? Executando métdo shp2sql sem comando especial..."
 endif
 	psql $(pg_uri_db) -c "SELECT ingest.any_load('shp2sql','$(sandbox)/NRO_IMOVEL','$(layername)','$(tabname)','$(fullPkID)','$(part1_file)',array['gid', 'textstring AS house_number', 'setor', 'last_edi_1 AS dateModified', 'geom'])"
 	@echo "Confira os resultados nas tabelas ingest.layer_file e ingest.feature_asis".
@@ -129,11 +128,10 @@ nsvia: makedirs $(part2_path)
 ifeq ('shp2sql','shp2sql')
 	@echo Executando shp2pgsql ...
 	cd $(sandbox);	shp2pgsql -s 31982 Bairros_LC12112_16.shp $(tabname) | psql -q $(pg_uri_db) 2> /dev/null
-else ('shp2sql','csv2sql')
+endif
+ifeq ('shp2sql','csv2sql')
 	@echo Executando csc2sql ...
 	psql $(pg_uri_db) -c "SELECT ingest.fdw_generate_direct_csv( '$(sandbox)/Bairros_LC12112_16.csv', '$(tabname)' )"
-else
-	@echo "Bug? Executando métdo shp2sql sem comando especial..."
 endif
 	psql $(pg_uri_db) -c "CREATE VIEW vw2_$(tabname) AS SELECT row_number() OVER () as gid, * \
 FROM ( \
@@ -186,11 +184,10 @@ via: makedirs $(part3_path)
 ifeq ('shp2sql','shp2sql')
 	@echo Executando shp2pgsql ...
 	cd $(sandbox);	shp2pgsql -s 31982 EixosLogradouros.shp $(tabname) | psql -q $(pg_uri_db) 2> /dev/null
-else ('shp2sql','csv2sql')
+endif
+ifeq ('shp2sql','csv2sql')
 	@echo Executando csc2sql ...
 	psql $(pg_uri_db) -c "SELECT ingest.fdw_generate_direct_csv( '$(sandbox)/EixosLogradouros.csv', '$(tabname)' )"
-else
-	@echo "Bug? Executando métdo shp2sql sem comando especial..."
 endif
 	psql $(pg_uri_db) -c "CREATE VIEW vw3_$(tabname) AS SELECT gid, CDIDECAT || iif(NMIDEPRE>'',' ' || NMIDEPRE,''::text) || ' ' || NMIDELOG AS via_name,\
        NRIMPINI, NRIMPFIN, NRPARINI, NRPARFIN, geom \

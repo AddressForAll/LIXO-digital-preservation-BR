@@ -1,7 +1,7 @@
 pkid:      12
 pkversion: 1
-schemaId_input:    ref012a
 schemaId_template: ref027a
+schemaId_input:    ref027a
 srid: 31983
 files:
   -
@@ -21,16 +21,19 @@ layers:
     p: 1a
     file: 1
     query_view: |-
-      SELECT row_number() OVER () as gid, \"SIGLA_TIPO_LOGRADOURO\" || ' ' || \"NOME_LOGRADOURO\" AS via_name,\
+      SELECT row_number() OVER () as gid, \"SIGLA_TIPO_LOGRADOURO\" \
+           || CASE WHEN \"SIGLA_TIPO_LOGRADOURO\" IN ('RUA','VIA') THEN ' ' ELSE '. ' END \
+           || \"NOME_LOGRADOURO\" AS via_name,\
            \"NUMERO_IMOVEL\" || COALESCE(\"LETRA_IMOVEL\",'') AS house_number,\
            \"LETRA_IMOVEL\">'' AS is_complemento_provavel,\
-           ST_GeomFromText(\"GEOMETRIA\",31983) as geom \
+           ST_GeomFromText(\"GEOMETRIA\",$(srid)) as geom \
       FROM $(tabname)
     orig_filename: ENDERECO
 
   via:
     subtype: full
     method: shp2sql
+    method_opts: -W latin1
     p: 2a
     file: 2
     query_view:  SELECT gid, TIPO_LOGRA || ' ' || NOME_LOGRA AS via_name, geom FROM $(tabname)

@@ -11,6 +11,7 @@ orig   =/var/www/preserv.addressforall.org/download
 pg_uri =postgres://postgres@localhost
 sandbox_root=/tmp/sandbox
 need_commands= 7z v16+; psql v12+; shp2pgsql v3+; 
+srid   =31983
 
 pkid = 12
 fullPkID=12_1
@@ -75,17 +76,18 @@ geoaddress: makedirs $(part1_path)
 	@read _tudo_bem_
 ifeq ('csv2sql','shp2sql')
 	@echo Executando shp2pgsql ...
-	cd $(sandbox);	shp2pgsql -s 31983 ENDERECO.shp $(tabname) | psql -q $(pg_uri_db) 2> /dev/null
-else ('csv2sql','csv2sql')
+	cd $(sandbox);	shp2pgsql   -s 31983 ENDERECO.shp $(tabname) | psql -q $(pg_uri_db) 2> /dev/null
+endif
+ifeq ('csv2sql','csv2sql')
 	@echo Executando csc2sql ...
 	psql $(pg_uri_db) -c "SELECT ingest.fdw_generate_direct_csv( '$(sandbox)/ENDERECO.csv', '$(tabname)' )"
-else
-	@echo "Bug? Executando métdo csv2sql sem comando especial..."
 endif
-	psql $(pg_uri_db) -c "CREATE VIEW vw1_$(tabname) AS SELECT row_number() OVER () as gid, \"SIGLA_TIPO_LOGRADOURO\" || ' ' || \"NOME_LOGRADOURO\" AS via_name,\
+	psql $(pg_uri_db) -c "CREATE VIEW vw1_$(tabname) AS SELECT row_number() OVER () as gid, \"SIGLA_TIPO_LOGRADOURO\" \
+     || CASE WHEN \"SIGLA_TIPO_LOGRADOURO\" IN ('RUA','VIA') THEN ' ' ELSE '. ' END \
+     || \"NOME_LOGRADOURO\" AS via_name,\
      \"NUMERO_IMOVEL\" || COALESCE(\"LETRA_IMOVEL\",'') AS house_number,\
      \"LETRA_IMOVEL\">'' AS is_complemento_provavel,\
-     ST_GeomFromText(\"GEOMETRIA\",31983) as geom \
+     ST_GeomFromText(\"GEOMETRIA\",$(srid)) as geom \
 FROM $(tabname)"
 	psql $(pg_uri_db) -c "SELECT ingest.any_load('csv2sql','$(sandbox)/ENDERECO','$(layername)','vw1_$(tabname)','$(fullPkID)','$(part1_file)',array[]::text[])"
 	psql $(pg_uri_db) -c "DROP VIEW vw1_$(tabname)"
@@ -132,12 +134,11 @@ via: makedirs $(part2_path)
 	@read _tudo_bem_
 ifeq ('shp2sql','shp2sql')
 	@echo Executando shp2pgsql ...
-	cd $(sandbox);	shp2pgsql -s 31983 LOGRADOUROLine.shp $(tabname) | psql -q $(pg_uri_db) 2> /dev/null
-else ('shp2sql','csv2sql')
+	cd $(sandbox);	shp2pgsql  -W latin1 -s 31983 LOGRADOUROLine.shp $(tabname) | psql -q $(pg_uri_db) 2> /dev/null
+endif
+ifeq ('shp2sql','csv2sql')
 	@echo Executando csc2sql ...
 	psql $(pg_uri_db) -c "SELECT ingest.fdw_generate_direct_csv( '$(sandbox)/LOGRADOUROLine.csv', '$(tabname)' )"
-else
-	@echo "Bug? Executando métdo shp2sql sem comando especial..."
 endif
 	psql $(pg_uri_db) -c "CREATE VIEW vw2_$(tabname) AS SELECT gid, TIPO_LOGRA || ' ' || NOME_LOGRA AS via_name, geom FROM $(tabname)"
 	psql $(pg_uri_db) -c "SELECT ingest.any_load('shp2sql','$(sandbox)/LOGRADOUROLine','$(layername)','vw2_$(tabname)','$(fullPkID)','$(part2_file)',array[]::text[])"
@@ -206,4 +207,7 @@ me: $(srcPy) $(mkme_input0) $(mkme_input) $(mkme_srcTpl)
 	@echo "If some changes, and no error in the changes, move the script:"
 	@echo " mv ./makefile ./bk-makefile"
 	@echo " mv $(mkme_output) ./makefile"
+	@echo "[ENTER para rodar mv ou ^C para sair]"
+	@read _tudo_bem_
+	mv $(mkme_output) ./makefile
 

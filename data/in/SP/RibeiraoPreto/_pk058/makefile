@@ -11,6 +11,7 @@ orig   =/var/www/preserv.addressforall.org/download
 pg_uri =postgres://postgres@localhost
 sandbox_root=/tmp/sandbox
 need_commands= 7z v16+; psql v12+; shp2pgsql v3+; 
+srid   =31983
 
 pkid = 58
 fullPkID=58_1
@@ -75,12 +76,11 @@ via: makedirs $(part1_path)
 	@read _tudo_bem_
 ifeq ('shp2sql','shp2sql')
 	@echo Executando shp2pgsql ...
-	cd $(sandbox);	shp2pgsql -s 31983 lograd.shp $(tabname) | psql -q $(pg_uri_db) 2> /dev/null
-else ('shp2sql','csv2sql')
+	cd $(sandbox);	shp2pgsql   -s 31983 lograd.shp $(tabname) | psql -q $(pg_uri_db) 2> /dev/null
+endif
+ifeq ('shp2sql','csv2sql')
 	@echo Executando csc2sql ...
 	psql $(pg_uri_db) -c "SELECT ingest.fdw_generate_direct_csv( '$(sandbox)/lograd.csv', '$(tabname)' )"
-else
-	@echo "Bug? Executando métdo shp2sql sem comando especial..."
 endif
 	psql $(pg_uri_db) -c "SELECT ingest.any_load('shp2sql','$(sandbox)/lograd','$(layername)','$(tabname)','$(fullPkID)','$(part1_file)',array['gid', '"NOME_LOGR" AS via_name', '"COD_DV_LOG" AS cod_dv_log', 'geom'])"
 	@echo "Confira os resultados nas tabelas ingest.layer_file e ingest.feature_asis".
@@ -124,12 +124,11 @@ parcel: makedirs $(part1_path)
 	@read _tudo_bem_
 ifeq ('shp2sql','shp2sql')
 	@echo Executando shp2pgsql ...
-	cd $(sandbox);	shp2pgsql -s 31983 lotes.shp $(tabname) | psql -q $(pg_uri_db) 2> /dev/null
-else ('shp2sql','csv2sql')
+	cd $(sandbox);	shp2pgsql   -s 31983 lotes.shp $(tabname) | psql -q $(pg_uri_db) 2> /dev/null
+endif
+ifeq ('shp2sql','csv2sql')
 	@echo Executando csc2sql ...
 	psql $(pg_uri_db) -c "SELECT ingest.fdw_generate_direct_csv( '$(sandbox)/lotes.csv', '$(tabname)' )"
-else
-	@echo "Bug? Executando métdo shp2sql sem comando especial..."
 endif
 	psql $(pg_uri_db) -c "SELECT ingest.any_load('shp2sql','$(sandbox)/lotes','$(layername)','$(tabname)','$(fullPkID)','$(part1_file)',array['gid', '"NRO_IMOV" AS house_number', '"COD_DV_LOG" AS cod_dv_log', 'geom'])"
 	@echo "Confira os resultados nas tabelas ingest.layer_file e ingest.feature_asis".
@@ -172,12 +171,11 @@ block: makedirs $(part1_path)
 	@read _tudo_bem_
 ifeq ('shp2sql','shp2sql')
 	@echo Executando shp2pgsql ...
-	cd $(sandbox);	shp2pgsql -s 31983 quadras.shp $(tabname) | psql -q $(pg_uri_db) 2> /dev/null
-else ('shp2sql','csv2sql')
+	cd $(sandbox);	shp2pgsql   -s 31983 quadras.shp $(tabname) | psql -q $(pg_uri_db) 2> /dev/null
+endif
+ifeq ('shp2sql','csv2sql')
 	@echo Executando csc2sql ...
 	psql $(pg_uri_db) -c "SELECT ingest.fdw_generate_direct_csv( '$(sandbox)/quadras.csv', '$(tabname)' )"
-else
-	@echo "Bug? Executando métdo shp2sql sem comando especial..."
 endif
 	psql $(pg_uri_db) -c "SELECT ingest.any_load('shp2sql','$(sandbox)/quadras','$(layername)','$(tabname)','$(fullPkID)','$(part1_file)',array['gid', '"QUADRA"', 'geom'])"
 	@echo "Confira os resultados nas tabelas ingest.layer_file e ingest.feature_asis".
@@ -240,4 +238,7 @@ me: $(srcPy) $(mkme_input0) $(mkme_input) $(mkme_srcTpl)
 	@echo "If some changes, and no error in the changes, move the script:"
 	@echo " mv ./makefile ./bk-makefile"
 	@echo " mv $(mkme_output) ./makefile"
+	@echo "[ENTER para rodar mv ou ^C para sair]"
+	@read _tudo_bem_
+	mv $(mkme_output) ./makefile
 

@@ -1,8 +1,7 @@
 pkid:      58
 pkversion: 1
-schemaId_input:    ref027a  # ID do JSON-schema de input, ref no preimeiro template a usar este padrão de input.
-schemaId_template: ref027a  # ID do makefile.mustache, ref no preimeiro package a usar o template.
-thisTplFile_root: digital-preservation-BR
+schemaId_template: ref027a
+schemaId_input:    ref027a
 srid: 31983
 
 files:

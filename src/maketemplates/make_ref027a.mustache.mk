@@ -11,6 +11,7 @@ orig   ={{orig}}
 pg_uri ={{pg_uri}}
 sandbox_root={{sandbox}}
 need_commands= 7z v16+; psql v12+; shp2pgsql v3+; {{need_extra_commands}}
+srid   ={{srid}}
 
 pkid = {{pkid}}
 fullPkID={{pkid}}_{{pkversion}}
