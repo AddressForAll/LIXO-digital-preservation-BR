@@ -19,34 +19,39 @@ files:
     file: 29d68e5ce006079b06b710cc2df3aa08d6cb6934f32bc0b29fc46d3e8272ff77.rar
     name: Eixos
 
-parts:
-  parcel_full:
+layers:
+  parcel:
+        subtype: full
+        method: shp2sql
         p: 1a
         file: 1
-        orig_filename: rb_20201116
         tabname:  parcel
-        sql_select: 'gid', 'nomelog AS via_name', 'endereco_n AS house_number'
-        array: ['gid','via_name', 'house_number']
-  nsvia_full:
+        sql_select: ['gid', 'nomelog AS via_name', 'endereco_n AS house_number']
+        orig_filename: rb_20201116/lotes
+  nsvia:
+        subtype: full
+        method: shp2sql
         p: 2a
         file: 2
-        orig_filename: bairros
         tabname:  nsvia
-        sql_select: 'gid', 'name AS ns_name', 'geom'
-        array: ['gid','ns_name','geom']
-  via_full:
+        sql_select: [ 'gid', 'name AS ns_name', 'geom' ]
+        orig_filename: rb_20201111/bairros
+  via:
+        subtype: full
+        method: shp2sql
         p: 3a
         file: 3
-        orig_filename: logradouros
         tabname:  via
-        sql_select: 'gid', "Nome || ' ' || Tipo AS via_name", 'geom'
-        array: ['gid','via_name','geom']
+        query_view: |-
+                    SELECT gid, 'Nome' || ' ' || 'Tipo' AS via_name,  geom FROM $(tabname)
+        orig_filename: logradouros
   # Não importei Eixos - planilha, precisa?
-  block_none:
+  block:
+        subtype: full
+        method: shp2sql
         p: 2b
         file: 2
-        orig_filename: quadras
         tabname:  via
-        sql_select: 'gid', 'iq', 'geom'
-        array: ['gid','iq','geom']
+        sql_select: ['gid', 'iq', 'geom']
+        orig_filename: rb_20201111/quadras
   # Mão importei Loteamentos - funciona como Bairro
