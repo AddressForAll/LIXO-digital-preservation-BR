@@ -72,7 +72,7 @@ O resumo de todos os dados deste README  encontra-se no arquivo [`make_conf.yaml
 <table><caption>Package 058 version 1, BR-SP-RibeiraoPreto</caption><tr>
 <td><b>block_full</b><br/>(quadras)</td>
 <td><b>Quantity</b>: 10921 polygons &#160;&#160;&#160; bbox_km2: 527 &#160;&#160;&#160; Size: 205 km2
-<br/><b>Distribution</b>: <code>6uj</code>: 27%, <code>6ujzx</code>: 14%, <code>6un</code>: 21%, <code>6unp</code>: 12%, <code>6unp2</code>: 12%, <code>6unp8</code>: 13%, <code>6uq</code>: 0%.
+  <br/><b>Distribution</b>: <a href="http://geohash.org/6uj?format=osm"><code>6uj</code></a>: 27%, <a href="http://geohash.org/6ujzx?format=osm"><code>6ujzx</code></a>: 14%, <a href="http://geohash.org/6un?format=osm"><code>6un</code></a>: 21%, <a href="http://geohash.org/6unp?format=osm"><code>6unp</code></a>: 12%, <a href="http://geohash.org/6unp2?format=osm"><code>6unp2</code></a>: 12%, <a href="http://geohash.org/6unp8?format=osm"><code>6unp8</code></a>: 13%, <a href="http://geohash.org/6uq?format=osm"><code>6uq</code></a>: 0%.
 <br/>Package <b>file-1</b>, sub-file: <b>shp</b> with MD5 <code>265d55a2b44626d5ea4fbe98ee03ea88</code> (14911076 bytes modifyed in 2020-09-10)
 </td>
 </tr><tr>
