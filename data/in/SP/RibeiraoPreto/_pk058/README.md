@@ -1,3 +1,10 @@
+* [Tarefas](#tarefas)
+* [Extração](#extração)
+* [Evidências de teste](#evidências-de-teste)
+* [Makefile e resumo dos resultados](#makefile-e-resumo-dos-resultados)
+
+-----
+
 # Tarefas
 ## 1. Atribuir nome de logradouro nos lotes
 Os lotes possuem somente numeração predial e o código de logradouro ao qual o lote pertence.
