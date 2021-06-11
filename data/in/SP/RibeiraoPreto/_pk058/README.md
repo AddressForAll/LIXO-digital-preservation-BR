@@ -63,6 +63,12 @@ Outros dados:
 Teste no QGIS:
 ![](qgis.png)
 
+A coordenada 207967.6,7654767.7 da projeção original, indicada na ilustração, 
+corresponde em coordenadas LatLong WGS84 ao ponto [`geo:-21.1851648,-47.812571`](https://www.openstreetmap.org/?mlat=-21.185164798007406&mlon=-47.81257110977818&zoom=18) ([Bing](https://www.bing.com/maps/?v=2&cp=-21.1851648~-47.812571&style=h&lvl=18), [Google](https://maps.google.com/maps?ll=-21.1851648,-47.812571&hl=en&t=h&z=18)). No PostGIS a transformação pode ser obtida por:
+```sql
+SELECT ST_Transform(ST_SetSRID( ST_Point(207967.6,7654767.7), 31983), 4326);
+```
+
 ------
 
 ## Makefile e resumo dos resultados
