@@ -1,5 +1,5 @@
 pkid:      16
-pkversion: 1
+pkversion: "001"
 schemaId_input:    ref027a  # ID do JSON-schema de input, ref no preimeiro template a usar este padrão de input.
 schemaId_template: ref027a  # ID do makefile.mustache, ref no preimeiro package a usar o template.
 thisTplFile_root: digital-preservation-BR
@@ -19,27 +19,31 @@ files:
     file: ae8dc027fe9e0983b553508c3a313061f7f466c50d66124c86c96254f70c4c15.zip
     name: Lotes
 
-parts:
+layers:
   nsvia:
         subtype: full
+        method: shp2sql
         p: 1a
         file: 1
         tabname:  nsvia
         sql_select: ['gid', 'nmbairro AS ns_name', 'geom']
         orig_filename: Bairros
-        codec: -W iso-8859-1
+        method_opts: -W iso-8859-1
   via:
         subtype: full
+        method: shp2sql
         p: 2a
         file: 2
         tabname:  via
-        sql_select: ['gid', "tipolograd || ' ' || nmlogradou AS via_name", 'geom']
+        query_view: |-
+                    SELECT gid, tipolograd || ' ' || nmlogradou AS via_name, geom  FROM $(tabname)
         orig_filename: Logradouros
   parcel:
         subtype: full
+        method: shp2sql
         p: 3a
         file: 3
         orig_filename: Lotes
         tabname:  via
         sql_select: ['gid', 'logradouro AS via_name', 'numerologr AS pointer_number', 'geom']
-        codec: -W iso-8859-1
+        method_opts: -W iso-8859-1
