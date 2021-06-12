@@ -12,7 +12,7 @@ files:
     name: Lotes
   -
     p:    2
-    file: db2d3b64a2494ff53212d276645986490890025d2b5d1fc5a1b90af7e7bbdf39.zip
+    file: 1fd83fa52b1a8b9179f8e38703b1a33a30256f68994794404acde1ad786dac7e.zip
     name: Lotes
   -
     p:    3
@@ -23,32 +23,37 @@ files:
     file: 926566fc01aa45a22ede663e66e371ce9e70e730e7f4e28b10b3bdf19d67fd38.zip
     name: Eixos
 
-parts:
+layers:
   parcel:
         subtype: none
+        method: shp2sql
         p: 1a
         file: 1
         tabname:  parcel
         sql_select: ['gid','id', 'nm_lot', 'geom']
-        orig_filename: lot
-  genericvia:
+        orig_filename: LOT
+  block:
         subtype: none
+        method: shp2sql
         p: 2a
         file: 2
         tabname:  genericvia
         sql_select: ['gid','nm_qdr','geom']
-        orig_filename: qdr
+        orig_filename: QDR
   nsvia:
         subtype: full
+        method: shp2sql
         p: 3a
         file: 3
         tabname:  nsvia
         sql_select: ['gid', 'nm AS nsvia_name', 'geom']
-        orig_filename: bai
+        orig_filename: BAI
   via:
         subtype: full
-        p: 3a
-        file: 3
+        method: shp2sql
+        p: 4a
+        file: 4
         tabname:  via
-        sql_select: ['gid', "tp_log || ' ' || nm_log AS via_name", 'geom']
-        orig_filename: seg
+        query_view: |-
+               SELECT gid, tp_log || ' ' || nm_log AS via_name, geom FROM $(tabname)
+        orig_filename: SEG
