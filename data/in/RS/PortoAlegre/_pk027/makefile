@@ -11,9 +11,10 @@ orig   =/var/www/preserv.addressforall.org/download
 pg_uri =postgres://postgres@localhost
 sandbox_root=/tmp/sandbox
 need_commands= 7z v16+; psql v12+; shp2pgsql v3+; 
+srid   =952013
 
 pkid = 27
-fullPkID=27_1
+fullPkID=27_001
 sandbox=$(sandbox_root)/_pk$(fullPkID)
 
 ## USER CONFIGS
@@ -73,13 +74,13 @@ geoaddress: makedirs $(part1_path)
 	@echo Extracting ....
 	@tput sgr0
 	cd $(sandbox);  7z e -y  $(part1_path) NRO_IMOVEL.* > /dev/null
-	@echo "Conferindo se SRID 31982 esta configurado:"
-	@psql $(pg_uri_db) -c "SELECT srid, proj4text FROM spatial_ref_sys where srid=31982"
+	@echo "Conferindo se SRID 952013 esta configurado:"
+	@psql $(pg_uri_db) -c "SELECT srid, proj4text FROM spatial_ref_sys where srid=952013"
 	@echo "Tudo bem até aqui?  [ENTER para continuar ou ^C para rodar WS/ingest-step1]"
 	@read _tudo_bem_
 ifeq ('shp2sql','shp2sql')
 	@echo Executando shp2pgsql ...
-	cd $(sandbox);	shp2pgsql -s 31982 NRO_IMOVEL.shp $(tabname) | psql -q $(pg_uri_db) 2> /dev/null
+	cd $(sandbox);	shp2pgsql   -s 952013 NRO_IMOVEL.shp $(tabname) | psql -q $(pg_uri_db) 2> /dev/null
 endif
 ifeq ('shp2sql','csv2sql')
 	@echo Executando csc2sql ...
@@ -121,13 +122,13 @@ nsvia: makedirs $(part2_path)
 	@echo Extracting ....
 	@tput sgr0
 	cd $(sandbox);  7z e -y  $(part2_path) Bairros_LC12112_16.* > /dev/null
-	@echo "Conferindo se SRID 31982 esta configurado:"
-	@psql $(pg_uri_db) -c "SELECT srid, proj4text FROM spatial_ref_sys where srid=31982"
+	@echo "Conferindo se SRID 952013 esta configurado:"
+	@psql $(pg_uri_db) -c "SELECT srid, proj4text FROM spatial_ref_sys where srid=952013"
 	@echo "Tudo bem até aqui?  [ENTER para continuar ou ^C para rodar WS/ingest-step1]"
 	@read _tudo_bem_
 ifeq ('shp2sql','shp2sql')
 	@echo Executando shp2pgsql ...
-	cd $(sandbox);	shp2pgsql -s 31982 Bairros_LC12112_16.shp $(tabname) | psql -q $(pg_uri_db) 2> /dev/null
+	cd $(sandbox);	shp2pgsql   -s 952013 Bairros_LC12112_16.shp $(tabname) | psql -q $(pg_uri_db) 2> /dev/null
 endif
 ifeq ('shp2sql','csv2sql')
 	@echo Executando csc2sql ...
@@ -177,13 +178,13 @@ via: makedirs $(part3_path)
 	@echo Extracting ....
 	@tput sgr0
 	cd $(sandbox);  7z e -y  $(part3_path) EixosLogradouros.* > /dev/null
-	@echo "Conferindo se SRID 31982 esta configurado:"
-	@psql $(pg_uri_db) -c "SELECT srid, proj4text FROM spatial_ref_sys where srid=31982"
+	@echo "Conferindo se SRID 952013 esta configurado:"
+	@psql $(pg_uri_db) -c "SELECT srid, proj4text FROM spatial_ref_sys where srid=952013"
 	@echo "Tudo bem até aqui?  [ENTER para continuar ou ^C para rodar WS/ingest-step1]"
 	@read _tudo_bem_
 ifeq ('shp2sql','shp2sql')
 	@echo Executando shp2pgsql ...
-	cd $(sandbox);	shp2pgsql -s 31982 EixosLogradouros.shp $(tabname) | psql -q $(pg_uri_db) 2> /dev/null
+	cd $(sandbox);	shp2pgsql   -s 952013 EixosLogradouros.shp $(tabname) | psql -q $(pg_uri_db) 2> /dev/null
 endif
 ifeq ('shp2sql','csv2sql')
 	@echo Executando csc2sql ...
@@ -240,12 +241,13 @@ clean: geoaddress-clean nsvia-clean via-clean
 ## SELF-GENERATE MAKE (make me)
 ##
 
-thisTplFile = digital-preservation-BR/src/maketemplates/make_ref027a.mustache.mk
-
+thisTplFile  = digital-preservation-BR/src/maketemplates/make_ref027a.mustache.mk
+country      = BR
 baseSrc      = /opt/gits/_a4a
+
 srcPy        =  $(baseSrc)/digital-preservation/src/run_mustache.py
-mkme_input0  =  $(baseSrc)/digital-preservation-BR/src/maketemplates/commomFirst.yaml
-mkme_srcTplLast  =  $(baseSrc)/digital-preservation-BR/src/maketemplates/commomLast.mustache.mk
+mkme_input0  =  $(baseSrc)/digital-preservation-$(country)/src/maketemplates/commomFirst.yaml
+mkme_srcTplLast  =  $(baseSrc)/digital-preservation-$(country)/src/maketemplates/commomLast.mustache.mk
 mkme_srcTpl  =  $(baseSrc)/$(thisTplFile)
 mkme_input   = ./make_conf.yaml
 mkme_output  = /tmp/digitalPresservation-make_me.mk
@@ -253,10 +255,13 @@ mkme_output  = /tmp/digitalPresservation-make_me.mk
 
 me: $(srcPy) $(mkme_input0) $(mkme_input) $(mkme_srcTpl)
 	@echo "-- Updating this make --"
-	python3 $(srcPy) -t $(mkme_srcTpl) --tplLast=$(mkme_srcTplLast) -i $(mkme_input) --input0=$(mkme_input0) > $(mkme_output)
+	python3 $(srcPy) -b $(baseSrc)/ -t $(mkme_srcTpl) --tplLast=$(mkme_srcTplLast) -i $(mkme_input) --input0=$(mkme_input0) > $(mkme_output)
 	@echo " Check diff, the '<' lines are the new ones... Something changed?"
 	@diff $(mkme_output) ./makefile || :
 	@echo "If some changes, and no error in the changes, move the script:"
 	@echo " mv ./makefile ./bk-makefile"
 	@echo " mv $(mkme_output) ./makefile"
+	@echo "[ENTER para rodar mv ou ^C para sair]"
+	@read _tudo_bem_
+	mv $(mkme_output) ./makefile
 
