@@ -11,10 +11,11 @@ files:
     file: ca5dab519aae0b5cfbc6f8930641c0cce2abbc34c25e306b3fe0aea87df34b74.rar
     name: Lotes e Loteamentos
 
-parts:
+layers:
 
   parcel: 
         subtype: full
+        method: shp2sql
         p: 1a   
         file: 1
         tabname:  genericvia
@@ -23,6 +24,7 @@ parts:
 
   nsvia:
         subtype: full
+        method: shp2sql
         p: 1b
         file: 1
         tabname:  nsvia
