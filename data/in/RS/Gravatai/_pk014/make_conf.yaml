@@ -15,9 +15,10 @@ files:
     file: 1ad669693352407105ccdeb37a4398d62b0accb25888122c84afe2788c121c7b.rar
     name: Loteamentos
 
-parts:
+layers:
   parcel:
         subtype: none
+        method: shp2sql
         p: 1a
         file: 1
         tabname:  lotes
@@ -25,15 +26,18 @@ parts:
         orig_filename: lote_numero_predial
   via:
         subtype: full
+        method: shp2sql
         p: 1b
         file: 1
         tabname:  via
-        sql_select: ['gid', "NOME || ' ' || TIPO AS via_name",'geom']
+        query_view: |-
+                   SELECT gid, NOME || ' ' || TIPO AS via_name, geom FROM $(tabname)
         orig_filename: sistema_viario
   nsvia:
         subtype: none
-        p: 1b
-        file: 1
+        method: shp2sql
+        p: 2b
+        file: 2
         tabname:  nsvia
         sql_select: ['gid', 'geom']
-        orig_filename: sistema_viario
+        orig_filename: PS_LOTEAMENTOS_SIRGAS 2000
