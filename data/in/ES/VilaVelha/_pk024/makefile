@@ -11,10 +11,10 @@ orig   =/var/www/preserv.addressforall.org/download
 pg_uri =postgres://postgres@localhost
 sandbox_root=/tmp/sandbox
 need_commands= 7z v16+; psql v12+; shp2pgsql v3+; 
-srid   =32719
+srid   =31984
 
-pkid = 46
-fullPkID=46_1
+pkid = 24
+fullPkID=24_1
 sandbox=$(sandbox_root)/_pk$(fullPkID)
 
 ## USER CONFIGS
@@ -22,16 +22,16 @@ pg_db  =ingest1
 thisTplFile_root = digital-preservation-BR
 
 ## ## ## ## ## ## ##
-## THIS_MAKE, _pk46
+## THIS_MAKE, _pk24
 
-part1_file  =d96f47270e22336cf4660f742ae4dba5694f15c6833363167c91d9fc9929871b.zip
+part1_file  =5c7131c32a7411cf7a27022b8ac2989e88f86254ed74b6b3b2e5cf94b44e3acb.zip
 part1_name  =Lotes
 
-part2_file  =73d02ba0ae4b0a994a629f7d06f0a027259f5c1d97e53f9b771fecd345c2a02b.zip
+part2_file  =c0cd7b2a4cc67b5d49a4d296f41b564b23464364ab746adc6d2206d5dd9249af.zip
 part2_name  =Bairros
 
-part3_file  =29d68e5ce006079b06b710cc2df3aa08d6cb6934f32bc0b29fc46d3e8272ff77.rar
-part3_name  =Eixos
+part3_file  =3984d1a48b63d858fdfbe7829e493d1c35650546eb84039a59f9008de9bc4871.zip
+part3_name  =Quadras
 
 ## COMPOSED VARS
 pg_uri_db   =$(pg_uri)/$(pg_db)
@@ -41,11 +41,11 @@ part3_path  =$(orig)/$(part3_file)
 
 all:
 	@echo "=== Resumo deste makefile de recuperação de dados preservados ==="
-	@printf "Targets para a geração de layers:\n\tall_layers parcel nsvia via block \n"
+	@printf "Targets para a geração de layers:\n\tall_layers parcel nsvia block \n"
 	@printf "Demais targets implementados:\n\tclean wget_files me\n"
 	@echo "A gereação de layers requer os seguintes comandos e versões:\n\t$(need_commands)"
 
-all_layers: parcel nsvia via block 
+all_layers: parcel nsvia block 
 	@echo "--ALL LAYERS--"
 
 ## ## ## ## ## ## ## ## ##
@@ -58,14 +58,14 @@ all_layers: parcel nsvia via block
 nsvia: layername = nsvia_full
 nsvia: tabname = pk$(fullPkID)_p2_nsvia
 nsvia: makedirs $(part2_path)
-	@# pk46_p2 - ETL extrating to PostgreSQL/PostGIS the "nsvia" datatype (zone with name)
+	@# pk24_p2 - ETL extrating to PostgreSQL/PostGIS the "nsvia" datatype (zone with name)
 	@echo
 	@echo "------------------------------------------"
 	@echo "------ Layer tipo $(layername)  ------"
 	@echo "-- Incluindo dados do arquivo-2 do package-$(fullPkID) na base $(pg_db) --"
 	@echo " Nome-hash do arquivo-2: $(part2_file)"
 	@echo " Tabela do layer geoaddress sem nome de rua, só com numero predial: $(tabname)"
-	@echo " Sub-arquivos do arquivo-2 com o conteúdo alvo: rb_20201111/bairros.*"
+	@echo " Sub-arquivos do arquivo-2 com o conteúdo alvo: BAIRROS/BAIRROS.*"
 	@echo " Tema dos sub-arquivos: $(part2_name)"
 	@echo "Run with tmux and sudo! (DANGER: seems not idempotent on psql)"
 	@whoami
@@ -75,20 +75,20 @@ nsvia: makedirs $(part2_path)
 	@tput bold
 	@echo Extracting ....
 	@tput sgr0
-	cd $(sandbox);  7z x -y  $(part2_path) rb_20201111/bairros.*  ; chmod -R a+rx . > /dev/null
-	@echo "Conferindo se SRID 32719 esta configurado:"
-	@psql $(pg_uri_db) -c "SELECT srid, proj4text FROM spatial_ref_sys where srid=32719"
+	cd $(sandbox);  7z x -y  $(part2_path) BAIRROS/BAIRROS.*  ; chmod -R a+rx . > /dev/null
+	@echo "Conferindo se SRID 31984 esta configurado:"
+	@psql $(pg_uri_db) -c "SELECT srid, proj4text FROM spatial_ref_sys where srid=31984"
 	@echo "Tudo bem até aqui?  [ENTER para continuar ou ^C para rodar WS/ingest-step1]"
 	@read _tudo_bem_
 ifeq ('shp2sql','shp2sql')
 	@echo Executando shp2pgsql ...
-	cd $(sandbox);	shp2pgsql   -s 32719 rb_20201111/bairros.shp $(tabname) | psql -q $(pg_uri_db) 2> /dev/null
+	cd $(sandbox);	shp2pgsql  -W iso-8859-1 -s 31984 BAIRROS/BAIRROS.shp $(tabname) | psql -q $(pg_uri_db) 2> /dev/null
 endif
 ifeq ('shp2sql','csv2sql')
 	@echo Executando csc2sql ...
-	psql $(pg_uri_db) -c "SELECT ingest.fdw_generate_direct_csv( '$(sandbox)/rb_20201111/bairros.csv', '$(tabname)' )"
+	psql $(pg_uri_db) -c "SELECT ingest.fdw_generate_direct_csv( '$(sandbox)/BAIRROS/BAIRROS.csv', '$(tabname)' )"
 endif
-	psql $(pg_uri_db) -c "SELECT ingest.any_load('shp2sql','$(sandbox)/rb_20201111/bairros','$(layername)','$(tabname)','$(fullPkID)','$(part2_file)',array['gid', 'name AS ns_name', 'geom'])"
+	psql $(pg_uri_db) -c "SELECT ingest.any_load('shp2sql','$(sandbox)/BAIRROS/BAIRROS','$(layername)','$(tabname)','$(fullPkID)','$(part2_file)',array['gid', 'BAIRRO AS nsvia_name', 'geom'])"
 	@echo "Confira os resultados nas tabelas ingest.layer_file e ingest.feature_asis".
 ifeq ('shp2sql','csv2sql')
 	psql $(pg_uri_db) -c "DROP FOREIGN TABLE IF EXISTS $(tabname)"
@@ -97,73 +97,25 @@ endif
 
 nsvia-clean: tabname = pk$(fullPkID)_p2_nsvia
 nsvia-clean:
-	rm -f $(sandbox)/rb_20201111/bairros.* || true
+	rm -f $(sandbox)/BAIRROS/BAIRROS.* || true
 	psql $(pg_uri_db) -c "DROP TABLE IF EXISTS $(tabname) CASCADE;  DROP VIEW IF EXISTS vw_$(tabname) CASCADE;"
 
 
 
-## ## ## ## sponsored by Project AddressForAll
-via: layername = via_full
-via: tabname = pk$(fullPkID)_p3_via
-via: makedirs $(part3_path)
-	@# pk46_p3 - ETL extrating to PostgreSQL/PostGIS the "via" datatype (street axes)
-	@echo
-	@echo "------------------------------------------"
-	@echo "------ Layer tipo $(layername)  ------"
-	@echo "-- Incluindo dados do arquivo-3 do package-$(fullPkID) na base $(pg_db) --"
-	@echo " Nome-hash do arquivo-3: $(part3_file)"
-	@echo " Tabela do layer geoaddress sem nome de rua, só com numero predial: $(tabname)"
-	@echo " Sub-arquivos do arquivo-3 com o conteúdo alvo: logradouros.*"
-	@echo " Tema dos sub-arquivos: $(part3_name)"
-	@echo "Run with tmux and sudo! (DANGER: seems not idempotent on psql)"
-	@whoami
-	@printf "Above user is root? If not, you have permissions for all paths?\n [press ENTER for yes else ^C]"
-	@read _press_enter_
-	psql $(pg_uri_db) -c "DROP TABLE IF EXISTS $(tabname) CASCADE"
-	@tput bold
-	@echo Extracting ....
-	@tput sgr0
-	cd $(sandbox);  7z x -y  $(part3_path) logradouros.*  ; chmod -R a+rx . > /dev/null
-	@echo "Conferindo se SRID 32719 esta configurado:"
-	@psql $(pg_uri_db) -c "SELECT srid, proj4text FROM spatial_ref_sys where srid=32719"
-	@echo "Tudo bem até aqui?  [ENTER para continuar ou ^C para rodar WS/ingest-step1]"
-	@read _tudo_bem_
-ifeq ('shp2sql','shp2sql')
-	@echo Executando shp2pgsql ...
-	cd $(sandbox);	shp2pgsql   -s 32719 logradouros.shp $(tabname) | psql -q $(pg_uri_db) 2> /dev/null
-endif
-ifeq ('shp2sql','csv2sql')
-	@echo Executando csc2sql ...
-	psql $(pg_uri_db) -c "SELECT ingest.fdw_generate_direct_csv( '$(sandbox)/logradouros.csv', '$(tabname)' )"
-endif
-	psql $(pg_uri_db) -c "CREATE VIEW vw3_$(tabname) AS SELECT gid, 'Nome' || ' ' || 'Tipo' AS via_name,  geom FROM $(tabname)"
-	psql $(pg_uri_db) -c "SELECT ingest.any_load('shp2sql','$(sandbox)/logradouros','$(layername)','vw3_$(tabname)','$(fullPkID)','$(part3_file)',array[]::text[])"
-	psql $(pg_uri_db) -c "DROP VIEW vw3_$(tabname)"
-	@echo "Confira os resultados nas tabelas ingest.layer_file e ingest.feature_asis".
-ifeq ('shp2sql','csv2sql')
-	psql $(pg_uri_db) -c "DROP FOREIGN TABLE IF EXISTS $(tabname)"
-endif
-	@echo FIM.
-
-via-clean: tabname = pk$(fullPkID)_p3_via
-via-clean:
-	rm -f $(sandbox)/logradouros.* || true
-	psql $(pg_uri_db) -c "DROP TABLE IF EXISTS $(tabname) CASCADE"
-
 
 
 ## ## ## ## sponsored by Project AddressForAll
-parcel: layername = parcel_full
+parcel: layername = parcel_none
 parcel: tabname = pk$(fullPkID)_p1_parcel
 parcel: makedirs $(part1_path)
-	@# pk46_p1 - ETL extrating to PostgreSQL/PostGIS the "parcel" datatype (street axes)
+	@# pk24_p1 - ETL extrating to PostgreSQL/PostGIS the "parcel" datatype (street axes)
 	@echo
 	@echo "------------------------------------------"
 	@echo "------ Layer tipo $(layername)  ------"
 	@echo "-- Incluindo dados do arquivo-1 do package-$(fullPkID) na base $(pg_db) --"
 	@echo " Nome-hash do arquivo-1: $(part1_file)"
 	@echo " Tabela do layer geoaddress sem nome de rua, só com numero predial: $(tabname)"
-	@echo " Sub-arquivos do arquivo-1 com o conteúdo alvo: rb_20201116/lotes.*"
+	@echo " Sub-arquivos do arquivo-1 com o conteúdo alvo: LOTES/LOTES.*"
 	@echo " Tema dos sub-arquivos: $(part1_name)"
 	@echo "Run with tmux and sudo! (DANGER: seems not idempotent on psql)"
 	@whoami
@@ -173,20 +125,20 @@ parcel: makedirs $(part1_path)
 	@tput bold
 	@echo Extracting ....
 	@tput sgr0
-	cd $(sandbox);  7z x -y  $(part1_path) rb_20201116/lotes.* ; chmod -R a+rx . > /dev/null
-	@echo "Conferindo se SRID 32719 esta configurado:"
-	@psql $(pg_uri_db) -c "SELECT srid, proj4text FROM spatial_ref_sys where srid=32719"
+	cd $(sandbox);  7z x -y  $(part1_path) LOTES/LOTES.* ; chmod -R a+rx . > /dev/null
+	@echo "Conferindo se SRID 31984 esta configurado:"
+	@psql $(pg_uri_db) -c "SELECT srid, proj4text FROM spatial_ref_sys where srid=31984"
 	@echo "Tudo bem até aqui?  [ENTER para continuar ou ^C para rodar WS/ingest-step1]"
 	@read _tudo_bem_
 ifeq ('shp2sql','shp2sql')
 	@echo Executando shp2pgsql ...
-	cd $(sandbox);	shp2pgsql   -s 32719 rb_20201116/lotes.shp $(tabname) | psql -q $(pg_uri_db) 2> /dev/null
+	cd $(sandbox);	shp2pgsql  -W iso-8859-1 -s 31984 LOTES/LOTES.shp $(tabname) | psql -q $(pg_uri_db) 2> /dev/null
 endif
 ifeq ('shp2sql','csv2sql')
 	@echo Executando csc2sql ...
-	psql $(pg_uri_db) -c "SELECT ingest.fdw_generate_direct_csv( '$(sandbox)/rb_20201116/lotes.csv', '$(tabname)' )"
+	psql $(pg_uri_db) -c "SELECT ingest.fdw_generate_direct_csv( '$(sandbox)/LOTES/LOTES.csv', '$(tabname)' )"
 endif
-	psql $(pg_uri_db) -c "SELECT ingest.any_load('shp2sql','$(sandbox)/rb_20201116/lotes','$(layername)','$(tabname)','$(fullPkID)','$(part1_file)',array['gid', 'nomelog AS via_name', 'endereco_n AS house_number'])"
+	psql $(pg_uri_db) -c "SELECT ingest.any_load('shp2sql','$(sandbox)/LOTES/LOTES','$(layername)','$(tabname)','$(fullPkID)','$(part1_file)',array['gid', 'CODGIS', 'LOTE', 'geom'])"
 	@echo "Confira os resultados nas tabelas ingest.layer_file e ingest.feature_asis".
 ifeq ('shp2sql','csv2sql')
 	psql $(pg_uri_db) -c "DROP FOREIGN TABLE IF EXISTS $(tabname)"
@@ -195,23 +147,23 @@ endif
 
 parcel-clean: tabname = pk$(fullPkID)_p1_parcel
 parcel-clean:
-	rm -f $(sandbox)/rb_20201116/lotes.* || true
+	rm -f $(sandbox)/LOTES/LOTES.* || true
 	psql $(pg_uri_db) -c "DROP TABLE IF EXISTS $(tabname) CASCADE"
 
 
 ## ## ## ## sponsored by Project AddressForAll
-block: layername = block_full
-block: tabname = pk$(fullPkID)_p2_block
-block: makedirs $(part2_path)
-	@# pk46_p2 - ETL extrating to PostgreSQL/PostGIS the "block" datatype (street axes)
+block: layername = block_none
+block: tabname = pk$(fullPkID)_p3_block
+block: makedirs $(part3_path)
+	@# pk24_p3 - ETL extrating to PostgreSQL/PostGIS the "block" datatype (street axes)
 	@echo
 	@echo "------------------------------------------"
 	@echo "------ Layer tipo $(layername)  ------"
-	@echo "-- Incluindo dados do arquivo-2 do package-$(fullPkID) na base $(pg_db) --"
-	@echo " Nome-hash do arquivo-2: $(part2_file)"
+	@echo "-- Incluindo dados do arquivo-3 do package-$(fullPkID) na base $(pg_db) --"
+	@echo " Nome-hash do arquivo-3: $(part3_file)"
 	@echo " Tabela do layer geoaddress sem nome de rua, só com numero predial: $(tabname)"
-	@echo " Sub-arquivos do arquivo-2 com o conteúdo alvo: rb_20201111/quadras.*"
-	@echo " Tema dos sub-arquivos: $(part2_name)"
+	@echo " Sub-arquivos do arquivo-3 com o conteúdo alvo: QUADRAS/QUADRAS.*"
+	@echo " Tema dos sub-arquivos: $(part3_name)"
 	@echo "Run with tmux and sudo! (DANGER: seems not idempotent on psql)"
 	@whoami
 	@printf "Above user is root? If not, you have permissions for all paths?\n [press ENTER for yes else ^C]"
@@ -220,29 +172,29 @@ block: makedirs $(part2_path)
 	@tput bold
 	@echo Extracting ....
 	@tput sgr0
-	cd $(sandbox);  7z x -y  $(part2_path) rb_20201111/quadras.* ; chmod -R a+rx . > /dev/null
-	@echo "Conferindo se SRID 32719 esta configurado:"
-	@psql $(pg_uri_db) -c "SELECT srid, proj4text FROM spatial_ref_sys where srid=32719"
+	cd $(sandbox);  7z x -y  $(part3_path) QUADRAS/QUADRAS.* ; chmod -R a+rx . > /dev/null
+	@echo "Conferindo se SRID 31984 esta configurado:"
+	@psql $(pg_uri_db) -c "SELECT srid, proj4text FROM spatial_ref_sys where srid=31984"
 	@echo "Tudo bem até aqui?  [ENTER para continuar ou ^C para rodar WS/ingest-step1]"
 	@read _tudo_bem_
 ifeq ('shp2sql','shp2sql')
 	@echo Executando shp2pgsql ...
-	cd $(sandbox);	shp2pgsql   -s 32719 rb_20201111/quadras.shp $(tabname) | psql -q $(pg_uri_db) 2> /dev/null
+	cd $(sandbox);	shp2pgsql  -W iso-8859-1 -s 31984 QUADRAS/QUADRAS.shp $(tabname) | psql -q $(pg_uri_db) 2> /dev/null
 endif
 ifeq ('shp2sql','csv2sql')
 	@echo Executando csc2sql ...
-	psql $(pg_uri_db) -c "SELECT ingest.fdw_generate_direct_csv( '$(sandbox)/rb_20201111/quadras.csv', '$(tabname)' )"
+	psql $(pg_uri_db) -c "SELECT ingest.fdw_generate_direct_csv( '$(sandbox)/QUADRAS/QUADRAS.csv', '$(tabname)' )"
 endif
-	psql $(pg_uri_db) -c "SELECT ingest.any_load('shp2sql','$(sandbox)/rb_20201111/quadras','$(layername)','$(tabname)','$(fullPkID)','$(part2_file)',array['gid', 'iq', 'geom'])"
+	psql $(pg_uri_db) -c "SELECT ingest.any_load('shp2sql','$(sandbox)/QUADRAS/QUADRAS','$(layername)','$(tabname)','$(fullPkID)','$(part3_file)',array['gid', 'DISTR', 'SETOR', 'QUADRA', 'CODGIS', 'geom'])"
 	@echo "Confira os resultados nas tabelas ingest.layer_file e ingest.feature_asis".
 ifeq ('shp2sql','csv2sql')
 	psql $(pg_uri_db) -c "DROP FOREIGN TABLE IF EXISTS $(tabname)"
 endif
 	@echo FIM.
 
-block-clean: tabname = pk$(fullPkID)_p2_block
+block-clean: tabname = pk$(fullPkID)_p3_block
 block-clean:
-	rm -f $(sandbox)/rb_20201111/quadras.* || true
+	rm -f $(sandbox)/QUADRAS/QUADRAS.* || true
 	psql $(pg_uri_db) -c "DROP TABLE IF EXISTS $(tabname) CASCADE"
 
 
@@ -259,9 +211,9 @@ wget_files:
 	@echo $(orig)
 	@read _ENTER_OK_
 	mkdir -p $(orig)
-	@cd $(orig); wget http://preserv.addressforall.org/download/d96f47270e22336cf4660f742ae4dba5694f15c6833363167c91d9fc9929871b.zip
-	@cd $(orig); wget http://preserv.addressforall.org/download/73d02ba0ae4b0a994a629f7d06f0a027259f5c1d97e53f9b771fecd345c2a02b.zip
-	@cd $(orig); wget http://preserv.addressforall.org/download/29d68e5ce006079b06b710cc2df3aa08d6cb6934f32bc0b29fc46d3e8272ff77.rar
+	@cd $(orig); wget http://preserv.addressforall.org/download/5c7131c32a7411cf7a27022b8ac2989e88f86254ed74b6b3b2e5cf94b44e3acb.zip
+	@cd $(orig); wget http://preserv.addressforall.org/download/c0cd7b2a4cc67b5d49a4d296f41b564b23464364ab746adc6d2206d5dd9249af.zip
+	@cd $(orig); wget http://preserv.addressforall.org/download/3984d1a48b63d858fdfbe7829e493d1c35650546eb84039a59f9008de9bc4871.zip
 	@echo "Please, if orig not default, run 'make _target_ orig=$(orig)'"
 
 
