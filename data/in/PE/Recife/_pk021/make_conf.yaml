@@ -11,27 +11,31 @@ files:
     file: 04fffd56aef1c5a53cb35e5864b940b0b103e6e4752adcff7d4f30a2cb99ddb6.zip
     name: Todos os shapes
 
-parts:
+layers:
   parcel:
         subtype: full
+        method: shp2sql
         p: 1a
         file: 1
-        tabname:  via
+        tabname:  parcel
         sql_select: ['gid', 'ENDNUMERO AS house_number','QTDPAVIMEN','NMEDIFICAC', 'geom']
-        orig_filename: TrechoLogradouros
-        codec: -W iso-8859-1
+        orig_filename: Lotes
+        method_opts: -W iso-8859-1
   via:
         subtype: full
+        method: shp2sql
         p: 1b
         file: 1
         tabname:  via
         sql_select: ['gid', 'NLGPAVOFIC AS via_name', 'geom']
         orig_filename: TrechoLogradouros
-        codec: -W iso-8859-1
-  nsvia_full:
+        method_opts: -W iso-8859-1
+  nsvia:
+        subtype: full
+        method: shp2sql
         p: 1c
         file: 1
         tabname:  nsvia
-        view_select: ['gid', 'EBAIRRNO_1 AS ns_name', 'geom']
+        sql_select: ['gid', 'EBAIRRNO_1 AS ns_name', 'geom']
         orig_filename: Bairros
-        codec: -W iso-8859-1
+        method_opts: -W iso-8859-1

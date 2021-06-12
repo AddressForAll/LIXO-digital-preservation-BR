@@ -1,82 +1,245 @@
+##
+## Template file reference: digital-preservation-BR/data/in/RS/PortoAlegre/_pk027
+## tplId: 027a
+##
+tplInputSchema_id=027a
 
-# PWD:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
+
+## BASIC CONFIG
 pg_io  =/tmp/pg_io
-ori    =/var/www/preserv.addressforall.org/download
-pg_uri ="postgres://postgres@localhost/ingest1"
+orig   =/var/www/preserv.addressforall.org/download
+pg_uri =postgres://postgres@localhost
+sandbox_root=/tmp/sandbox
+need_commands= 7z v16+; psql v12+; shp2pgsql v3+; 
+srid   =31985
 
-NRO_IMOVEL_ZIP     =$(ori)/04fffd56aef1c5a53cb35e5864b940b0b103e6e4752adcff7d4f30a2cb99ddb6.zip
-NRO_IMOVEL         =Lotes
+pkid = 21
+fullPkID=21_1
+sandbox=$(sandbox_root)/_pk$(fullPkID)
 
+## USER CONFIGS
+pg_db  =ingest1
+thisTplFile_root = digital-preservation-BR
+
+## ## ## ## ## ## ##
+## THIS_MAKE, _pk21
+
+part1_file  =04fffd56aef1c5a53cb35e5864b940b0b103e6e4752adcff7d4f30a2cb99ddb6.zip
+part1_name  =Todos os shapes
+
+## COMPOSED VARS
+pg_uri_db   =$(pg_uri)/$(pg_db)
+part1_path  =$(orig)/$(part1_file)
 
 all:
-	@echo Favor consultar as opcoes de target
+	@echo "=== Resumo deste makefile de recuperação de dados preservados ==="
+	@printf "Targets para a geração de layers:\n\tall_layers parcel via nsvia \n"
+	@printf "Demais targets implementados:\n\tclean wget_files me\n"
+	@echo "A gereação de layers requer os seguintes comandos e versões:\n\t$(need_commands)"
 
-etl_toPgis_lotes:
-# ETL extrating to PostgreSQL/PostGIS the "lotes" datatype (point and house number)
-	@echo "Creating table ingest.pk021_lotes on PostGIS"
-	@whoami
+all_layers: parcel via nsvia 
+	@echo "--ALL LAYERS--"
+
+## ## ## ## ## ## ## ## ##
+## ## ## ## ## ## ## ## ##
+## Make targets of the Project Digital Preservation
+
+
+
+## ## ## ## sponsored by Project AddressForAll
+nsvia: layername = nsvia_full
+nsvia: tabname = pk$(fullPkID)_p1_nsvia
+nsvia: makedirs $(part1_path)
+	@# pk21_p1 - ETL extrating to PostgreSQL/PostGIS the "nsvia" datatype (zone with name)
+	@echo
+	@echo "------------------------------------------"
+	@echo "------ Layer tipo $(layername)  ------"
+	@echo "-- Incluindo dados do arquivo-1 do package-$(fullPkID) na base $(pg_db) --"
+	@echo " Nome-hash do arquivo-1: $(part1_file)"
+	@echo " Tabela do layer geoaddress sem nome de rua, só com numero predial: $(tabname)"
+	@echo " Sub-arquivos do arquivo-1 com o conteúdo alvo: Bairros.*"
+	@echo " Tema dos sub-arquivos: $(part1_name)"
 	@echo "Run with tmux and sudo! (DANGER: seems not idempotent on psql)"
-	mkdir -p $(pg_io)
-	psql $(pg_uri) -c "drop table if exists lotes cascade; drop table if exists ingest.pk021_lotes cascade;"
+	@whoami
+	@printf "Above user is root? If not, you have permissions for all paths?\n [press ENTER for yes else ^C]"
+	@read _press_enter_
+	psql $(pg_uri_db) -c "DROP TABLE IF EXISTS $(tabname) CASCADE"
 	@tput bold
-	@echo Extraindo ....
+	@echo Extracting ....
 	@tput sgr0
-	cd $(pg_io) ; 7z e -y  $(NRO_IMOVEL_ZIP) $(NRO_IMOVEL).* > /dev/null
-	@echo "Conferindo se SRID esta configurado:"
-	@( psql $(pg_uri) -c "SELECT srid, proj4text FROM spatial_ref_sys where srid=31985" )
+	cd $(sandbox);  7z x -y  $(part1_path) "Bairros.*"  ; chmod -R a+rx . > /dev/null
+	@echo "Conferindo se SRID 31985 esta configurado:"
+	@psql $(pg_uri_db) -c "SELECT srid, proj4text FROM spatial_ref_sys where srid=31985"
+	@echo "Tudo bem até aqui?  [ENTER para continuar ou ^C para rodar WS/ingest-step1]"
+	@read _tudo_bem_
+ifeq ('shp2sql','shp2sql')
 	@echo Executando shp2pgsql ...
-	@( cd $(pg_io) ; shp2pgsql -s 31985 $(NRO_IMOVEL).shp lotes | psql -q $(pg_uri) 2> /dev/null  )
-	@echo "Conferira se bate o perfil: 97920 | 2389279.68 |  0.02 | 589.86 |   238.42 "
-	psql $(pg_uri) -c "SELECT count(*) n, round(max(a),2) a_max, round(min(a),2) a_min, round(avg(a),2) a_avg, round(percentile_disc(0.5) WITHIN GROUP ( ORDER BY a),2) a_median FROM ( select  st_area(geom) a from lotes ) t"
-	psql $(pg_uri) -c "CREATE TABLE ingest.pk021_lotes AS select gid, ENDNUMERO, QTDPAVIMEN, NMEDIFICAC, ST_centroid(ST_Transform(geom,4326)) as geom FROM lotes"
-	@echo Limpando...
-	rm $(pg_io)/$(NRO_IMOVEL).*
-	psql $(pg_uri) -c "drop table lotes cascade"
+	cd $(sandbox);	shp2pgsql  -W iso-8859-1 -s 31985 "Bairros.shp" $(tabname) | psql -q $(pg_uri_db) 2> /dev/null
+endif
+ifeq ('shp2sql','csv2sql')
+	@echo Executando csc2sql ...
+	psql $(pg_uri_db) -c "SELECT ingest.fdw_generate_direct_csv( '$(sandbox)/Bairros.csv', '$(tabname)' )"
+endif
+	psql $(pg_uri_db) -c "SELECT ingest.any_load('shp2sql','$(sandbox)/Bairros','$(layername)','$(tabname)','$(fullPkID)','$(part1_file)',array['gid', 'EBAIRRNO_1 AS ns_name', 'geom'])"
+	@echo "Confira os resultados nas tabelas ingest.layer_file e ingest.feature_asis".
+ifeq ('shp2sql','csv2sql')
+	psql $(pg_uri_db) -c "DROP FOREIGN TABLE IF EXISTS $(tabname)"
+endif
 	@echo FIM.
 
-EIXOS_ZIP       =$(ori)/04fffd56aef1c5a53cb35e5864b940b0b103e6e4752adcff7d4f30a2cb99ddb6.zip
-EIXOS_SHPREFIX  =TrechoLogradouros
-etl_toPgis_eixos:
-	@echo "Creating table ingest.pk021_eixos on PostGIS"
-	@whoami
-	@echo "Run with tmux and sudo! (DANGER: seems not idempotent on psql)"
-	mkdir -p $(pg_io)
-	@psql $(pg_uri) -c "drop table if exists eixos cascade; drop table if exists ingest.pk021_eixos cascade;"
-	@tput bold
-	@echo Extraindo ....
-	@tput sgr0
-	cd $(pg_io) ; 7z e -y  $(EIXOS_ZIP) $(EIXOS_SHPREFIX).* > /dev/null
-	@echo "Conferindo se SRID esta configurado:"
-	@( psql $(pg_uri) -c "SELECT srid, proj4text FROM spatial_ref_sys where srid=31985" )
-	@echo Executando shp2pgsql ...
-	@( cd $(pg_io) ; shp2pgsql -W iso-8859-1 -s 31985 $(EIXOS_SHPREFIX).shp eixos |  psql -q $(pg_uri) 2> /dev/null  )
-	@echo "Conferira se bate o perfil:  9404 |  0.00 |  0.00 |  0.00 |     0.00 "
-	psql $(pg_uri) -c "SELECT count(*) n, round(max(a),2) a_max, round(min(a),2) a_min, round(avg(a),2) a_avg, round(percentile_disc(0.5) WITHIN GROUP ( ORDER BY a),2) a_median FROM ( select  st_area(geom) a from eixos ) t"
-	psql $(pg_uri) -c "CREATE TABLE ingest.pk021_eixos AS select gid, NLGPAVOFIC, ST_centroid(ST_Transform(geom,4326)) as geom FROM eixos"
-	@echo Limpando...
-	rm $(pg_io)/$(EIXOS_SHPREFIX).*
-	psql $(pg_uri) -c "drop table eixos cascade"
-	@echo FIM.
+nsvia-clean: tabname = pk$(fullPkID)_p1_nsvia
+nsvia-clean:
+	rm -f "$(sandbox)/Bairros.*" || true
+	psql $(pg_uri_db) -c "DROP TABLE IF EXISTS $(tabname) CASCADE;  DROP VIEW IF EXISTS vw_$(tabname) CASCADE;"
 
 
-BAIRROS_ZIP	=$(ori)/04fffd56aef1c5a53cb35e5864b940b0b103e6e4752adcff7d4f30a2cb99ddb6.zip
-BAIRROS_SHPREFIX=Bairros
-etl_toPgis_bairros:
-	@echo "Creating table ingest.pk021_bairros on PostGIS"
-	@whoami
+
+## ## ## ## sponsored by Project AddressForAll
+via: layername = via_full
+via: tabname = pk$(fullPkID)_p1_via
+via: makedirs $(part1_path)
+	@# pk21_p1 - ETL extrating to PostgreSQL/PostGIS the "via" datatype (street axes)
+	@echo
+	@echo "------------------------------------------"
+	@echo "------ Layer tipo $(layername)  ------"
+	@echo "-- Incluindo dados do arquivo-1 do package-$(fullPkID) na base $(pg_db) --"
+	@echo " Nome-hash do arquivo-1: $(part1_file)"
+	@echo " Tabela do layer geoaddress sem nome de rua, só com numero predial: $(tabname)"
+	@echo " Sub-arquivos do arquivo-1 com o conteúdo alvo: TrechoLogradouros.*"
+	@echo " Tema dos sub-arquivos: $(part1_name)"
 	@echo "Run with tmux and sudo! (DANGER: seems not idempotent on psql)"
-	mkdir -p $(pg_io)
-	@psql $(pg_uri) -c "drop table if exists bairros cascade;drop table if exists ingest.pk021_bairros cascade;"
+	@whoami
+	@printf "Above user is root? If not, you have permissions for all paths?\n [press ENTER for yes else ^C]"
+	@read _press_enter_
+	psql $(pg_uri_db) -c "DROP TABLE IF EXISTS $(tabname) CASCADE"
 	@tput bold
-	@echo Extraindo ....
+	@echo Extracting ....
 	@tput sgr0
-	cd $(pg_io) ; 7z e -y  $(BAIRROS_ZIP) $(BAIRROS_SHPREFIX).* > /dev/null
+	cd $(sandbox);  7z x -y  $(part1_path) "TrechoLogradouros.*"  ; chmod -R a+rx . > /dev/null
+	@echo "Conferindo se SRID 31985 esta configurado:"
+	@psql $(pg_uri_db) -c "SELECT srid, proj4text FROM spatial_ref_sys where srid=31985"
+	@echo "Tudo bem até aqui?  [ENTER para continuar ou ^C para rodar WS/ingest-step1]"
+	@read _tudo_bem_
+ifeq ('shp2sql','shp2sql')
 	@echo Executando shp2pgsql ...
-	@( cd $(pg_io) ; shp2pgsql -W iso-8859-1 -s 31985 $(BAIRROS_SHPREFIX).shp bairros | psql -q $(pg_uri) 2> /dev/null  )
-	@echo "Conferira se bate o perfil:  94 | 46819322.87 | 139305.12 | 2373829.90 | 877517.22 "
-	psql $(pg_uri) -c "SELECT count(*) n, round(max(a),2) a_max, round(min(a),2) a_min, round(avg(a),2) a_avg, round(percentile_disc(0.5) WITHIN GROUP ( ORDER BY a),2) a_median FROM ( select  st_area(geom) a from bairros ) t"
-	psql $(pg_uri) -c "CREATE TABLE ingest.pk021_bairros AS select gid, EBAIRRNO_1, ST_centroid(ST_Transform(geom,4326)) as geom FROM bairros"
-	@echo Limpando...
-	rm $(pg_io)/$(BAIRROS_SHPREFIX).*
-	psql $(pg_uri) -c "drop table bairros cascade"
+	cd $(sandbox);	shp2pgsql  -W iso-8859-1 -s 31985 "TrechoLogradouros.shp" $(tabname) | psql -q $(pg_uri_db) 2> /dev/null
+endif
+ifeq ('shp2sql','csv2sql')
+	@echo Executando csc2sql ...
+	psql $(pg_uri_db) -c "SELECT ingest.fdw_generate_direct_csv( '$(sandbox)/TrechoLogradouros.csv', '$(tabname)' )"
+endif
+	psql $(pg_uri_db) -c "SELECT ingest.any_load('shp2sql','$(sandbox)/TrechoLogradouros','$(layername)','$(tabname)','$(fullPkID)','$(part1_file)',array['gid', 'NLGPAVOFIC AS via_name', 'geom'])"
+	@echo "Confira os resultados nas tabelas ingest.layer_file e ingest.feature_asis".
+ifeq ('shp2sql','csv2sql')
+	psql $(pg_uri_db) -c "DROP FOREIGN TABLE IF EXISTS $(tabname)"
+endif
 	@echo FIM.
+
+via-clean: tabname = pk$(fullPkID)_p1_via
+via-clean:
+	rm -f "$(sandbox)/TrechoLogradouros.*" || true
+	psql $(pg_uri_db) -c "DROP TABLE IF EXISTS $(tabname) CASCADE"
+
+
+
+## ## ## ## sponsored by Project AddressForAll
+parcel: layername = parcel_full
+parcel: tabname = pk$(fullPkID)_p1_parcel
+parcel: makedirs $(part1_path)
+	@# pk21_p1 - ETL extrating to PostgreSQL/PostGIS the "parcel" datatype (street axes)
+	@echo
+	@echo "------------------------------------------"
+	@echo "------ Layer tipo $(layername)  ------"
+	@echo "-- Incluindo dados do arquivo-1 do package-$(fullPkID) na base $(pg_db) --"
+	@echo " Nome-hash do arquivo-1: $(part1_file)"
+	@echo " Tabela do layer geoaddress sem nome de rua, só com numero predial: $(tabname)"
+	@echo " Sub-arquivos do arquivo-1 com o conteúdo alvo: Lotes.*"
+	@echo " Tema dos sub-arquivos: $(part1_name)"
+	@echo "Run with tmux and sudo! (DANGER: seems not idempotent on psql)"
+	@whoami
+	@printf "Above user is root? If not, you have permissions for all paths?\n [press ENTER for yes else ^C]"
+	@read _press_enter_
+	psql $(pg_uri_db) -c "DROP TABLE IF EXISTS $(tabname) CASCADE"
+	@tput bold
+	@echo Extracting ....
+	@tput sgr0
+	cd $(sandbox);  7z x -y  $(part1_path) "Lotes.*" ; chmod -R a+rx . > /dev/null
+	@echo "Conferindo se SRID 31985 esta configurado:"
+	@psql $(pg_uri_db) -c "SELECT srid, proj4text FROM spatial_ref_sys where srid=31985"
+	@echo "Tudo bem até aqui?  [ENTER para continuar ou ^C para rodar WS/ingest-step1]"
+	@read _tudo_bem_
+ifeq ('shp2sql','shp2sql')
+	@echo Executando shp2pgsql ...
+	cd $(sandbox);	shp2pgsql  -W iso-8859-1 -s 31985 "Lotes.shp" $(tabname) | psql -q $(pg_uri_db) 2> /dev/null
+endif
+ifeq ('shp2sql','csv2sql')
+	@echo Executando csc2sql ...
+	psql $(pg_uri_db) -c "SELECT ingest.fdw_generate_direct_csv( '$(sandbox)/Lotes.csv', '$(tabname)' )"
+endif
+	psql $(pg_uri_db) -c "SELECT ingest.any_load('shp2sql','$(sandbox)/Lotes','$(layername)','$(tabname)','$(fullPkID)','$(part1_file)',array['gid', 'ENDNUMERO AS house_number', 'QTDPAVIMEN', 'NMEDIFICAC', 'geom'])"
+	@echo "Confira os resultados nas tabelas ingest.layer_file e ingest.feature_asis".
+ifeq ('shp2sql','csv2sql')
+	psql $(pg_uri_db) -c "DROP FOREIGN TABLE IF EXISTS $(tabname)"
+endif
+	@echo FIM.
+
+parcel-clean: tabname = pk$(fullPkID)_p1_parcel
+parcel-clean:
+	rm -f "$(sandbox)/Lotes.*" || true
+	psql $(pg_uri_db) -c "DROP TABLE IF EXISTS $(tabname) CASCADE"
+
+
+
+## ## ## ## ## ## ## ## ##
+## ## ## ## ## ## ## ## ##
+
+makedirs: clean_sandbox
+	@mkdir -p $(sandbox_root)
+	@mkdir -p $(sandbox)
+	@mkdir -p $(pg_io)
+
+wget_files:
+	@echo "Under construction, need to check that orig path is not /var/www! or use orig=x [ENTER if not else ^C]"
+	@echo $(orig)
+	@read _ENTER_OK_
+	mkdir -p $(orig)
+	@cd $(orig); wget http://preserv.addressforall.org/download/04fffd56aef1c5a53cb35e5864b940b0b103e6e4752adcff7d4f30a2cb99ddb6.zip
+	@echo "Please, if orig not default, run 'make _target_ orig=$(orig)'"
+
+
+## ## ## ##
+
+clean_sandbox:
+	@rm -rf $(sandbox) || true
+
+clean: geoaddress-clean nsvia-clean via-clean
+
+
+## ############################
+## SELF-GENERATE MAKE (make me)
+##
+
+thisTplFile  = digital-preservation-BR/src/maketemplates/make_ref027a.mustache.mk
+country      = BR
+baseSrc      = /opt/gits/_a4a
+
+srcPy        =  $(baseSrc)/digital-preservation/src/run_mustache.py
+mkme_input0  =  $(baseSrc)/digital-preservation-$(country)/src/maketemplates/commomFirst.yaml
+mkme_srcTplLast  =  $(baseSrc)/digital-preservation-$(country)/src/maketemplates/commomLast.mustache.mk
+mkme_srcTpl  =  $(baseSrc)/$(thisTplFile)
+mkme_input   = ./make_conf.yaml
+mkme_output  = /tmp/digitalPresservation-make_me.mk
+
+
+me: $(srcPy) $(mkme_input0) $(mkme_input) $(mkme_srcTpl)
+	@echo "-- Updating this make --"
+	python3 $(srcPy) -b $(baseSrc)/ -t $(mkme_srcTpl) --tplLast=$(mkme_srcTplLast) -i $(mkme_input) --input0=$(mkme_input0) > $(mkme_output)
+	@echo " Check diff, the '<' lines are the new ones... Something changed?"
+	@diff $(mkme_output) ./makefile || :
+	@echo "If some changes, and no error in the changes, move the script:"
+	@echo " mv ./makefile ./bk-makefile"
+	@echo " mv $(mkme_output) ./makefile"
+	@echo "[ENTER para rodar mv ou ^C para sair]"
+	@read _tudo_bem_
+	mv $(mkme_output) ./makefile
+
