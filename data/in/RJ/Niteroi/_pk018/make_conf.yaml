@@ -1,5 +1,5 @@
 pkid:      18
-pkversion: 1
+pkversion: "001"
 schemaId_input:    ref027a  # ID do JSON-schema de input, ref no preimeiro template a usar este padrão de input.
 schemaId_template: ref027a  # ID do makefile.mustache, ref no preimeiro package a usar o template.
 thisTplFile_root: digital-preservation-BR
@@ -19,9 +19,10 @@ files:
     file: fd0fcfd937ee3d20620862cce6e870679518f4756063f3045c7f65e6b9ca9981.zip
     name: Bairros
 
-parts:
+layers:
   parcel:
         subtype: none
+        method: shp2sql
         p: 1a
         file: 1
         orig_filename: Lotes
@@ -29,17 +30,20 @@ parts:
         sql_select: ['gid', 'tx_insct', 'geom']
   via:
         subtype: full
+        method: shp2sql
         p: 2b
         file: 2
         orig_filename: Logradouro
         tabname:  via
-        view_select: ['gid', "ST_TYPE || ' ' || ST_NO AS via_name", 'CMTY_L AS nsvia_name_left', 'CMTY_R AS nsvia_name_right', 'geom']
+        query_view: |-
+                    SELECT gid, ST_TYPE || ' ' || ST_NO AS via_name, CMTY_L AS nsvia_name_left, CMTY_R AS nsvia_name_right, geom FROM $(tabname)
+
         # não coloquei Legislacao (string): lei da denominação (para outros projetos).
   nsvia:
         subtype: ext # Usar os dados de via para montar o poligono de bairro
-        p: 2b
-        file: 2
+        method: shp2sql
+        p: 3a
+        file: 3
         orig_filename: Limite_de_Bairros
         tabname:  nsvia
-        view_select: gid, geom
-        array: ['gid','geom']
+        sql_select: ['gid', 'geom']

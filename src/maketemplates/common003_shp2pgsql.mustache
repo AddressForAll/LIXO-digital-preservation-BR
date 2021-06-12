@@ -6,7 +6,7 @@
 {{/srid}}
 ifeq ('{{method}}','shp2sql')
 	@echo Executando shp2pgsql ...
-	cd $(sandbox);	shp2pgsql  {{{method_opts}}} -s {{srid}} {{orig_filename}}.shp $(tabname) | psql -q $(pg_uri_db) 2> /dev/null
+	cd $(sandbox);	shp2pgsql  {{{method_opts}}} -s {{srid}} "{{orig_filename}}.shp" $(tabname) | psql -q $(pg_uri_db) 2> /dev/null
 endif
 ifeq ('{{method}}','csv2sql')
 	@echo Executando csc2sql ...
