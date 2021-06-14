@@ -69,14 +69,14 @@ geoaddress: makedirs $(part1_path)
 	@tput bold
 	@echo Extracting ....
 	@tput sgr0
-	cd $(sandbox);  7z e -y  $(part1_path) ENDERECO.* > /dev/null
+	cd $(sandbox);  7z x -y  $(part1_path) "ENDERECO.*" ; chmod -R a+rx . > /dev/null
 	@echo "Conferindo se SRID 31983 esta configurado:"
 	@psql $(pg_uri_db) -c "SELECT srid, proj4text FROM spatial_ref_sys where srid=31983"
 	@echo "Tudo bem até aqui?  [ENTER para continuar ou ^C para rodar WS/ingest-step1]"
 	@read _tudo_bem_
 ifeq ('csv2sql','shp2sql')
 	@echo Executando shp2pgsql ...
-	cd $(sandbox);	shp2pgsql   -s 31983 ENDERECO.shp $(tabname) | psql -q $(pg_uri_db) 2> /dev/null
+	cd $(sandbox);	shp2pgsql   -s 31983 "ENDERECO.shp" $(tabname) | psql -q $(pg_uri_db) 2> /dev/null
 endif
 ifeq ('csv2sql','csv2sql')
 	@echo Executando csc2sql ...
@@ -99,7 +99,7 @@ endif
 
 geoaddress-clean: tabname = pk$(fullPkID)_p1_geoaddress
 geoaddress-clean:
-	rm -f $(sandbox)/ENDERECO.* || true
+	rm -f "$(sandbox)/ENDERECO.*" || true
 	psql $(pg_uri_db) -c "DROP TABLE IF EXISTS $(tabname) CASCADE"
 
 
@@ -127,14 +127,14 @@ via: makedirs $(part2_path)
 	@tput bold
 	@echo Extracting ....
 	@tput sgr0
-	cd $(sandbox);  7z e -y  $(part2_path) LOGRADOUROLine.* > /dev/null
+	cd $(sandbox);  7z x -y  $(part2_path) "LOGRADOUROLine.*"  ; chmod -R a+rx . > /dev/null
 	@echo "Conferindo se SRID 31983 esta configurado:"
 	@psql $(pg_uri_db) -c "SELECT srid, proj4text FROM spatial_ref_sys where srid=31983"
 	@echo "Tudo bem até aqui?  [ENTER para continuar ou ^C para rodar WS/ingest-step1]"
 	@read _tudo_bem_
 ifeq ('shp2sql','shp2sql')
 	@echo Executando shp2pgsql ...
-	cd $(sandbox);	shp2pgsql  -W latin1 -s 31983 LOGRADOUROLine.shp $(tabname) | psql -q $(pg_uri_db) 2> /dev/null
+	cd $(sandbox);	shp2pgsql  -W latin1 -s 31983 "LOGRADOUROLine.shp" $(tabname) | psql -q $(pg_uri_db) 2> /dev/null
 endif
 ifeq ('shp2sql','csv2sql')
 	@echo Executando csc2sql ...
@@ -151,7 +151,7 @@ endif
 
 via-clean: tabname = pk$(fullPkID)_p2_via
 via-clean:
-	rm -f $(sandbox)/LOGRADOUROLine.* || true
+	rm -f "$(sandbox)/LOGRADOUROLine.*" || true
 	psql $(pg_uri_db) -c "DROP TABLE IF EXISTS $(tabname) CASCADE"
 
 

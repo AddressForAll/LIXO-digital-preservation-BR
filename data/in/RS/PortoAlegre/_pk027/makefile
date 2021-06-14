@@ -73,14 +73,14 @@ geoaddress: makedirs $(part1_path)
 	@tput bold
 	@echo Extracting ....
 	@tput sgr0
-	cd $(sandbox);  7z e -y  $(part1_path) NRO_IMOVEL.* > /dev/null
+	cd $(sandbox);  7z x -y  $(part1_path) "NRO_IMOVEL.*" ; chmod -R a+rx . > /dev/null
 	@echo "Conferindo se SRID 952013 esta configurado:"
 	@psql $(pg_uri_db) -c "SELECT srid, proj4text FROM spatial_ref_sys where srid=952013"
 	@echo "Tudo bem até aqui?  [ENTER para continuar ou ^C para rodar WS/ingest-step1]"
 	@read _tudo_bem_
 ifeq ('shp2sql','shp2sql')
 	@echo Executando shp2pgsql ...
-	cd $(sandbox);	shp2pgsql   -s 952013 NRO_IMOVEL.shp $(tabname) | psql -q $(pg_uri_db) 2> /dev/null
+	cd $(sandbox);	shp2pgsql   -s 952013 "NRO_IMOVEL.shp" $(tabname) | psql -q $(pg_uri_db) 2> /dev/null
 endif
 ifeq ('shp2sql','csv2sql')
 	@echo Executando csc2sql ...
@@ -95,7 +95,7 @@ endif
 
 geoaddress-clean: tabname = pk$(fullPkID)_p1_geoaddress
 geoaddress-clean:
-	rm -f $(sandbox)/NRO_IMOVEL.* || true
+	rm -f "$(sandbox)/NRO_IMOVEL.*" || true
 	psql $(pg_uri_db) -c "DROP TABLE IF EXISTS $(tabname) CASCADE"
 
 
@@ -121,14 +121,14 @@ nsvia: makedirs $(part2_path)
 	@tput bold
 	@echo Extracting ....
 	@tput sgr0
-	cd $(sandbox);  7z e -y  $(part2_path) Bairros_LC12112_16.* > /dev/null
+	cd $(sandbox);  7z x -y  $(part2_path) "Bairros_LC12112_16.*"  ; chmod -R a+rx . > /dev/null
 	@echo "Conferindo se SRID 952013 esta configurado:"
 	@psql $(pg_uri_db) -c "SELECT srid, proj4text FROM spatial_ref_sys where srid=952013"
 	@echo "Tudo bem até aqui?  [ENTER para continuar ou ^C para rodar WS/ingest-step1]"
 	@read _tudo_bem_
 ifeq ('shp2sql','shp2sql')
 	@echo Executando shp2pgsql ...
-	cd $(sandbox);	shp2pgsql   -s 952013 Bairros_LC12112_16.shp $(tabname) | psql -q $(pg_uri_db) 2> /dev/null
+	cd $(sandbox);	shp2pgsql   -s 952013 "Bairros_LC12112_16.shp" $(tabname) | psql -q $(pg_uri_db) 2> /dev/null
 endif
 ifeq ('shp2sql','csv2sql')
 	@echo Executando csc2sql ...
@@ -151,7 +151,7 @@ endif
 
 nsvia-clean: tabname = pk$(fullPkID)_p2_nsvia
 nsvia-clean:
-	rm -f $(sandbox)/Bairros_LC12112_16.* || true
+	rm -f "$(sandbox)/Bairros_LC12112_16.*" || true
 	psql $(pg_uri_db) -c "DROP TABLE IF EXISTS $(tabname) CASCADE;  DROP VIEW IF EXISTS vw_$(tabname) CASCADE;"
 
 
@@ -177,14 +177,14 @@ via: makedirs $(part3_path)
 	@tput bold
 	@echo Extracting ....
 	@tput sgr0
-	cd $(sandbox);  7z e -y  $(part3_path) EixosLogradouros.* > /dev/null
+	cd $(sandbox);  7z x -y  $(part3_path) "EixosLogradouros.*"  ; chmod -R a+rx . > /dev/null
 	@echo "Conferindo se SRID 952013 esta configurado:"
 	@psql $(pg_uri_db) -c "SELECT srid, proj4text FROM spatial_ref_sys where srid=952013"
 	@echo "Tudo bem até aqui?  [ENTER para continuar ou ^C para rodar WS/ingest-step1]"
 	@read _tudo_bem_
 ifeq ('shp2sql','shp2sql')
 	@echo Executando shp2pgsql ...
-	cd $(sandbox);	shp2pgsql   -s 952013 EixosLogradouros.shp $(tabname) | psql -q $(pg_uri_db) 2> /dev/null
+	cd $(sandbox);	shp2pgsql   -s 952013 "EixosLogradouros.shp" $(tabname) | psql -q $(pg_uri_db) 2> /dev/null
 endif
 ifeq ('shp2sql','csv2sql')
 	@echo Executando csc2sql ...
@@ -203,7 +203,7 @@ endif
 
 via-clean: tabname = pk$(fullPkID)_p3_via
 via-clean:
-	rm -f $(sandbox)/EixosLogradouros.* || true
+	rm -f "$(sandbox)/EixosLogradouros.*" || true
 	psql $(pg_uri_db) -c "DROP TABLE IF EXISTS $(tabname) CASCADE"
 
 

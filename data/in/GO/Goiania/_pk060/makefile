@@ -14,7 +14,7 @@ need_commands= 7z v16+; psql v12+; shp2pgsql v3+;
 srid   =31982
 
 pkid = 60
-fullPkID=60_1
+fullPkID=60_001
 sandbox=$(sandbox_root)/_pk$(fullPkID)
 
 ## USER CONFIGS
@@ -79,14 +79,14 @@ nsvia: makedirs $(part3_path)
 	@tput bold
 	@echo Extracting ....
 	@tput sgr0
-	cd $(sandbox);  7z x -y  $(part3_path) BAI.*  ; chmod -R a+rx . > /dev/null
+	cd $(sandbox);  7z x -y  $(part3_path) "BAI.*"  ; chmod -R a+rx . > /dev/null
 	@echo "Conferindo se SRID 31982 esta configurado:"
 	@psql $(pg_uri_db) -c "SELECT srid, proj4text FROM spatial_ref_sys where srid=31982"
 	@echo "Tudo bem até aqui?  [ENTER para continuar ou ^C para rodar WS/ingest-step1]"
 	@read _tudo_bem_
 ifeq ('shp2sql','shp2sql')
 	@echo Executando shp2pgsql ...
-	cd $(sandbox);	shp2pgsql   -s 31982 BAI.shp $(tabname) | psql -q $(pg_uri_db) 2> /dev/null
+	cd $(sandbox);	shp2pgsql   -s 31982 "BAI.shp" $(tabname) | psql -q $(pg_uri_db) 2> /dev/null
 endif
 ifeq ('shp2sql','csv2sql')
 	@echo Executando csc2sql ...
@@ -101,7 +101,7 @@ endif
 
 nsvia-clean: tabname = pk$(fullPkID)_p3_nsvia
 nsvia-clean:
-	rm -f $(sandbox)/BAI.* || true
+	rm -f "$(sandbox)/BAI.*" || true
 	psql $(pg_uri_db) -c "DROP TABLE IF EXISTS $(tabname) CASCADE;  DROP VIEW IF EXISTS vw_$(tabname) CASCADE;"
 
 
@@ -127,14 +127,14 @@ via: makedirs $(part4_path)
 	@tput bold
 	@echo Extracting ....
 	@tput sgr0
-	cd $(sandbox);  7z x -y  $(part4_path) SEG.*  ; chmod -R a+rx . > /dev/null
+	cd $(sandbox);  7z x -y  $(part4_path) "SEG.*"  ; chmod -R a+rx . > /dev/null
 	@echo "Conferindo se SRID 31982 esta configurado:"
 	@psql $(pg_uri_db) -c "SELECT srid, proj4text FROM spatial_ref_sys where srid=31982"
 	@echo "Tudo bem até aqui?  [ENTER para continuar ou ^C para rodar WS/ingest-step1]"
 	@read _tudo_bem_
 ifeq ('shp2sql','shp2sql')
 	@echo Executando shp2pgsql ...
-	cd $(sandbox);	shp2pgsql   -s 31982 SEG.shp $(tabname) | psql -q $(pg_uri_db) 2> /dev/null
+	cd $(sandbox);	shp2pgsql   -s 31982 "SEG.shp" $(tabname) | psql -q $(pg_uri_db) 2> /dev/null
 endif
 ifeq ('shp2sql','csv2sql')
 	@echo Executando csc2sql ...
@@ -151,7 +151,7 @@ endif
 
 via-clean: tabname = pk$(fullPkID)_p4_via
 via-clean:
-	rm -f $(sandbox)/SEG.* || true
+	rm -f "$(sandbox)/SEG.*" || true
 	psql $(pg_uri_db) -c "DROP TABLE IF EXISTS $(tabname) CASCADE"
 
 
@@ -177,14 +177,14 @@ parcel: makedirs $(part1_path)
 	@tput bold
 	@echo Extracting ....
 	@tput sgr0
-	cd $(sandbox);  7z x -y  $(part1_path) LOT.* ; chmod -R a+rx . > /dev/null
+	cd $(sandbox);  7z x -y  $(part1_path) "LOT.*" ; chmod -R a+rx . > /dev/null
 	@echo "Conferindo se SRID 31982 esta configurado:"
 	@psql $(pg_uri_db) -c "SELECT srid, proj4text FROM spatial_ref_sys where srid=31982"
 	@echo "Tudo bem até aqui?  [ENTER para continuar ou ^C para rodar WS/ingest-step1]"
 	@read _tudo_bem_
 ifeq ('shp2sql','shp2sql')
 	@echo Executando shp2pgsql ...
-	cd $(sandbox);	shp2pgsql   -s 31982 LOT.shp $(tabname) | psql -q $(pg_uri_db) 2> /dev/null
+	cd $(sandbox);	shp2pgsql   -s 31982 "LOT.shp" $(tabname) | psql -q $(pg_uri_db) 2> /dev/null
 endif
 ifeq ('shp2sql','csv2sql')
 	@echo Executando csc2sql ...
@@ -199,7 +199,7 @@ endif
 
 parcel-clean: tabname = pk$(fullPkID)_p1_parcel
 parcel-clean:
-	rm -f $(sandbox)/LOT.* || true
+	rm -f "$(sandbox)/LOT.*" || true
 	psql $(pg_uri_db) -c "DROP TABLE IF EXISTS $(tabname) CASCADE"
 
 
@@ -224,14 +224,14 @@ block: makedirs $(part2_path)
 	@tput bold
 	@echo Extracting ....
 	@tput sgr0
-	cd $(sandbox);  7z x -y  $(part2_path) QDR.* ; chmod -R a+rx . > /dev/null
+	cd $(sandbox);  7z x -y  $(part2_path) "QDR.*" ; chmod -R a+rx . > /dev/null
 	@echo "Conferindo se SRID 31982 esta configurado:"
 	@psql $(pg_uri_db) -c "SELECT srid, proj4text FROM spatial_ref_sys where srid=31982"
 	@echo "Tudo bem até aqui?  [ENTER para continuar ou ^C para rodar WS/ingest-step1]"
 	@read _tudo_bem_
 ifeq ('shp2sql','shp2sql')
 	@echo Executando shp2pgsql ...
-	cd $(sandbox);	shp2pgsql   -s 31982 QDR.shp $(tabname) | psql -q $(pg_uri_db) 2> /dev/null
+	cd $(sandbox);	shp2pgsql   -s 31982 "QDR.shp" $(tabname) | psql -q $(pg_uri_db) 2> /dev/null
 endif
 ifeq ('shp2sql','csv2sql')
 	@echo Executando csc2sql ...
@@ -246,7 +246,7 @@ endif
 
 block-clean: tabname = pk$(fullPkID)_p2_block
 block-clean:
-	rm -f $(sandbox)/QDR.* || true
+	rm -f "$(sandbox)/QDR.*" || true
 	psql $(pg_uri_db) -c "DROP TABLE IF EXISTS $(tabname) CASCADE"
 
 

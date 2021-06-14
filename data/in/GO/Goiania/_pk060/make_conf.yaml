@@ -30,7 +30,7 @@ layers:
         p: 1a
         file: 1
         tabname:  parcel
-        sql_select: ['gid','id', 'nm_lot', 'geom']
+        sql_select: ['gid','id', 'nm_lot', 'id_log', 'geom']
         orig_filename: LOT
   block:
         subtype: none
@@ -55,5 +55,6 @@ layers:
         file: 4
         tabname:  via
         query_view: |-
-               SELECT gid, tp_log || ' ' || nm_log AS via_name, geom FROM $(tabname)
+               SELECT gid, tp_log || ' ' || nm_log AS via_name, id_log, geom FROM $(tabname)
         orig_filename: SEG
+

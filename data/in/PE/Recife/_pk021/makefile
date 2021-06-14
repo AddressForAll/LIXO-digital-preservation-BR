@@ -14,7 +14,7 @@ need_commands= 7z v16+; psql v12+; shp2pgsql v3+;
 srid   =31985
 
 pkid = 21
-fullPkID=21_1
+fullPkID=21_001
 sandbox=$(sandbox_root)/_pk$(fullPkID)
 
 ## USER CONFIGS
