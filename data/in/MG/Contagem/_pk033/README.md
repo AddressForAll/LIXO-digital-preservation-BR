@@ -1,7 +1,7 @@
 # Sobre
 O material foi fornecido no formato GDB (Geodatabase) e não funciona como arquivos shapefile. É um conjunto de databases onde os dados e geometrias são distribuídos em vários arquivos.
 
-Ver [Extração: Antes de tudo](#Antes de tudo) para instalação.
+Ver [Extração: Antes de tudo](#antes-de-tudo) para instalação.
 
 # Extração
 Abaixo os passos para extração por tipo de dado relevante.
