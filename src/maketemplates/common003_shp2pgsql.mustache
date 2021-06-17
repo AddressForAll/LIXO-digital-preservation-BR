@@ -12,3 +12,10 @@ ifeq ('{{method}}','csv2sql')
 	@echo Executando csc2sql ...
 	psql $(pg_uri_db) -c "SELECT ingest.fdw_generate_direct_csv( '$(sandbox)/{{orig_filename}}.csv', '$(tabname)' )"
 endif
+ifeq ('{{method}}','gdb')
+	@echo Executando shp2pgsql ...
+        mkdir -p $(sandbox)/shp
+        docker run --rm --network host -v $(sandbox):$(sandbox) osgeo/gdal \
+	ogr2ogr -f "ESRI Shapefile" $(sandbox)/shp /tmp/carlos/OpenStreetMap.gdb
+	cd $(sandbox);	shp2pgsql  {{{method_opts}}} -s {{srid}} "{{orig_filename}}.shp" $(tabname) | psql -q $(pg_uri_db) 2> /dev/null
+endif
