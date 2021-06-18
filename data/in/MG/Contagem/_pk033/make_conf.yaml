@@ -1,55 +1,62 @@
 pkid:      33
 pkversion: "001"
-schemaId_input:    ref027a  # ID do JSON-schema de input, ref no preimeiro template a usar este padrão de input.
-schemaId_template: ref027a  # ID do makefile.mustache, ref no preimeiro package a usar o template.
-thisTplFile_root: digital-preservation-BR
-need_commands:    7z psql shp2pgsql
+schemaId_input:    ref033a 
+schemaId_template: ref033a
 files:
   -
     p:    1
     file: 058a6022054e8b3f9ba81f25f7511b58cbd4ad616b0510033b917f3f7f9f23d5.rar
     name: GDB Geodatabase 
-  -
 
-parts:
+layers:
   nsvia:
         subtype: full
+        method: ogr2ogr
         p: 1a   
         file: 1
         tabname:  nsvia
         sql_select: ['gid','Teste2_P_1 AS namespace_name','geom']
-        orig_filename: OpenStreetMap.gdb/Bairros
+        orig_filename: OpenStreetMap.gdb
+        orig_tabname: Bairros
         srid: 3857
   via:
         subtype: full
         p: 1b
         file: 1
         tabname:  via
-        sql_select:  ['gid', "TIPO_LOGRA || ' ' || NOME_LOGRA AS via_name", 'geom']
-        orig_filename: OpenStreetMap.gdb/Logradouros
+        #sql_select:  ['gid', "TIPO_LOGRA || ' ' || NOME_LOGRA AS via_name", 'geom']
+        sql_select:  ['gid', 'TIPO_LOGRA', 'geom']
+        orig_filename: OpenStreetMap.gdb
+        orig_tabname: Logradouros
         srid: 31983
   geoaddress:
         subtype: full
+        method: ogr2ogr
         p: 1c
         file: 1
-        orig_filename: OpenStreetMap.gdb/Endereco
-        tabname:  via
-        sql_select:  ['gid', 'Nome_logra AS via_name', 'Num_imovel AS house_number', 'geom']
-        srid_local: 31983
+        orig_filename: OpenStreetMap.gdb
+        tabname:  geoaddress
+        orig_tabname: Endereco
+        sql_select:  ['objectid AS gid', 'ident_logr', 'nome_logra AS via_name', 'num_imovel AS house_number', 'shape AS geom']
+        srid: 31983
   parcel:
         subtype: ext # Ver Pontos de endereço.
+        method: ogr2ogr
         p: 1d
         file: 1
         tabname:  parcel
         sql_select:  ['gid', 'BAIRRO AS namespace_name', 'geom']
-        orig_filename: OpenStreetMap.gdb/Lotes
-        srid_local: 31983
+        orig_filename: OpenStreetMap.gdb
+        orig_tabname: Lotes
+        srid: 31983
 # Não importei praça - Carlos 23/05/2021
   genericvia:
         subtype: full
+        method: ogr2ogr
         p: 1d
         file: 1
-        orig_filename: OpenStreetMap.gdb/Quadras
+        orig_filename: OpenStreetMap.gdb
+        orig_tabname: Quadras
         tabname:  genericvia
         sql_select:  ['gid', 'QUADRA AS genericvia_number', 'geom']
         srid_local: 31983

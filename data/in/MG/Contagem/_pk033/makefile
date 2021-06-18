@@ -1,217 +1,283 @@
+##
+## Template file reference: digital-preservation-BR/data/in/MG/Contagem/_pk033
+## tplId: 033a
+##
+tplInputSchema_id=033a
 
-# PWD:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
+
+## BASIC CONFIG
 pg_io  =/tmp/pg_io
-ori    =/var/www/preserv.addressforall.org/download
-pg_uri ="postgres://postgres@localhost/ingest1"
+orig   =/var/www/preserv.addressforall.org/download
+pg_uri =postgres://postgres@localhost
+sandbox_root=/tmp/sandbox
+need_commands= 7z v16+; ogr2ogr v3+ ; 
+srid   =
 
-OSM_ZIP         =$(ori)/058a6022054e8b3f9ba81f25f7511b58cbd4ad616b0510033b917f3f7f9f23d5.rar
-OSM_GDB         =OpenStreetMap.gdb
-OSM_SHD         =OpenStreetMap
+pkid = 33
+fullPkID=33_001
+sandbox=$(sandbox_root)/_pk$(fullPkID)
 
-BAIRROS         =Bairros
-BAIRROS_SQL     =bairros
-BAIRROS_INGEST  =ingest.pk033_bairros
+## USER CONFIGS
+pg_db  =ingest1
+thisTplFile_root = digital-preservation-BR
 
-ENDERECO        =Endereco
-ENDERECO_SQL    =endereco
-ENDERECO_INGEST =ingest.pk033_endereco
+## ## ## ## ## ## ##
+## THIS_MAKE, _pk33
 
-EIXOS           =Logradouros
-EIXOS_SQL       =eixos
-EIXOS_INGEST    =ingest.pk033_eixos
+part1_file  =058a6022054e8b3f9ba81f25f7511b58cbd4ad616b0510033b917f3f7f9f23d5.rar
+part1_name  =GDB Geodatabase
 
-LOTES           =Lotes
-LOTES_SQL       =lotes
-LOTES_INGEST    =ingest.pk033_lotes
-
-PRACAS          =Pracas
-PRACAS_SQL      =pracas
-PRACAS_INGEST   =ingest.pk033_pracas
-
-QUADRAS         =Quadras
-QUADRAS_SQL     =quadras
-QUADRAS_INGEST  =ingest.pk033_quadras
+## COMPOSED VARS
+pg_uri_db   =$(pg_uri)/$(pg_db)
+part1_path  =$(orig)/$(part1_file)
 
 all:
-	@echo Favor consultar as opcoes de target
+	@echo "=== Resumo deste makefile de recuperação de dados preservados ==="
+	@printf "Targets para a geração de layers:\n\tall_layers nsvia via geoaddress parcel genericvia \n"
+	@printf "Demais targets implementados:\n\tclean wget_files me\n"
+	@echo "A gereação de layers requer os seguintes comandos e versões:\n\t$(need_commands)"
 
-etl_toPgis_bairros:
-# ETL extrating to PostgreSQL/PostGIS the "bairros" datatype (point and house number)
-	@echo "Creating table $(BAIRROS_INGEST) on PostGIS"
-	@whoami
+all_layers: nsvia via geoaddress parcel genericvia 
+	@echo "--ALL LAYERS--"
+
+## ## ## ## ## ## ## ## ##
+## ## ## ## ## ## ## ## ##
+## Make targets of the Project Digital Preservation
+
+## ## ## ## sponsored by Project AddressForAll
+geoaddress: layername = geoaddress_full
+geoaddress: tabname = pk$(fullPkID)_p1_geoaddress
+geoaddress: makedirs $(part1_path)
+	@# pk33_p1 - ETL extrating to PostgreSQL/PostGIS the "geoaddress" datatype (point with house_number but no via name)
+	@echo
+	@echo "------------------------------------------"
+	@echo "------ Layer tipo $(layername)  ------"
+	@echo "-- Incluindo dados do arquivo-1 do package-$(fullPkID) na base $(pg_db) --"
+	@echo " Nome-hash do arquivo-1: $(part1_file)"
+	@echo " Tabela do layer geoaddress sem nome de rua, só com numero predial: $(tabname)"
+	@echo " Sub-arquivos do arquivo-1 com o conteúdo alvo: OpenStreetMap.gdb.*"
+	@echo " Tema dos sub-arquivos: $(part1_name)"
 	@echo "Run with tmux and sudo! (DANGER: seems not idempotent on psql)"
-	mkdir -p $(pg_io)
-	psql $(pg_uri) -c "drop table if exists $(BAIRROS_SQL) cascade; drop table if exists $(BAIRROS_INGEST) cascade;"
+	@whoami
+	@printf "Above user is root? If not, you have permissions for all paths?\n [press ENTER for yes else ^C]"
+	@read _press_enter_
+	psql $(pg_uri_db) -c "DROP TABLE IF EXISTS $(tabname) CASCADE"
 	@tput bold
-	@echo Extraindo ....
+	@echo Extracting ....
 	@tput sgr0
-	cd $(pg_io) ; 7z x -y  $(OSM_ZIP) > /dev/null
-	psql $(pg_uri) -P pager=off -c "SELECT srid, proj4text FROM spatial_ref_sys where srid=3857" 
-	@echo Executando ogr2ogr ...
-	@( cd $(pg_io) ; \
-		docker run --rm --network host -v /tmp:/tmp osgeo/gdal \
-		ogr2ogr -f "ESRI Shapefile" $(pg_io)/OpenStreetMap $(pg_io)/OpenStreetMap.gdb )
-	@echo Executando shp2pgsql ...
-	@( cd $(pg_io)/OpenStreetMap ; shp2pgsql -s 3857 $(BAIRROS).shp  $(BAIRROS_SQL) | psql -q $(pg_uri) 2> /dev/null  )
-	@echo "Conferira se bate o perfil:   269 | 54029716.59 | 4872.61 | 812944.06 | 250734.99 "
-	psql $(pg_uri) -c "SELECT count(*) n, round(max(a),2) a_max, round(min(a),2) a_min, round(avg(a),2) a_avg, round(percentile_disc(0.5) WITHIN GROUP ( ORDER BY a),2) a_median FROM ( select  st_area(geom) a from $(BAIRROS_SQL) ) t"
-	@echo "Conferindo se SRID esta configurado:"
-	@echo "SRID = 3857"
-	psql $(pg_uri) -c "SELECT Find_SRID('public', '$(BAIRROS_SQL)', 'geom')"
-	psql $(pg_uri) -c "CREATE TABLE $(BAIRROS_INGEST) AS select * FROM $(BAIRROS_SQL)"
-	@echo Limpando...
-	rm -rf $(pg_io)/$(OSM_SHD)
-	rm -rf $(pg_io)/$(OSM_GDB)
-	psql $(pg_uri) -c "drop table if exists $(BAIRROS_SQL) cascade;" 
+	cd $(sandbox);  7z x -y  $(part1_path) "OpenStreetMap.gdb" ; chmod -R a+rx . > /dev/null
+	docker run --rm --network host -v $(sandbox):/tmp osgeo/gdal ogr2ogr -overwrite -f "PostgreSQL" PG:" dbname='$(pg_db)' host='localhost' port='5432' user='postgres'     " /tmp/OpenStreetMap.gdb Endereco -nln $(tabname)
+	psql $(pg_uri_db) -c "SELECT ingest.any_load('ogr2ogr','$(sandbox)/OpenStreetMap.gdb','$(layername)','$(tabname)','$(fullPkID)','$(part1_file)',array['objectid AS gid', 'ident_logr', 'nome_logra AS via_name', 'num_imovel AS house_number', 'shape AS geom'])"
+	@echo "Confira os resultados nas tabelas ingest.layer_file e ingest.feature_asis".
+ifeq ('ogr2ogr','csv2sql')
+	psql $(pg_uri_db) -c "DROP FOREIGN TABLE IF EXISTS $(tabname)"
+endif
 	@echo FIM.
 
-etl_toPgis_endereco:
-# ETL extrating to PostgreSQL/PostGIS the "endereco" datatype (point and house number)
-	@echo "Creating table $(ENDERECO_INGEST) on PostGIS"
-	@whoami
+geoaddress-clean: tabname = pk$(fullPkID)_p1_geoaddress
+geoaddress-clean:
+	rm -f "$(sandbox)/OpenStreetMap.gdb.*" || true
+	psql $(pg_uri_db) -c "DROP TABLE IF EXISTS $(tabname) CASCADE"
+
+
+
+## ## ## ## sponsored by Project AddressForAll
+nsvia: layername = nsvia_full
+nsvia: tabname = pk$(fullPkID)_p1_nsvia
+nsvia: makedirs $(part1_path)
+	@# pk33_p1 - ETL extrating to PostgreSQL/PostGIS the "nsvia" datatype (zone with name)
+	@echo
+	@echo "------------------------------------------"
+	@echo "------ Layer tipo $(layername)  ------"
+	@echo "-- Incluindo dados do arquivo-1 do package-$(fullPkID) na base $(pg_db) --"
+	@echo " Nome-hash do arquivo-1: $(part1_file)"
+	@echo " Tabela do layer geoaddress sem nome de rua, só com numero predial: $(tabname)"
+	@echo " Sub-arquivos do arquivo-1 com o conteúdo alvo: OpenStreetMap.gdb.*"
+	@echo " Tema dos sub-arquivos: $(part1_name)"
 	@echo "Run with tmux and sudo! (DANGER: seems not idempotent on psql)"
-	mkdir -p $(pg_io)
-	psql $(pg_uri) -c "drop table if exists $(ENDERECO_SQL) cascade; drop table if exists $(ENDERECO_INGEST) cascade;"
+	@whoami
+	@printf "Above user is root? If not, you have permissions for all paths?\n [press ENTER for yes else ^C]"
+	@read _press_enter_
+	psql $(pg_uri_db) -c "DROP TABLE IF EXISTS $(tabname) CASCADE"
 	@tput bold
-	@echo Extraindo ....
+	@echo Extracting ....
 	@tput sgr0
-	cd $(pg_io) ; 7z x -y  $(OSM_ZIP) > /dev/null
-	psql $(pg_uri) -P pager=off -c "SELECT srid, proj4text FROM spatial_ref_sys where srid=3857" 
-	@echo Executando ogr2ogr ...
-	@( cd $(pg_io) ; \
-		docker run --rm --network host -v /tmp:/tmp osgeo/gdal \
-		ogr2ogr -f "ESRI Shapefile" $(pg_io)/OpenStreetMap $(pg_io)/OpenStreetMap.gdb )
-	@echo Executando shp2pgsql ...
-	@( cd $(pg_io)/OpenStreetMap ; shp2pgsql -s 3857 $(ENDERECO).shp  $(ENDERECO_SQL) | psql -q $(pg_uri) 2> /dev/null  )
-	@echo "Conferira se bate o perfil:    103847 |  0.00 |  0.00 |  0.00 |     0.00  "
-	psql $(pg_uri) -c "SELECT count(*) n, round(max(a),2) a_max, round(min(a),2) a_min, round(avg(a),2) a_avg, round(percentile_disc(0.5) WITHIN GROUP ( ORDER BY a),2) a_median FROM ( select  st_area(geom) a from $(ENDERECO_SQL) ) t"
-	@echo "Conferindo se SRID esta configurado:"
-	@echo "SRID = 3857"
-	psql $(pg_uri) -c "SELECT Find_SRID('public', '$(ENDERECO_SQL)', 'geom')"
-	psql $(pg_uri) -c "CREATE TABLE $(ENDERECO_INGEST) AS select * FROM $(ENDERECO_SQL)"
-	@echo Limpando...
-	rm -rf $(pg_io)/$(OSM_SHD)
-	rm -rf $(pg_io)/$(OSM_GDB)
-	psql $(pg_uri) -c "drop table if exists $(ENDERECO_SQL) cascade;" 
+	cd $(sandbox);  7z x -y  $(part1_path) "OpenStreetMap.gdb" ; chmod -R a+rx . > /dev/null
+	docker run --rm --network host -v $(sandbox):/tmp osgeo/gdal ogr2ogr -overwrite -f "PostgreSQL" PG:" dbname='$(pg_db)' host='localhost' port='5432' user='postgres'     " /tmp/OpenStreetMap.gdb Bairros -nln $(tabname)
+	psql $(pg_uri_db) -c "SELECT ingest.any_load('ogr2ogr','$(sandbox)/OpenStreetMap.gdb','$(layername)','$(tabname)','$(fullPkID)','$(part1_file)',array['gid', 'Teste2_P_1 AS namespace_name', 'geom'])"
+	@echo "Confira os resultados nas tabelas ingest.layer_file e ingest.feature_asis".
+ifeq ('ogr2ogr','csv2sql')
+	psql $(pg_uri_db) -c "DROP FOREIGN TABLE IF EXISTS $(tabname)"
+endif
 	@echo FIM.
 
-etl_toPgis_eixos:
-# ETL extrating to PostgreSQL/PostGIS the "eixos" datatype (point and house number)
-	@echo "Creating table $(EIXOS_INGEST) on PostGIS"
-	@whoami
+nsvia-clean: tabname = pk$(fullPkID)_p1_nsvia
+nsvia-clean:
+	rm -f "$(sandbox)/OpenStreetMap.gdb.*" || true
+	psql $(pg_uri_db) -c "DROP TABLE IF EXISTS $(tabname) CASCADE;  DROP VIEW IF EXISTS vw_$(tabname) CASCADE;"
+
+
+
+## ## ## ## sponsored by Project AddressForAll
+via: layername = via_full
+via: tabname = pk$(fullPkID)_p1_via
+via: makedirs $(part1_path)
+	@# pk33_p1 - ETL extrating to PostgreSQL/PostGIS the "via" datatype (street axes)
+	@echo
+	@echo "------------------------------------------"
+	@echo "------ Layer tipo $(layername)  ------"
+	@echo "-- Incluindo dados do arquivo-1 do package-$(fullPkID) na base $(pg_db) --"
+	@echo " Nome-hash do arquivo-1: $(part1_file)"
+	@echo " Tabela do layer geoaddress sem nome de rua, só com numero predial: $(tabname)"
+	@echo " Sub-arquivos do arquivo-1 com o conteúdo alvo: OpenStreetMap.gdb.*"
+	@echo " Tema dos sub-arquivos: $(part1_name)"
 	@echo "Run with tmux and sudo! (DANGER: seems not idempotent on psql)"
-	mkdir -p $(pg_io)
-	psql $(pg_uri) -c "drop table if exists $(EIXOS_SQL) cascade; drop table if exists $(EIXOS_INGEST) cascade;"
+	@whoami
+	@printf "Above user is root? If not, you have permissions for all paths?\n [press ENTER for yes else ^C]"
+	@read _press_enter_
+	psql $(pg_uri_db) -c "DROP TABLE IF EXISTS $(tabname) CASCADE"
 	@tput bold
-	@echo Extraindo ....
+	@echo Extracting ....
 	@tput sgr0
-	cd $(pg_io) ; 7z x -y  $(OSM_ZIP) > /dev/null
-	psql $(pg_uri) -P pager=off -c "SELECT srid, proj4text FROM spatial_ref_sys where srid=3857" 
-	@echo Executando ogr2ogr ...
-	@( cd $(pg_io) ; \
-		docker run --rm --network host -v /tmp:/tmp osgeo/gdal \
-		ogr2ogr -f "ESRI Shapefile" $(pg_io)/OpenStreetMap $(pg_io)/OpenStreetMap.gdb )
-	@echo Executando shp2pgsql ...
-	@( cd $(pg_io)/OpenStreetMap ; shp2pgsql -s 3857 $(EIXOS).shp  $(EIXOS_SQL) | psql -q $(pg_uri) 2> /dev/null  )
-	@echo "Conferira se bate o perfil: 16025 |  0.00 |  0.00 |  0.00 |     0.00  "
-	psql $(pg_uri) -c "SELECT count(*) n, round(max(a),2) a_max, round(min(a),2) a_min, round(avg(a),2) a_avg, round(percentile_disc(0.5) WITHIN GROUP ( ORDER BY a),2) a_median FROM ( select  st_area(geom) a from $(EIXOS_SQL) ) t"
-	@echo "Conferindo se SRID esta configurado:"
-	@echo "SRID = 3857"
-	psql $(pg_uri) -c "SELECT Find_SRID('public', '$(EIXOS_SQL)', 'geom')"
-	psql $(pg_uri) -c "CREATE TABLE $(EIXOS_INGEST) AS select * FROM $(EIXOS_SQL)"
-	@echo Limpando...
-	rm -rf $(pg_io)/$(OSM_SHD)
-	rm -rf $(pg_io)/$(OSM_GDB)
-	psql $(pg_uri) -c "drop table if exists $(EIXOS_SQL) cascade;" 
+	cd $(sandbox);  7z x -y  $(part1_path) "OpenStreetMap.gdb"  ; chmod -R a+rx . > /dev/null
+	docker run --rm --network host -v $(sandbox):/tmp osgeo/gdal ogr2ogr -overwrite -f "PostgreSQL" PG:" dbname='$(pg_db)' host='localhost' port='5432' user='postgres'     " /tmp/OpenStreetMap.gdb Logradouros -nln $(tabname)
+	psql $(pg_uri_db) -c "SELECT ingest.any_load('','$(sandbox)/OpenStreetMap.gdb','$(layername)','$(tabname)','$(fullPkID)','$(part1_file)',array['gid', 'TIPO_LOGRA', 'geom'])"
+	@echo "Confira os resultados nas tabelas ingest.layer_file e ingest.feature_asis".
+ifeq ('','csv2sql')
+	psql $(pg_uri_db) -c "DROP FOREIGN TABLE IF EXISTS $(tabname)"
+endif
 	@echo FIM.
 
-etl_toPgis_lotes:
-# ETL extrating to PostgreSQL/PostGIS the "lotes" datatype (point and house number)
-	@echo "Creating table $(LOTES_INGEST) on PostGIS"
-	@whoami
+via-clean: tabname = pk$(fullPkID)_p1_via
+via-clean:
+	rm -f "$(sandbox)/OpenStreetMap.gdb.*" || true
+	psql $(pg_uri_db) -c "DROP TABLE IF EXISTS $(tabname) CASCADE"
+
+
+
+## ## ## ## sponsored by Project AddressForAll
+parcel: layername = parcel_ext
+parcel: tabname = pk$(fullPkID)_p1_parcel
+parcel: makedirs $(part1_path)
+	@# pk33_p1 - ETL extrating to PostgreSQL/PostGIS the "parcel" datatype (street axes)
+	@echo
+	@echo "------------------------------------------"
+	@echo "------ Layer tipo $(layername)  ------"
+	@echo "-- Incluindo dados do arquivo-1 do package-$(fullPkID) na base $(pg_db) --"
+	@echo " Nome-hash do arquivo-1: $(part1_file)"
+	@echo " Tabela do layer geoaddress sem nome de rua, só com numero predial: $(tabname)"
+	@echo " Sub-arquivos do arquivo-1 com o conteúdo alvo: OpenStreetMap.gdb.*"
+	@echo " Tema dos sub-arquivos: $(part1_name)"
 	@echo "Run with tmux and sudo! (DANGER: seems not idempotent on psql)"
-	mkdir -p $(pg_io)
-	psql $(pg_uri) -c "drop table if exists $(LOTES_SQL) cascade; drop table if exists $(LOTES_INGEST) cascade;"
+	@whoami
+	@printf "Above user is root? If not, you have permissions for all paths?\n [press ENTER for yes else ^C]"
+	@read _press_enter_
+	psql $(pg_uri_db) -c "DROP TABLE IF EXISTS $(tabname) CASCADE"
 	@tput bold
-	@echo Extraindo ....
+	@echo Extracting ....
 	@tput sgr0
-	cd $(pg_io) ; 7z x -y  $(OSM_ZIP) > /dev/null
-	psql $(pg_uri) -P pager=off -c "SELECT srid, proj4text FROM spatial_ref_sys where srid=3857" 
-	@echo Executando ogr2ogr ...
-	@( cd $(pg_io) ; \
-		docker run --rm --network host -v /tmp:/tmp osgeo/gdal \
-		ogr2ogr -f "ESRI Shapefile" $(pg_io)/OpenStreetMap $(pg_io)/OpenStreetMap.gdb )
-	@echo Executando shp2pgsql ...
-	@( cd $(pg_io)/OpenStreetMap ; shp2pgsql -s 3857 $(LOTES).shp  $(LOTES_SQL) | psql -q $(pg_uri) 2> /dev/null  )
-	@echo "Conferira se bate o perfil:231172 | 1103045.46 |  0.01 | 824.95 |   362.02  "
-	psql $(pg_uri) -c "SELECT count(*) n, round(max(a),2) a_max, round(min(a),2) a_min, round(avg(a),2) a_avg, round(percentile_disc(0.5) WITHIN GROUP ( ORDER BY a),2) a_median FROM ( select  st_area(geom) a from $(LOTES_SQL) ) t"
-	@echo "Conferindo se SRID esta configurado:"
-	@echo "SRID = 3857"
-	psql $(pg_uri) -c "SELECT Find_SRID('public', '$(LOTES_SQL)', 'geom')"
-	psql $(pg_uri) -c "CREATE TABLE $(LOTES_INGEST) AS select * FROM $(LOTES_SQL)"
-	@echo Limpando...
-	rm -rf $(pg_io)/$(OSM_SHD)
-	rm -rf $(pg_io)/$(OSM_GDB)
-	psql $(pg_uri) -c "drop table if exists $(LOTES_SQL) cascade;" 
+	cd $(sandbox);  7z x -y  $(part1_path) "OpenStreetMap.gdb" ; chmod -R a+rx . > /dev/null
+	docker run --rm --network host -v $(sandbox):/tmp osgeo/gdal ogr2ogr -overwrite -f "PostgreSQL" PG:" dbname='$(pg_db)' host='localhost' port='5432' user='postgres'     " /tmp/OpenStreetMap.gdb Lotes -nln $(tabname)
+	psql $(pg_uri_db) -c "SELECT ingest.any_load('ogr2ogr','$(sandbox)/OpenStreetMap.gdb','$(layername)','$(tabname)','$(fullPkID)','$(part1_file)',array['gid', 'BAIRRO AS namespace_name', 'geom'])"
+	@echo "Confira os resultados nas tabelas ingest.layer_file e ingest.feature_asis".
+ifeq ('ogr2ogr','csv2sql')
+	psql $(pg_uri_db) -c "DROP FOREIGN TABLE IF EXISTS $(tabname)"
+endif
 	@echo FIM.
 
-etl_toPgis_pracas:
-# ETL extrating to PostgreSQL/PostGIS the "pracas" datatype (point and house number)
-	@echo "Creating table $(PRACAS_INGEST) on PostGIS"
-	@whoami
+parcel-clean: tabname = pk$(fullPkID)_p1_parcel
+parcel-clean:
+	rm -f "$(sandbox)/OpenStreetMap.gdb.*" || true
+	psql $(pg_uri_db) -c "DROP TABLE IF EXISTS $(tabname) CASCADE"
+
+
+
+## ## ## ## sponsored by Project AddressForAll
+genericvia: layername = genericvia_full
+genericvia: tabname = pk$(fullPkID)_p1_genericvia
+genericvia: makedirs $(part1_path)
+	@# pk33_p1 - ETL extrating to PostgreSQL/PostGIS the "genericvia" datatype (lots and blocks)
+	@echo
+	@echo "------------------------------------------"
+	@echo "------ Layer tipo $(layername)  ------"
+	@echo "-- Incluindo dados do arquivo-1 do package-$(fullPkID) na base $(pg_db) --"
+	@echo " Nome-hash do arquivo-1: $(part1_file)"
+	@echo " Tabela do layer geoaddress sem nome de rua, só com numero predial: $(tabname)"
+	@echo " Sub-arquivos do arquivo-1 com o conteúdo alvo: OpenStreetMap.gdb.*"
+	@echo " Tema dos sub-arquivos: $(part1_name)"
 	@echo "Run with tmux and sudo! (DANGER: seems not idempotent on psql)"
-	mkdir -p $(pg_io)
-	psql $(pg_uri) -c "drop table if exists $(PRACAS_SQL) cascade; drop table if exists $(PRACAS_INGEST) cascade;"
+	@whoami
+	@printf "Above user is root? If not, you have permissions for all paths?\n [press ENTER for yes else ^C]"
+	@read _press_enter_
+	psql $(pg_uri_db) -c "DROP TABLE IF EXISTS $(tabname) CASCADE"
 	@tput bold
-	@echo Extraindo ....
+	@echo Extracting ....
 	@tput sgr0
-	cd $(pg_io) ; 7z x -y  $(OSM_ZIP) > /dev/null
-	psql $(pg_uri) -P pager=off -c "SELECT srid, proj4text FROM spatial_ref_sys where srid=3857" 
-	@echo Executando ogr2ogr ...
-	@( cd $(pg_io) ; \
-		docker run --rm --network host -v /tmp:/tmp osgeo/gdal \
-		ogr2ogr -f "ESRI Shapefile" $(pg_io)/OpenStreetMap $(pg_io)/OpenStreetMap.gdb )
-	@echo Executando shp2pgsql ...
-	@( cd $(pg_io)/OpenStreetMap ; shp2pgsql  -W ISO-8859-1 -s 3857 $(PRACAS).shp  $(PRACAS_SQL) | psql -q $(pg_uri) 2> /dev/null  )
-	@echo "Conferira se bate o perfil: 309 | 155648.68 |  4.40 | 2850.72 |   441.30  "
-	psql $(pg_uri) -c "SELECT count(*) n, round(max(a),2) a_max, round(min(a),2) a_min, round(avg(a),2) a_avg, round(percentile_disc(0.5) WITHIN GROUP ( ORDER BY a),2) a_median FROM ( select  st_area(geom) a from $(PRACAS_SQL) ) t"
-	@echo "Conferindo se SRID esta configurado:"
-	@echo "SRID = 3857"
-	psql $(pg_uri) -c "SELECT Find_SRID('public', '$(PRACAS_SQL)', 'geom')"
-	psql $(pg_uri) -c "CREATE TABLE $(PRACAS_INGEST) AS select * FROM $(PRACAS_SQL)"
-	@echo Limpando...
-	rm -rf $(pg_io)/$(OSM_SHD)
-	rm -rf $(pg_io)/$(OSM_GDB)
-	psql $(pg_uri) -c "drop table if exists $(PRACAS_SQL) cascade;" 
+	cd $(sandbox);  7z x -y  $(part1_path) "OpenStreetMap.gdb" ; chmod -R a+rx . > /dev/null
+	docker run --rm --network host -v $(sandbox):/tmp osgeo/gdal ogr2ogr -overwrite -f "PostgreSQL" PG:" dbname='$(pg_db)' host='localhost' port='5432' user='postgres'     " /tmp/OpenStreetMap.gdb Quadras -nln $(tabname)
+	psql $(pg_uri_db) -c "SELECT ingest.any_load('ogr2ogr','$(sandbox)/OpenStreetMap.gdb','$(layername)','$(tabname)','$(fullPkID)','$(part1_file)',array['gid', 'QUADRA AS genericvia_number', 'geom'])"
+	@echo "Confira os resultados nas tabelas ingest.layer_file e ingest.feature_asis".
+ifeq ('ogr2ogr','csv2sql')
+	psql $(pg_uri_db) -c "DROP FOREIGN TABLE IF EXISTS $(tabname)"
+endif
 	@echo FIM.
 
-etl_toPgis_quadras:
-# ETL extrating to PostgreSQL/PostGIS the "quadras" datatype (point and house number)
-	@echo "Creating table $(QUADRAS_INGEST) on PostGIS"
-	@whoami
-	@echo "Run with tmux and sudo! (DANGER: seems not idempotent on psql)"
-	mkdir -p $(pg_io)
-	psql $(pg_uri) -c "drop table if exists $(QUADRAS_SQL) cascade; drop table if exists $(QUADRAS_INGEST) cascade;"
-	@tput bold
-	@echo Extraindo ....
-	@tput sgr0
-	cd $(pg_io) ; 7z x -y  $(OSM_ZIP) > /dev/null
-	psql $(pg_uri) -P pager=off -c "SELECT srid, proj4text FROM spatial_ref_sys where srid=3857" 
-	@echo Executando ogr2ogr ...
-	@( cd $(pg_io) ; \
-		docker run --rm --network host -v /tmp:/tmp osgeo/gdal \
-		ogr2ogr -f "ESRI Shapefile" $(pg_io)/OpenStreetMap $(pg_io)/OpenStreetMap.gdb )
-	@echo Executando shp2pgsql ...
-	@( cd $(pg_io)/OpenStreetMap ; shp2pgsql  -s 3857 $(QUADRAS).shp  $(QUADRAS_SQL) | psql -q $(pg_uri) 2> /dev/null  )
-	@echo "Conferira se bate o perfil: 5953 | 2360799.58 | 41.06 | 16017.66 |  8639.12  "
-	psql $(pg_uri) -c "SELECT count(*) n, round(max(a),2) a_max, round(min(a),2) a_min, round(avg(a),2) a_avg, round(percentile_disc(0.5) WITHIN GROUP ( ORDER BY a),2) a_median FROM ( select  st_area(geom) a from $(QUADRAS_SQL) ) t"
-	@echo "Conferindo se SRID esta configurado:"
-	@echo "SRID = 3857"
-	psql $(pg_uri) -c "SELECT Find_SRID('public', '$(QUADRAS_SQL)', 'geom')"
-	psql $(pg_uri) -c "CREATE TABLE $(QUADRAS_INGEST) AS select * FROM $(QUADRAS_SQL)"
-	@echo Limpando...
-	rm -rf $(pg_io)/$(OSM_SHD)
-	rm -rf $(pg_io)/$(OSM_GDB)
-	psql $(pg_uri) -c "drop table if exists $(QUADRAS_SQL) cascade;" 
-	@echo FIM.
+genericvia-clean: tabname = pk$(fullPkID)_p1_genericvia
+genericvia-clean:
+	rm -f "$(sandbox)/OpenStreetMap.gdb.*" || true
+	psql $(pg_uri_db) -c "DROP TABLE IF EXISTS $(tabname) CASCADE"
+
+
+## ## ## ## ## ## ## ## ##
+## ## ## ## ## ## ## ## ##
+
+makedirs: clean_sandbox
+	@mkdir -p $(sandbox_root)
+	@mkdir -p $(sandbox)
+	@mkdir -p $(pg_io)
+
+wget_files:
+	@echo "Under construction, need to check that orig path is not /var/www! or use orig=x [ENTER if not else ^C]"
+	@echo $(orig)
+	@read _ENTER_OK_
+	mkdir -p $(orig)
+	@cd $(orig); wget http://preserv.addressforall.org/download/058a6022054e8b3f9ba81f25f7511b58cbd4ad616b0510033b917f3f7f9f23d5.rar
+	@echo "Please, if orig not default, run 'make _target_ orig=$(orig)'"
+
+
+## ## ## ##
+
+clean_sandbox:
+	@rm -rf $(sandbox) || true
+
+clean: geoaddress-clean nsvia-clean via-clean
+
+
+## ############################
+## SELF-GENERATE MAKE (make me)
+##
+
+thisTplFile  = digital-preservation-BR/src/maketemplates/make_ref033a.mustache.mk
+country      = BR
+baseSrc      = /opt/gits/_a4a
+
+srcPy        =  $(baseSrc)/digital-preservation/src/run_mustache.py
+mkme_input0  =  $(baseSrc)/digital-preservation-$(country)/src/maketemplates/commomFirst.yaml
+mkme_srcTplLast  =  $(baseSrc)/digital-preservation-$(country)/src/maketemplates/commomLast.mustache.mk
+mkme_srcTpl  =  $(baseSrc)/$(thisTplFile)
+mkme_input   = ./make_conf.yaml
+mkme_output  = /tmp/digitalPresservation-make_me.mk
+
+
+me: $(srcPy) $(mkme_input0) $(mkme_input) $(mkme_srcTpl)
+	@echo "-- Updating this make --"
+	python3 $(srcPy) -b $(baseSrc)/ -t $(mkme_srcTpl) --tplLast=$(mkme_srcTplLast) -i $(mkme_input) --input0=$(mkme_input0) > $(mkme_output)
+	@echo " Check diff, the '<' lines are the new ones... Something changed?"
+	@diff $(mkme_output) ./makefile || :
+	@echo "If some changes, and no error in the changes, move the script:"
+	@echo " mv ./makefile ./bk-makefile"
+	@echo " mv $(mkme_output) ./makefile"
+	@echo "[ENTER para rodar mv ou ^C para sair]"
+	@read _tudo_bem_
+	mv $(mkme_output) ./makefile
 
