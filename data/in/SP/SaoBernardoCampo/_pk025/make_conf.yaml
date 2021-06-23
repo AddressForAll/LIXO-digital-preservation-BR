@@ -28,7 +28,7 @@ layers:
         method: shp2sql
         p: 1a   
         file: 1
-        sql_select: ['gid', 'NOME_COMPL as via_name', 'Numero as house_number', 'geom']
+        sql_select: ['row_number() OVER () AS gid', 'NOME_COMPL as via_name', 'Numero as house_number', 'geom']
         orig_filename: Q_Endereco_SBC
         method_opts: -W iso-8859-1
   parcel:
@@ -36,14 +36,14 @@ layers:
         method: shp2sql
         p: 2a
         file: 2
-        sql_select:  ['gid', 'ZONA','QUADRA', 'UNIDADE',  'geom']  
+        sql_select:  ['row_number() OVER () AS gid', 'ZONA','QUADRA', 'UNIDADE',  'geom']  
         orig_filename: LOTE
   via:
         subtype: full
         method: shp2sql
         p: 3a
         file: 3
-        sql_select:  ['gid','NOME as via_name', 'DENOMINADA as via_type', 'ORIGEM as via_original']
+        sql_select:  ['row_number() OVER () AS gid','NOME as via_name', 'DENOMINADA as via_type', 'ORIGEM as via_original', 'geom']
         orig_filename: LOGRADOURO
         method_opts: -W iso-8859-1
   nsvia:
@@ -51,7 +51,7 @@ layers:
         method: shp2sql
         p: 4a
         file: 4
-        sql_select:  ['gid','NOME as nsvia_name', 'ZONA as nsvia_type', 'geom']
+        sql_select:  ['row_number() OVER () AS gid','NOME as nsvia_name', 'ZONA as nsvia_type', 'geom']
         orig_filename: BAIRRO
         method_opts: -W iso-8859-1
         srid: 31982
