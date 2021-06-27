@@ -142,6 +142,25 @@ block-clean:
 
 {{/block}}
 
+
+{{#genericvia}}## ## ## ## sponsored by Project AddressForAll
+genericvia: layername = genericvia_{{subtype}}
+genericvia: tabname = pk$(fullPkID)_p{{file}}_genericvia
+genericvia: makedirs $(part{{file}}_path)
+	@# pk{{pkid}}_p{{file}} - ETL extrating to PostgreSQL/PostGIS the "genericvia" datatype (railroad, waterway or other)
+{{>common002_layerHeader}}
+	cd $(sandbox);  7z x -y  $(part{{file}}_path) "{{orig_filename}}.*" ; chmod -R a+rx . > /dev/null
+{{>common003_shp2pgsql}}
+{{>common001_pgAny_load}}
+	@echo FIM.
+
+genericvia-clean: tabname = pk$(fullPkID)_p{{file}}_genericvia
+genericvia-clean:
+	rm -f "$(sandbox)/{{orig_filename}}.*" || true
+	psql $(pg_uri_db) -c "DROP TABLE IF EXISTS $(tabname) CASCADE"
+
+{{/genericvia}}
+
 {{/layers}}
 ## ## ## ## ## ## ## ## ##
 ## ## ## ## ## ## ## ## ##
