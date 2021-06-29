@@ -160,6 +160,25 @@ genericvia-clean:
 
 {{/genericvia}}
 
+{{#building}}## ## ## ## sponsored by Project AddressForAll
+building: layername = building_{{subtype}}
+building: tabname = pk$(fullPkID)_p{{file}}_building
+building: makedirs $(part{{file}}_path)
+	@# pk{{pkid}}_p{{file}} - ETL extrating to PostgreSQL/PostGIS the "building" datatype (construction)
+{{>common002_layerHeader}}
+	cd $(sandbox);  7z x -y  $(part{{file}}_path) "{{orig_filename}}" ; chmod -R a+rx . > /dev/null
+	docker run --rm --network host -v $(sandbox):/tmp osgeo/gdal ogr2ogr -overwrite -f "PostgreSQL" PG:" dbname='$(pg_db)' host='localhost' port='5432' user='postgres'     " /tmp/OpenStreetMap.gdb {{{orig_tabname}}} -nln $(tabname)
+{{>common001_pgAny_load}}
+	@echo FIM.
+
+building-clean: tabname = pk$(fullPkID)_p{{file}}_building
+building-clean:
+	rm -f "$(sandbox)/{{orig_filename}}.*" || true
+	psql $(pg_uri_db) -c "DROP TABLE IF EXISTS $(tabname) CASCADE"
+
+{{/building}}
+
+
 {{/layers}}
 ## ## ## ## ## ## ## ## ##
 ## ## ## ## ## ## ## ## ##
