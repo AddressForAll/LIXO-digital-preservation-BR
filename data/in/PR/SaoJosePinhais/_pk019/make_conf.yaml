@@ -1,0 +1,54 @@
+pkid:      19
+pkversion: "001"
+schemaId_input:    ref027a
+schemaId_template: ref027a
+srid: 31982
+files:
+  -
+    p:    1
+    file: 0dc83eb009fad58f0e8e88db79f3b019886234104aee8fdc9b01fb29f85baeb4.rar
+    name: Dados
+  -
+    p:    2
+    file: 57259cc76f4cc45db5fd0a244fec4bb07f7b17615306f7332b6bdd9b5452fa2f.rar
+    name: Lotes
+
+layers:
+
+  geoaddress:
+    subtype: full
+    method: shp2sql
+    p: 1a
+    file: 1
+    sql_select: ['gid', 'TEXTSTRING AS house_number', 'geom']
+    orig_filename: Num_Predial
+
+  genericvia:
+    subtype: full
+    method: shp2sql
+    p: 2a
+    file: 2
+    query_view: |-
+        SELECT row_number() OVER () as gid, indfisc, csetor, cquadra, clote, csublote, num_pred, \
+        bairro AS nsvia_name, lgrtipo || ' ' || lgr  AS via_name, COALESCE(numpred, num_pred::text) AS house_number, \
+        lgr2, compleme, cep, bairro_1, geom FROM $(tabname)
+    orig_filename: Lotes_x_Proprietarios
+
+  via:
+    subtype: full
+    method: shp2sql
+    p: 1b
+    file: 1
+    query_view: |-
+        SELECT row_number() OVER () as gid, TIPOS, NOME, NOMECPLT AS via_name, BAIRRONOME AS nsvia_name, CEPLE, \
+        CEPLD, NUMIE, NUMID, NUMFE, NUMFD, geom FROM $(tabname)
+    orig_filename: Eixos_Vias
+
+  nsvia:
+    subtype: full
+    method: shp2sql
+    p: 1c
+    file: 1
+    query_view: |-
+        SELECT row_number() OVER () as gid, BAIRRO2015 AS nsvia_name, geom FROM $(tabname)
+    orig_filename: Bairros_SJP

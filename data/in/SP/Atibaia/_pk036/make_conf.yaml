@@ -1,0 +1,46 @@
+pkid:      36
+pkversion: "001"
+schemaId_input:    ref027a
+schemaId_template: ref027a
+files:
+  -
+    p:    1
+    file: 6d741572b6c31ffd82cf004b92fa98056545df805bcb64afba5e7b26e32b62ab.zip
+    name: Edificações
+  -
+    p:    2
+    file: 0a7fedd6e8e30541f706fa7f77166a183a3cc43d2b1d3d3d0a8d3fb7f077e804.zip
+    name: Eixos
+  -
+    p:    3
+    file: b6221fa57754ec8c4db284591a6ceeea7acf986eb215b2e521647e32fb175488.zip
+    name: Lotes
+
+layers:
+
+  building:
+    subtype: full
+    method: shp2sql
+    p: 1a
+    file: 1
+    sql_select: ['gid', 'numero AS build_number', 'geom']
+    orig_filename: edificacoes/edificacoes
+    srid: 3857
+
+  via:
+    subtype: full
+    method: shp2sql
+    p: 2a
+    file: 2
+    sql_select: ['gid', 'tiv_codigo','log_nome','log_nome_c AS via_name','ini_imp','fim_imp', 'ini_par', 'fim_par' , 'geom']
+    orig_filename: logradouros/CAD_LOG
+    srid: 29193
+
+  parcel:
+    subtype: full
+    method: shp2sql
+    p: 3a
+    file: 3
+    sql_select: ['gid', 'num AS build_number', 'geom']
+    orig_filename: lotes/lotes
+    srid: 29193

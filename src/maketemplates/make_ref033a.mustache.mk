@@ -55,8 +55,8 @@ geoaddress: tabname = pk$(fullPkID)_p{{file}}_geoaddress
 geoaddress: makedirs $(part{{file}}_path)
 	@# pk{{pkid}}_p{{file}} - ETL extrating to PostgreSQL/PostGIS the "geoaddress" datatype (point with house_number but no via name)
 {{>common002_layerHeader}}
-	cd $(sandbox);  7z x -y  $(part{{file}}_path) "{{orig_filename}}" ; chmod -R a+rx . > /dev/null
-	docker run --rm --network host -v $(sandbox):/tmp osgeo/gdal ogr2ogr -overwrite -f "PostgreSQL" PG:" dbname='$(pg_db)' host='localhost' port='5432' user='postgres'     " /tmp/OpenStreetMap.gdb {{{orig_tabname}}} -nln $(tabname)
+	cd $(sandbox);  7z x -y  $(part{{file}}_path)  ; chmod -R a+rx . > /dev/null
+	docker run --rm --network host -v $(sandbox):/tmp osgeo/gdal ogr2ogr -overwrite -f "PostgreSQL" PG:" dbname='$(pg_db)' host='localhost' port='5432' user='postgres'     " /tmp/{{{orig_tabname}}} -nln $(tabname)
 {{>common001_pgAny_load}}
 	@echo FIM.
 
@@ -149,7 +149,7 @@ genericvia: makedirs $(part{{file}}_path)
 	@# pk{{pkid}}_p{{file}} - ETL extrating to PostgreSQL/PostGIS the "genericvia" datatype (lots and blocks)
 {{>common002_layerHeader}}
 	cd $(sandbox);  7z x -y  $(part{{file}}_path) "{{orig_filename}}" ; chmod -R a+rx . > /dev/null
-	docker run --rm --network host -v $(sandbox):/tmp osgeo/gdal ogr2ogr -overwrite -f "PostgreSQL" PG:" dbname='$(pg_db)' host='localhost' port='5432' user='postgres'     " /tmp/OpenStreetMap.gdb {{{orig_tabname}}} -nln $(tabname)
+	docker run --rm --network host -v $(sandbox):/tmp osgeo/gdal ogr2ogr -overwrite -f "PostgreSQL" PG:" dbname='$(pg_db)' host='localhost' port='5432' user='postgres'     " /tmp/{{{orig_tabname}}} -nln $(tabname)
 {{>common001_pgAny_load}}
 	@echo FIM.
 
@@ -177,6 +177,25 @@ building-clean:
 	psql $(pg_uri_db) -c "DROP TABLE IF EXISTS $(tabname) CASCADE"
 
 {{/building}}
+
+{{#cadvia}}## ## ## ## sponsored by Project AddressForAll
+cadvia: layername = cadvia_{{subtype}}
+cadvia: tabname = pk$(fullPkID)_p{{file}}_cadvia
+cadvia: makedirs $(part{{file}}_path)
+	@# pk{{pkid}}_p{{file}} - ETL extrating to PostgreSQL/PostGIS the "cadvia" datatype (via data)
+{{>common002_layerHeader}}
+	cd $(sandbox);  7z x -y  $(part{{file}}_path) "{{orig_filename}}" ; chmod -R a+rx . > /dev/null
+	docker run --rm --network host -v $(sandbox):/tmp osgeo/gdal ogr2ogr -overwrite -f "PostgreSQL" PG:" dbname='$(pg_db)' host='localhost' port='5432' user='postgres'     " /tmp/OpenStreetMap.gdb {{{orig_tabname}}} -nln $(tabname)
+{{>common001_pgAny_load}}
+	@echo FIM.
+
+cadvia-clean: tabname = pk$(fullPkID)_p{{file}}_cadvia
+cadvia-clean:
+	rm -f "$(sandbox)/{{orig_filename}}.*" || true
+	psql $(pg_uri_db) -c "DROP TABLE IF EXISTS $(tabname) CASCADE"
+
+{{/cadvia}}
+
 
 
 {{/layers}}

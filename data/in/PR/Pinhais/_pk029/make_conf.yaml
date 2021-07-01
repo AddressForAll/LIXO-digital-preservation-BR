@@ -21,7 +21,7 @@ files:
 
 layers:
 
-  geoaddress: 
+  genericvia: 
     subtype: none
     method: shp2sql
     p: 1a   
