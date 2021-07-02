@@ -19,16 +19,22 @@ layers:
 
   parcel: 
     subtype: full
+    method: shp2sql
     p: 1a   
     file: 1
     tabname:  parcel
-    sql_select: ['gid', 'Complement', " 'Número Por' AS house_number ", " 'Tipo do Lo' || ' ' || 'Nome do Lo' AS  via_name ", 'geom']
+    query_view: |-
+            SELECT gid, \"complement\", \"número por\" AS house_number, \"tipo do lo\" || \"nome do lo\" AS  via_name, geom FROM $(tabname)
     orig_filename: lotes_prediais
+    method_opts: -W iso-8859-1
 
   via:
     subtype: full
+    method: shp2sql
     p: 2a
     file: 2
     tabname:  via
-    sql_select: ['gid', " 'TIPO' || ' ' NOME AS via_name ", 'CEP', 'BAIRRO AS ns_name','IMPLANTADO', 'CLANDESTIN', 'SITUACAO', 'geom']
+    query_view: |-
+            SELECT gid, TIPO || ' ' || NOME AS via_name, CEP, BAIRRO AS ns_name, IMPLANTADO, CLANDESTIN, SITUACAO, geom FROM $(tabname)
     orig_filename: eixos_sorocaba
+    method_opts: -W iso-8859-1
