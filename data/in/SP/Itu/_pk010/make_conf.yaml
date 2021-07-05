@@ -25,7 +25,8 @@ layers:
     p: 1a
     file: 1
     sql_select: ['ogc_fid AS gid', 'Bairro AS nsvia_name', 'Logradouro AS via_name', '"Número"', 'wkb_geometry AS geom']
-    orig_filename: lotes_Itu.TAB
+    orig_filename: lotes_Itu
+    orig_ext: .TAB
 
   nsvia:
     subtype: full

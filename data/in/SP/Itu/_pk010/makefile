@@ -63,7 +63,7 @@ geoaddress: makedirs $(part1_path)
 	@echo "-- Incluindo dados do arquivo-1 do package-$(fullPkID) na base $(pg_db) --"
 	@echo " Nome-hash do arquivo-1: $(part1_file)"
 	@echo " Tabela do layer geoaddress sem nome de rua, só com numero predial: $(tabname)"
-	@echo " Sub-arquivos do arquivo-1 com o conteúdo alvo: lotes_Itu.TAB.*"
+	@echo " Sub-arquivos do arquivo-1 com o conteúdo alvo: lotes_Itu.*"
 	@echo " Tema dos sub-arquivos: $(part1_name)"
 	@echo "Run with tmux and sudo! (DANGER: seems not idempotent on psql)"
 	@whoami
@@ -73,9 +73,9 @@ geoaddress: makedirs $(part1_path)
 	@tput bold
 	@echo Extracting ....
 	@tput sgr0
-	cd $(sandbox);  7z x -y  $(part1_path)  ; chmod -R a+rx . > /dev/null
-	docker run --rm --network host -v $(sandbox):/tmp osgeo/gdal ogr2ogr -overwrite -f "PostgreSQL" PG:" dbname='$(pg_db)' host='localhost' port='5432' user='postgres'     " /tmp/ -nln $(tabname)
-	psql $(pg_uri_db) -c "SELECT ingest.any_load('ogr2ogr','$(sandbox)/lotes_Itu.TAB','$(layername)','$(tabname)','$(fullPkID)','$(part1_file)',array['ogc_fid AS gid', 'Bairro AS nsvia_name', 'Logradouro AS via_name', '"Número"', 'wkb_geometry AS geom'])"
+	cd $(sandbox);  7z x -y  $(part1_path) "lotes_Itu*" ; chmod -R a+rx . > /dev/null
+	docker run --rm --network host -v $(sandbox):/tmp osgeo/gdal ogr2ogr -overwrite -f "PostgreSQL" PG:" dbname='$(pg_db)' host='localhost' port='5432' user='postgres'     " "/tmp/lotes_Itu.TAB"  -nln $(tabname)
+	psql $(pg_uri_db) -c "SELECT ingest.any_load('ogr2ogr','$(sandbox)/lotes_Itu','$(layername)','$(tabname)','$(fullPkID)','$(part1_file)',array['ogc_fid AS gid', 'Bairro AS nsvia_name', 'Logradouro AS via_name', '"Número"', 'wkb_geometry AS geom'])"
 	@echo "Confira os resultados nas tabelas ingest.layer_file e ingest.feature_asis".
 ifeq ('ogr2ogr','csv2sql')
 	psql $(pg_uri_db) -c "DROP FOREIGN TABLE IF EXISTS $(tabname)"
@@ -84,7 +84,7 @@ endif
 
 geoaddress-clean: tabname = pk$(fullPkID)_p1_geoaddress
 geoaddress-clean:
-	rm -f "$(sandbox)/lotes_Itu.TAB.*" || true
+	rm -f "$(sandbox)/lotes_Itu.*" || true
 	psql $(pg_uri_db) -c "DROP TABLE IF EXISTS $(tabname) CASCADE"
 
 
@@ -110,8 +110,8 @@ nsvia: makedirs $(part2_path)
 	@tput bold
 	@echo Extracting ....
 	@tput sgr0
-	cd $(sandbox);  7z x -y  $(part2_path) "Bairros_LC12112_16" ; chmod -R a+rx . > /dev/null
-	docker run --rm --network host -v $(sandbox):/tmp osgeo/gdal ogr2ogr -overwrite -f "PostgreSQL" PG:" dbname='$(pg_db)' host='localhost' port='5432' user='postgres'     " /tmp/OpenStreetMap.gdb  -nln $(tabname)
+	cd $(sandbox);  7z x -y  $(part2_path) "Bairros_LC12112_16*" ; chmod -R a+rx . > /dev/null
+	docker run --rm --network host -v $(sandbox):/tmp osgeo/gdal ogr2ogr -overwrite -f "PostgreSQL" PG:" dbname='$(pg_db)' host='localhost' port='5432' user='postgres'     " "/tmp/Bairros_LC12112_16"  -nln $(tabname)
 	psql $(pg_uri_db) -c "CREATE VIEW vw2_$(tabname) AS SELECT row_number() OVER () as gid, * \
 FROM ( \
   SELECT upper(trim(nome)) as nome, count(*) n, round(sum(st_area(geom))) area, \
@@ -155,8 +155,8 @@ via: makedirs $(part3_path)
 	@tput bold
 	@echo Extracting ....
 	@tput sgr0
-	cd $(sandbox);  7z x -y  $(part3_path) "EixosLogradouros"  ; chmod -R a+rx . > /dev/null
-	docker run --rm --network host -v $(sandbox):/tmp osgeo/gdal ogr2ogr -overwrite -f "PostgreSQL" PG:" dbname='$(pg_db)' host='localhost' port='5432' user='postgres'     " /tmp/OpenStreetMap.gdb  -nln $(tabname)
+	cd $(sandbox);  7z x -y  $(part3_path) "EixosLogradouros*" ; chmod -R a+rx . > /dev/null
+	docker run --rm --network host -v $(sandbox):/tmp osgeo/gdal ogr2ogr -overwrite -f "PostgreSQL" PG:" dbname='$(pg_db)' host='localhost' port='5432' user='postgres'     " "/tmp/EixosLogradouros"  -nln $(tabname)
 	psql $(pg_uri_db) -c "CREATE VIEW vw3_$(tabname) AS SELECT gid, CDIDECAT || iif(NMIDEPRE>'',' ' || NMIDEPRE,''::text) || ' ' || NMIDELOG AS via_name,\
        NRIMPINI, NRIMPFIN, NRPARINI, NRPARFIN, geom \
 FROM $(tabname)"

@@ -65,8 +65,8 @@ geoaddress: makedirs $(part1_path)
 	@tput bold
 	@echo Extracting ....
 	@tput sgr0
-	cd $(sandbox);  7z x -y  $(part1_path) "OpenStreetMap.gdb" ; chmod -R a+rx . > /dev/null
-	docker run --rm --network host -v $(sandbox):/tmp osgeo/gdal ogr2ogr -overwrite -f "PostgreSQL" PG:" dbname='$(pg_db)' host='localhost' port='5432' user='postgres'     " /tmp/OpenStreetMap.gdb Endereco -nln $(tabname)
+	cd $(sandbox);  7z x -y  $(part1_path) "OpenStreetMap.gdb*" ; chmod -R a+rx . > /dev/null
+	docker run --rm --network host -v $(sandbox):/tmp osgeo/gdal ogr2ogr -overwrite -f "PostgreSQL" PG:" dbname='$(pg_db)' host='localhost' port='5432' user='postgres'     " "/tmp/OpenStreetMap.gdb" Endereco -nln $(tabname)
 	psql $(pg_uri_db) -c "SELECT ingest.any_load('ogr2ogr','$(sandbox)/OpenStreetMap.gdb','$(layername)','$(tabname)','$(fullPkID)','$(part1_file)',array['objectid AS gid', 'ident_logr', 'nome_logra AS via_name', 'num_imovel AS house_number', 'shape AS geom'])"
 	@echo "Confira os resultados nas tabelas ingest.layer_file e ingest.feature_asis".
 ifeq ('ogr2ogr','csv2sql')
@@ -102,8 +102,8 @@ nsvia: makedirs $(part1_path)
 	@tput bold
 	@echo Extracting ....
 	@tput sgr0
-	cd $(sandbox);  7z x -y  $(part1_path) "OpenStreetMap.gdb" ; chmod -R a+rx . > /dev/null
-	docker run --rm --network host -v $(sandbox):/tmp osgeo/gdal ogr2ogr -overwrite -f "PostgreSQL" PG:" dbname='$(pg_db)' host='localhost' port='5432' user='postgres'     " /tmp/OpenStreetMap.gdb Bairros -nln $(tabname)
+	cd $(sandbox);  7z x -y  $(part1_path) "OpenStreetMap.gdb*" ; chmod -R a+rx . > /dev/null
+	docker run --rm --network host -v $(sandbox):/tmp osgeo/gdal ogr2ogr -overwrite -f "PostgreSQL" PG:" dbname='$(pg_db)' host='localhost' port='5432' user='postgres'     " "/tmp/OpenStreetMap.gdb" Bairros -nln $(tabname)
 	psql $(pg_uri_db) -c "SELECT ingest.any_load('ogr2ogr','$(sandbox)/OpenStreetMap.gdb','$(layername)','$(tabname)','$(fullPkID)','$(part1_file)',array['gid', 'Teste2_P_1 AS namespace_name', 'geom'])"
 	@echo "Confira os resultados nas tabelas ingest.layer_file e ingest.feature_asis".
 ifeq ('ogr2ogr','csv2sql')
@@ -139,8 +139,8 @@ via: makedirs $(part1_path)
 	@tput bold
 	@echo Extracting ....
 	@tput sgr0
-	cd $(sandbox);  7z x -y  $(part1_path) "OpenStreetMap.gdb"  ; chmod -R a+rx . > /dev/null
-	docker run --rm --network host -v $(sandbox):/tmp osgeo/gdal ogr2ogr -overwrite -f "PostgreSQL" PG:" dbname='$(pg_db)' host='localhost' port='5432' user='postgres'     " /tmp/OpenStreetMap.gdb Logradouros -nln $(tabname)
+	cd $(sandbox);  7z x -y  $(part1_path) "OpenStreetMap.gdb*" ; chmod -R a+rx . > /dev/null
+	docker run --rm --network host -v $(sandbox):/tmp osgeo/gdal ogr2ogr -overwrite -f "PostgreSQL" PG:" dbname='$(pg_db)' host='localhost' port='5432' user='postgres'     " "/tmp/OpenStreetMap.gdb" Logradouros -nln $(tabname)
 	psql $(pg_uri_db) -c "SELECT ingest.any_load('','$(sandbox)/OpenStreetMap.gdb','$(layername)','$(tabname)','$(fullPkID)','$(part1_file)',array['gid', 'TIPO_LOGRA', 'geom'])"
 	@echo "Confira os resultados nas tabelas ingest.layer_file e ingest.feature_asis".
 ifeq ('','csv2sql')
@@ -176,8 +176,8 @@ parcel: makedirs $(part1_path)
 	@tput bold
 	@echo Extracting ....
 	@tput sgr0
-	cd $(sandbox);  7z x -y  $(part1_path) "OpenStreetMap.gdb" ; chmod -R a+rx . > /dev/null
-	docker run --rm --network host -v $(sandbox):/tmp osgeo/gdal ogr2ogr -overwrite -f "PostgreSQL" PG:" dbname='$(pg_db)' host='localhost' port='5432' user='postgres'     " /tmp/OpenStreetMap.gdb Lotes -nln $(tabname)
+	cd $(sandbox);  7z x -y  $(part1_path) "OpenStreetMap.gdb*" ; chmod -R a+rx . > /dev/null
+	docker run --rm --network host -v $(sandbox):/tmp osgeo/gdal ogr2ogr -overwrite -f "PostgreSQL" PG:" dbname='$(pg_db)' host='localhost' port='5432' user='postgres'     " "/tmp/OpenStreetMap.gdb" Lotes -nln $(tabname)
 	psql $(pg_uri_db) -c "SELECT ingest.any_load('ogr2ogr','$(sandbox)/OpenStreetMap.gdb','$(layername)','$(tabname)','$(fullPkID)','$(part1_file)',array['gid', 'BAIRRO AS namespace_name', 'geom'])"
 	@echo "Confira os resultados nas tabelas ingest.layer_file e ingest.feature_asis".
 ifeq ('ogr2ogr','csv2sql')
@@ -213,8 +213,8 @@ genericvia: makedirs $(part1_path)
 	@tput bold
 	@echo Extracting ....
 	@tput sgr0
-	cd $(sandbox);  7z x -y  $(part1_path) "OpenStreetMap.gdb" ; chmod -R a+rx . > /dev/null
-	docker run --rm --network host -v $(sandbox):/tmp osgeo/gdal ogr2ogr -overwrite -f "PostgreSQL" PG:" dbname='$(pg_db)' host='localhost' port='5432' user='postgres'     " /tmp/OpenStreetMap.gdb Quadras -nln $(tabname)
+	cd $(sandbox);  7z x -y  $(part1_path) "OpenStreetMap.gdb*" ; chmod -R a+rx . > /dev/null
+	docker run --rm --network host -v $(sandbox):/tmp osgeo/gdal ogr2ogr -overwrite -f "PostgreSQL" PG:" dbname='$(pg_db)' host='localhost' port='5432' user='postgres'     " "/tmp/OpenStreetMap.gdb" Quadras -nln $(tabname)
 	psql $(pg_uri_db) -c "SELECT ingest.any_load('ogr2ogr','$(sandbox)/OpenStreetMap.gdb','$(layername)','$(tabname)','$(fullPkID)','$(part1_file)',array['gid', 'QUADRA AS genericvia_number', 'geom'])"
 	@echo "Confira os resultados nas tabelas ingest.layer_file e ingest.feature_asis".
 ifeq ('ogr2ogr','csv2sql')
@@ -226,6 +226,10 @@ genericvia-clean: tabname = pk$(fullPkID)_p1_genericvia
 genericvia-clean:
 	rm -f "$(sandbox)/OpenStreetMap.gdb.*" || true
 	psql $(pg_uri_db) -c "DROP TABLE IF EXISTS $(tabname) CASCADE"
+
+
+
+
 
 
 ## ## ## ## ## ## ## ## ##
