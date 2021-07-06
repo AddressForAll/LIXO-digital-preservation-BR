@@ -1,0 +1,44 @@
+pkid:      23
+pkversion: "001"
+schemaId_input:    ref027a
+schemaId_template: ref027a
+srid: 31999
+files:
+  -
+    p:    1
+    file: 3a92899e5a7e87acb92cca7198cc0e894bac9ac96c2192b12b668d1e1d598898.zip
+    name: Lotes
+  -
+    p:    2
+    file: 252f2228f3400be3f6fdbef5a99b3aacf1ed0232ab73675ed918f9b5f8743752.zip
+    name: Eixos
+  -
+    p:    3
+    file: 307f158ccd7d9ff8f7ec9767de719595fde4ea759c14316d478da176c23303fe.zip
+    name: Bairros
+
+layers:
+
+  genericvia:
+    subtype: full
+    method: shp2sql
+    p: 1a
+    file: 1
+    sql_select: ['gid', 'logradouro AS via_name', 'numero AS house_number', 'bairro AS nsvia_name','geom']
+    orig_filename: lote
+
+  via:
+    subtype: full
+    method: shp2sql
+    p: 2a
+    file: 2
+    sql_select: ['gid', 'nome AS via_name', 'bairro_1 AS nsvia_name', 'bairro_2 AS nsvia_name2', 'geom']
+    orig_filename: eixo_logradouro
+
+  nsvia:
+    subtype: full
+    method: shp2sql
+    p: 3a
+    file: 3
+    sql_select: ['gid', 'bairro AS nsvia_name','geom']
+    orig_filename: bairros
