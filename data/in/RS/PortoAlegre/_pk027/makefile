@@ -261,7 +261,7 @@ me: $(srcPy) $(mkme_input0) $(mkme_input) $(mkme_srcTpl)
 	@echo "If some changes, and no error in the changes, move the script:"
 	@echo " mv ./makefile ./bk-makefile"
 	@echo " mv $(mkme_output) ./makefile"
-	@echo "[ENTER para rodar mv ou ^C para sair]"
-	@read _tudo_bem_
-	mv $(mkme_output) ./makefile
+	#@echo "[ENTER para rodar mv ou ^C para sair]"
+	#@read _tudo_bem_
+	#mv $(mkme_output) ./makefile
 

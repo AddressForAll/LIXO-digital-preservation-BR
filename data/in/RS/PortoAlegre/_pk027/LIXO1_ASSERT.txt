@@ -1,0 +1,30 @@
+-- Updating this make --
+python3 /tmp/sandbox/digital-preservation/src/run_mustache.py -b /tmp/sandbox/ -t /tmp/sandbox/digital-preservation-BR/src/maketemplates/make_ref027a.mustache.mk --tplLast=/tmp/sandbox/digital-preservation-BR/src/maketemplates/commomLast.mustache.mk -i ./make_conf.yaml --input0=/tmp/sandbox/digital-preservation-BR/src/maketemplates/commomFirst.yaml > /tmp/digitalPresservation-make_me.mk
+ Check diff, the '<' lines are the new ones... Something changed?
+213,216d212
+< 
+< 
+< 
+< 
+230,232c226,228
+< 	@cd $(orig); wget http://dl.digital-guard.org/fbc62efdbd0f16a7db03b5b775c50c9425367a8dee8a85d9b53e4475bbdb99d2.zip
+< 	@cd $(orig); wget http://dl.digital-guard.org/258772459588f7941ac6eeda7c6839df02d58741cf6bc3e48825aecd60418251.zip
+< 	@cd $(orig); wget http://dl.digital-guard.org/c35e3b2825d3da122a74c6c8dd5f3157a3bd6201208d2a6d13dec433a6ded9fc.zip
+---
+> 	@cd $(orig); wget http://preserv.addressforall.org/download/fbc62efdbd0f16a7db03b5b775c50c9425367a8dee8a85d9b53e4475bbdb99d2.zip
+> 	@cd $(orig); wget http://preserv.addressforall.org/download/258772459588f7941ac6eeda7c6839df02d58741cf6bc3e48825aecd60418251.zip
+> 	@cd $(orig); wget http://preserv.addressforall.org/download/c35e3b2825d3da122a74c6c8dd5f3157a3bd6201208d2a6d13dec433a6ded9fc.zip
+268,270c264,266
+< 	@echo "[ENTER para rodar mv ou ^C para sair]"
+< 	@read _tudo_bem_
+< 	mv $(mkme_output) ./makefile
+---
+> 	#@echo "[ENTER para rodar mv ou ^C para sair]"
+> 	#@read _tudo_bem_
+> 	#mv $(mkme_output) ./makefile
+If some changes, and no error in the changes, move the script:
+ mv ./makefile ./bk-makefile
+ mv /tmp/digitalPresservation-make_me.mk ./makefile
+#@echo "[ENTER para rodar mv ou ^C para sair]"
+#@read _tudo_bem_
+#mv /tmp/digitalPresservation-make_me.mk ./makefile
