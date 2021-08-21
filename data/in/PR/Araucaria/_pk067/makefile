@@ -14,7 +14,7 @@ need_commands= 7z v16+; psql v12+; shp2pgsql v3+;
 srid   =29192
 
 pkid = 67
-fullPkID=67_1
+fullPkID=67_001
 sandbox=$(sandbox_root)/_pk$(fullPkID)
 
 ## USER CONFIGS
@@ -67,7 +67,7 @@ nsvia: makedirs $(part3_path)
 	@tput bold
 	@echo Extracting ....
 	@tput sgr0
-	cd $(sandbox);  7z x -y  $(part3_path) "Localidades Rurais.*"  ; chmod -R a+rx . > /dev/null
+	cd $(sandbox);  7z  x -y  $(part3_path) "Localidades Rurais.*"  ; chmod -R a+rx . > /dev/null
 	@echo "Conferindo se SRID 29192 esta configurado:"
 	@psql $(pg_uri_db) -c "SELECT srid, proj4text FROM spatial_ref_sys where srid=29192"
 	@echo "Tudo bem até aqui?  [ENTER para continuar ou ^C para rodar WS/ingest-step1]"
@@ -105,7 +105,7 @@ via: makedirs $(part1_path)
 	@echo "-- Incluindo dados do arquivo-1 do package-$(fullPkID) na base $(pg_db) --"
 	@echo " Nome-hash do arquivo-1: $(part1_file)"
 	@echo " Tabela do layer geoaddress sem nome de rua, só com numero predial: $(tabname)"
-	@echo " Sub-arquivos do arquivo-1 com o conteúdo alvo: Sistema Viário.*"
+	@echo " Sub-arquivos do arquivo-1 com o conteúdo alvo: Sistema Vi rio.*"
 	@echo " Tema dos sub-arquivos: $(part1_name)"
 	@echo "Run with tmux and sudo! (DANGER: seems not idempotent on psql)"
 	@whoami
@@ -115,20 +115,20 @@ via: makedirs $(part1_path)
 	@tput bold
 	@echo Extracting ....
 	@tput sgr0
-	cd $(sandbox);  7z x -y -sccUTF-8  $(part1_path) "Sistema Viário.*"  ; chmod -R a+rx . > /dev/null
+	cd $(sandbox);  7z -sccUTF-8 -scsWIN x -y  $(part1_path) "Sistema Vi rio.*"  ; chmod -R a+rx . > /dev/null
 	@echo "Conferindo se SRID 29192 esta configurado:"
 	@psql $(pg_uri_db) -c "SELECT srid, proj4text FROM spatial_ref_sys where srid=29192"
 	@echo "Tudo bem até aqui?  [ENTER para continuar ou ^C para rodar WS/ingest-step1]"
 	@read _tudo_bem_
 ifeq ('shp2sql','shp2sql')
 	@echo Executando shp2pgsql ...
-	cd $(sandbox);	shp2pgsql  -sccUTF-8 -s 29192 "Sistema Viário.shp" $(tabname) | psql -q $(pg_uri_db) 2> /dev/null
+	cd $(sandbox);	shp2pgsql   -s 29192 "Sistema Vi rio.shp" $(tabname) | psql -q $(pg_uri_db) 2> /dev/null
 endif
 ifeq ('shp2sql','csv2sql')
 	@echo Executando csc2sql ...
-	psql $(pg_uri_db) -c "SELECT ingest.fdw_generate_direct_csv( '$(sandbox)/Sistema Viário.csv', '$(tabname)' )"
+	psql $(pg_uri_db) -c "SELECT ingest.fdw_generate_direct_csv( '$(sandbox)/Sistema Vi rio.csv', '$(tabname)' )"
 endif
-	psql $(pg_uri_db) -c "SELECT ingest.any_load('shp2sql','$(sandbox)/Sistema Viário','$(layername)','$(tabname)','$(fullPkID)','$(part1_file)',array['gid', 'endereço AS via_name', 'geom'])"
+	psql $(pg_uri_db) -c "SELECT ingest.any_load('shp2sql','$(sandbox)/Sistema Vi rio','$(layername)','$(tabname)','$(fullPkID)','$(part1_file)',array['gid', 'endereço AS via_name', 'geom'])"
 	@echo "Confira os resultados nas tabelas ingest.layer_file e ingest.feature_asis".
 ifeq ('shp2sql','csv2sql')
 	psql $(pg_uri_db) -c "DROP FOREIGN TABLE IF EXISTS $(tabname)"
@@ -137,8 +137,12 @@ endif
 
 via-clean: tabname = pk$(fullPkID)_p1_via
 via-clean:
-	rm -f "$(sandbox)/Sistema Viário.*" || true
+	rm -f "$(sandbox)/Sistema Vi rio.*" || true
 	psql $(pg_uri_db) -c "DROP TABLE IF EXISTS $(tabname) CASCADE"
+
+
+
+
 
 
 
@@ -157,7 +161,7 @@ wget_files:
 	@echo $(orig)
 	@read _ENTER_OK_
 	mkdir -p $(orig)
-	@cd $(orig); wget http://preserv.addressforall.org/download/39cfe0ef43045a9bfaf872ffc648b8294151f73d431607220141cd248b45e260.zip
+	@cd $(orig); wget http://dl.digital-guard.org/39cfe0ef43045a9bfaf872ffc648b8294151f73d431607220141cd248b45e260.zip
 	@echo "Please, if orig not default, run 'make _target_ orig=$(orig)'"
 
 
